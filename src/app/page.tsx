@@ -9,7 +9,7 @@ function Card({
 }) {
   return (
     <Link href={href} className="card-3d">
-      <div className="glass-card h-full p-7 md:p-8 flex flex-col items-start">
+      <div className="glass-card h-full p-7 md:p-8 flex flex-col items-center">
         {/* иконка */}
         <div className="mb-6">
           <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl

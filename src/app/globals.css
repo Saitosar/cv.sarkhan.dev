@@ -48,5 +48,5 @@ gradient-border::before {
 .card-3d:hover { transform: translateY(-8px); box-shadow: 0 22px 60px rgba(0,0,0,.55); }
 
 .glass-card {
-  @apply rounded-2xl bg-white/10 bg-clip-padding backdrop-blur-md border border-white/20;
+  @apply rounded-2xl bg-white/5 bg-clip-padding backdrop-blur-lg border border-white/30;
 }
