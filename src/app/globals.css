@@ -54,9 +54,33 @@ body { color: white; background-color: #0b0f19; }
 .card-3d:hover { transform: translateY(-8px); box-shadow: 0 22px 60px rgba(0,0,0,.55); }
 
 .glass-card {
-  background-color: rgba(40, 47, 65, 0.5); /* <-- Главное изменение: тёмно-синий полупрозрачный фон */
-  border: 1px solid rgba(255, 255, 255, 0.15); /* <-- Делаем рамку менее заметной */
-  backdrop-filter: blur(16px); /* <-- Эффект размытия */
+  /* --- Стеклянный эффект --- */
+  background-color: rgba(40, 47, 65, 0.5); /* Темно-синий фон */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-radius: 1rem; /* 16px */
+
+  /* --- Эффект свечения (начальное состояние) --- */
+  /* Мы добавляем градиент поверх цвета фона */
+  background-image: radial-gradient(
+    circle at 50% 0%,
+    rgba(139, 92, 246, 0.15),
+    transparent 60%
+  );
+  
+  /* --- Плавный переход для свечения и рамки --- */
+  transition: background-image 0.4s ease-in-out, border-color 0.4s ease-in-out;
+}
+
+.glass-card:hover {
+  /* --- Усиление свечения при наведении --- */
+  background-image: radial-gradient(
+    circle at 50% 0%,
+    rgba(139, 92, 246, 0.25),
+    transparent 70%
+  );
+  
+  /* --- Также немного подсветим рамку для лучшего эффекта --- */
+  border-color: rgba(255, 255, 255, 0.25);
 }

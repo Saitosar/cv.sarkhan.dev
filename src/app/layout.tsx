@@ -1,15 +1,42 @@
-import "./globals.css";
-import { Inter, Space_Grotesk } from "next/font/google";
+import type { Metadata } from 'next';
+import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google';
+import './globals.css';
+import BackgroundFX from '@/components/BackgroundFX';
+import { Header } from '@/components/Header';
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const space = Space_Grotesk({ subsets: ["latin"], variable: "--font-space" });
+// Настройка шрифтов с CSS переменными
+const inter = Inter({ 
+  subsets: ['latin'], 
+  variable: '--font-inter' 
+});
 
-export const metadata = { title: "Resume Generator", description: "AI CV builder" };
+const grotesk = SpaceGrotesk({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-grotesk', // Используем '--font-grotesk' для консистентности
+});
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export const metadata: Metadata = {
+  title: 'Resume Generator',
+  description: 'AI CV builder',
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" className={`${space.variable} ${inter.variable}`}>
-      <body className="font-body">{children}</body>
+    <html lang="en">
+      {/* Применяем переменные шрифтов к телу документа */}
+      <body className={`${inter.variable} ${grotesk.variable} font-sans`}>
+        {/* Компоненты, которые будут на всех страницах */}
+        <BackgroundFX />
+        <Header />
+        
+        {/* Основной контент страницы */}
+        <main>{children}</main>
+      </body>
     </html>
   );
 }
