@@ -8,7 +8,7 @@ function Card({
   title: string; desc: string; href: string; cta: string; icon: React.ReactNode;
 }) {
   return (
-    <Link href={href} className="card-3d">
+    <Link href={href} className="card-3d gradient-border relative">
       <div className="glass-card h-full p-7 md:p-8 flex flex-col items-center">
         {/* иконка */}
         <div className="mb-6">
