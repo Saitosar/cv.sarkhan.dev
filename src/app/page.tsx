@@ -8,22 +8,26 @@ function Card({
   title: string; desc: string; href: string; cta: string; icon: React.ReactNode;
 }) {
   return (
-    <Link href={href} className="gradient-border block card-3d">
-      <div className="glass p-7 md:p-8 h-full flex flex-col">
+    <Link href={href} className="card-3d">
+      <div className="glass-card h-full p-7 md:p-8 flex flex-col items-start">
+        {/* иконка */}
         <div className="mb-6">
           <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl
                           bg-gradient-to-br from-neonCyan/20 to-neonViolet/20
-                          ring-1 ring-white/10">
+                          border border-white/20">
             {icon}
           </div>
         </div>
-        <h3 className="font-display text-2xl leading-tight mb-2">{title}</h3>
+        {/* заголовок и описание */}
+        <h3 className="font-display text-2xl mb-2">{title}</h3>
         <p className="text-white/80 mb-6">{desc}</p>
-        <span className="btn-pill w-fit mt-auto">{cta}</span>
+        {/* кнопка */}
+        <span className="btn-pill mt-auto">{cta}</span>
       </div>
     </Link>
   );
 }
+
 
 export default function Home() {
   return (

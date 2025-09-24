@@ -14,6 +14,7 @@ body { color: white; background-color: #0b0f19; }
   border-radius: 20px;
 }
 
+
 /* неоновое свечение снаружи */
 .glow {
   box-shadow:
@@ -45,3 +46,7 @@ gradient-border::before {
 /* 3D-hover */
 .card-3d { transition: transform .2s ease, box-shadow .25s ease; }
 .card-3d:hover { transform: translateY(-8px); box-shadow: 0 22px 60px rgba(0,0,0,.55); }
+
+.glass-card {
+  @apply rounded-2xl bg-white/10 bg-clip-padding backdrop-blur-md border border-white/20;
+}
