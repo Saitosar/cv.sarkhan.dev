@@ -4,11 +4,13 @@ module.exports = {
   content: ["./src/app/**/*.{ts,tsx}", "./src/components/**/*.{ts,tsx}"],
   theme: {
     extend: {
-      colors: { neonViolet: "#8B5CF6", neonCyan: "#06B6D4",
-      'icon-pen': '#7dd3fc', // Светло-голубой для ручки
-      'icon-folder': '#c4b5fd', // Фиолетовый для папки
-      'icon-linkedin': '#38bdf8' // Голубой для LinkedIn
-       },
+      colors: {
+      'icon-pen': '#7dd3fc',
+      'icon-folder': '#c4b5fd',
+      'icon-linkedin': '#38bdf8',
+      neonViolet: "#8B5CF6",
+      neonCyan: "#06B6D4",
+    },
       fontFamily: {
         display: ["'Space Grotesk'", "ui-sans-serif", "system-ui"],
         body: ["Inter", "ui-sans-serif", "system-ui"],

@@ -51,7 +51,7 @@ export default function Home() {
     icon={
       <PenLine 
         size={32} 
-        className="text-icon-pen [filter:drop-shadow(0_0_5px_theme(colors.icon-pen))]" 
+        className="glow-pen" /* Оставляем только один класс */
       />
     }
   />
@@ -62,7 +62,7 @@ export default function Home() {
     icon={
       <FolderClosed 
         size={32} 
-        className="text-icon-folder [filter:drop-shadow(0_0_5px_theme(colors.icon-folder))]" 
+        className="glow-folder" /* Оставляем только один класс */
       />
     }
   />
@@ -73,7 +73,7 @@ export default function Home() {
     icon={
       <Linkedin 
         size={32} 
-        className="text-icon-linkedin [filter:drop-shadow(0_0_5px_theme(colors.icon-linkedin))]" 
+        className="glow-linkedin" /* Оставляем только один класс */
       />
     }
   />
