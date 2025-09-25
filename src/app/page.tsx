@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { PenLine, FolderClosed, Linkedin } from "lucide-react";
-
 function Card({
   title,
   href,
@@ -14,15 +13,14 @@ function Card({
 }) {
   return (
     <Link href={href} className="card-3d gradient-border relative">
-      {/* Основной контейнер glass-card уже является flex-контейнером.
-        Мы убираем лишнюю вложенную обертку.
-      */}
-      <div className="glass-card relative h-full p-7 md:p-8 flex flex-col items-center text-center">
+      {/* ИЗМЕНЕНИЕ 1: Добавляем 'justify-between', чтобы распределить пространство */}
+      <div className="glass-card relative h-full p-7 md:p-8 flex flex-col items-center text-center justify-center gap-y-8">
         
         {/* Иконка */}
-        <div className="mb-6">
+        {/* ИЗМЕНЕНИЕ 2: Убираем отступ 'mb-6', так как он больше не нужен */}
+        <div>
           <div
-            className="inline-flex h-12 w-12 items-center justify-center rounded-xl
+            className="inline-flex h-16 w-16 items-center justify-center rounded-xl
                        bg-gradient-to-br from-neonCyan/20 to-neonViolet/20
                        border border-white/20"
           >
@@ -30,12 +28,11 @@ function Card({
           </div>
         </div>
 
-        {/* Заголовок */}
-        <h3 className="font-display text-2xl">{title}</h3>
+        {/* Заголовок (без изменений) */}
+        <h3 className="font-display text-2xl pb-3">{title}</h3>
 
-        {/* Кнопка. Теперь класс 'mt-auto' будет работать правильно,
-          так как он сможет "оттолкнуть" кнопку от заголовка вниз.
-        */}
+        {/* Кнопка */}
+        {/* ИЗМЕНЕНИЕ 3: Убираем 'mt-auto' с кнопки */}
         <span className="card-button">{cta}</span>
       </div>
     </Link>
