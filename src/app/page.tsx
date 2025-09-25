@@ -44,25 +44,40 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-8 md:p-24 pt-32">
       <div className="mt-12 grid gap-8 md:grid-cols-3 max-w-5xl w-full">
-        <Card
-          title="Create from scratch"
-          href="/create"
-          cta="Create"
-          icon={<PenLine size={32} className="text-neonCyan" />}
-        />
-        <Card
-          title="Update existing CV"
-          href="/update"
-          cta="Update"
-          icon={<FolderClosed size={32} className="text-neonViolet" />}
-        />
-        <Card
-          title="Modify from LinkedIn"
-          href="/import"
-          cta="Import"
-          icon={<Linkedin size={32} className="text-neonCyan" />}
-        />
-      </div>
+  <Card
+    title="Create from scratch"
+    href="/create"
+    cta="Create"
+    icon={
+      <PenLine 
+        size={32} 
+        className="text-icon-pen [filter:drop-shadow(0_0_5px_theme(colors.icon-pen))]" 
+      />
+    }
+  />
+  <Card
+    title="Update existing CV"
+    href="/update"
+    cta="Update"
+    icon={
+      <FolderClosed 
+        size={32} 
+        className="text-icon-folder [filter:drop-shadow(0_0_5px_theme(colors.icon-folder))]" 
+      />
+    }
+  />
+  <Card
+    title="Modify from LinkedIn"
+    href="/import"
+    cta="Import"
+    icon={
+      <Linkedin 
+        size={32} 
+        className="text-icon-linkedin [filter:drop-shadow(0_0_5px_theme(colors.icon-linkedin))]" 
+      />
+    }
+  />
+</div>
     </main>
   );
 }
