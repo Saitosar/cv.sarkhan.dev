@@ -118,16 +118,16 @@ body { color: white; background-color: #0b0f19; }
 
 /* Новые классы для свечения иконок */
 .glow-pen {
-  color: #7dd3fc; /* ЗАДАЕМ ЦВЕТ ИКОНКИ */
-  filter: drop-shadow(0px 0px 1.5px #7dd3fc);
+  color: #7afdff; /* ЗАДАЕМ ЦВЕТ ИКОНКИ */
+  filter: drop-shadow(0px 0px 1px #7dd3fc);
 }
 .glow-folder {
-  color: #c4b5fd; /* ЗАДАЕМ ЦВЕТ ИКОНКИ */
-  filter: drop-shadow(0 0 1.5px #c4b5fd);
+  color: #e8a8ff; /* ЗАДАЕМ ЦВЕТ ИКОНКИ */
+  filter: drop-shadow(0 0 1px #c4b5fd);
 }
 .glow-linkedin {
-  color: #38bdf8; /* ЗАДАЕМ ЦВЕТ ИКОНКИ */
-  filter: drop-shadow(0 0 1.5px #38bdf8);
+  color: #5ad0ff; /* ЗАДАЕМ ЦВЕТ ИКОНКИ */
+  filter: drop-shadow(0 0 1px #38bdf8);
 }
 
 .signin-button {

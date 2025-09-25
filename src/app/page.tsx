@@ -32,7 +32,7 @@ function Card({
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-8 md:p-24 pt-32">
+<main className="flex min-h-screen flex-col items-center p-8 md:p-24 pt-24">
       <div className="mt-12 grid gap-8 md:grid-cols-3 max-w-5xl w-full">
         <Card
           title="Create from scratch"
