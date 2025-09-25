@@ -129,3 +129,42 @@ body { color: white; background-color: #0b0f19; }
   color: #38bdf8; /* ЗАДАЕМ ЦВЕТ ИКОНКИ */
   filter: drop-shadow(0 0 1.5px #38bdf8);
 }
+
+.signin-button {
+  /* Форма и размер (без изменений) */
+  display: block;
+  width: 8rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 0.75rem;
+
+  /* Эффект стекла и новое внутреннее свечение */
+  background-color: rgba(255, 255, 255, 0.05);
+  background-image: radial-gradient(
+    circle at 50% 100%, /* Свечение снизу */
+    rgba(139, 92, 246, 0.15), /* Violet */
+    transparent 70%
+  );
+  border: 1px solid rgba(146, 204, 255, 0.552);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  /* Текст с эффектом "наклейки" */
+  text-align: center;
+  font-weight: 600;
+  color: rgb(207, 228, 250);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+  font-size: 18px;
+
+  /* Плавный переход для анимаций */
+  transition: all 0.2s ease-in-out;
+  }
+
+  .signin-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: scale(1.03); /* Легкое увеличение */
+
+  /* Эффект неонового свечения, зажигающегося внутри */
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.5), /* Внешнее свечение */
+              inset 0 0 15px rgba(139, 92, 246, 0.3); /* Внутреннее свечение */
+}
