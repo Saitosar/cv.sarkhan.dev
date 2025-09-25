@@ -3,22 +3,23 @@ import { PenLine, FolderClosed, Linkedin } from "lucide-react";
 
 function Card({
   title,
-  desc,
   href,
   cta,
   icon,
 }: {
   title: string;
-  desc: string;
   href: string;
   cta: string;
   icon: React.ReactNode;
 }) {
   return (
     <Link href={href} className="card-3d gradient-border relative">
-      {/* Класс 'card-glow' уже здесь - он отвечает за внутреннее свечение */}
+      {/* Основной контейнер glass-card уже является flex-контейнером.
+        Мы убираем лишнюю вложенную обертку.
+      */}
       <div className="glass-card relative h-full p-7 md:p-8 flex flex-col items-center text-center">
-        {/* иконка */}
+        
+        {/* Иконка */}
         <div className="mb-6">
           <div
             className="inline-flex h-12 w-12 items-center justify-center rounded-xl
@@ -29,42 +30,37 @@ function Card({
           </div>
         </div>
 
-        {/* заголовок и описание */}
-        <h3 className="font-display text-2xl mb-2">{title}</h3>
-        <p className="text-white/80 mb-6">{desc}</p>
+        {/* Заголовок */}
+        <h3 className="font-display text-2xl">{title}</h3>
 
-        {/* кнопка */}
-        <span className="btn-pill mt-auto">{cta}</span>
+        {/* Кнопка. Теперь класс 'mt-auto' будет работать правильно,
+          так как он сможет "оттолкнуть" кнопку от заголовка вниз.
+        */}
+        <span className="card-button">{cta}</span>
       </div>
     </Link>
   );
 }
 
+
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-8 md:p-24 pt-32">
-      {/* Компонент <BackgroundFX /> был удален отсюда, 
-        потому что он уже глобально вызывается в файле layout.tsx.
-        Это избавляет от дублирования.
-      */}
       <div className="mt-12 grid gap-8 md:grid-cols-3 max-w-5xl w-full">
         <Card
-          title="Create a new resume"
-          desc="Start from zero with a smart form."
+          title="Create from scratch"
           href="/create"
-          cta="Get Started"
+          cta="Create"
           icon={<PenLine size={32} className="text-neonCyan" />}
         />
         <Card
-          title="Update existing resume"
-          desc="Upload old CV or paste updates."
+          title="Update existing CV"
           href="/update"
-          cta="Upload"
+          cta="Update"
           icon={<FolderClosed size={32} className="text-neonViolet" />}
         />
         <Card
-          title="Import from LinkedIn"
-          desc="Paste profile URL or upload PDF."
+          title="Modify from LinkedIn"
           href="/import"
           cta="Import"
           icon={<Linkedin size={32} className="text-neonCyan" />}

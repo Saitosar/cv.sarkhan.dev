@@ -39,16 +39,6 @@ body { color: white; background-color: #0b0f19; }
   mask-composite: exclude;
 }
 
-.btn-pill {
-  border-radius: 999px;
-  padding: .7rem 1.2rem;
-  color: #0b0f19;
-  font-weight: 600;
-  background-image: linear-gradient(135deg, #06B6D4, #8B5CF6);
-  box-shadow: 0 8px 24px rgba(6,182,212,.25), 0 10px 34px rgba(139,92,246,.22);
-  transition: transform .15s ease, box-shadow .2s ease;
-}
-.btn-pill:hover { transform: translateY(-1px); }
 /* 3D-hover */
 .card-3d { transition: transform .2s ease, box-shadow .25s ease; }
 .card-3d:hover { transform: translateY(-8px); box-shadow: 0 22px 60px rgba(0,0,0,.55); }
@@ -83,4 +73,47 @@ body { color: white; background-color: #0b0f19; }
   
   /* --- Также немного подсветим рамку для лучшего эффекта --- */
   border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Новый базовый стиль для кнопок на карточках */
+/* Стало: */
+.card-button {
+  /* Форма и размер (без изменений) */
+  display: block;
+  width: 100%;
+  padding: 0.8rem 1.5rem;
+  border-radius: 0.75rem;
+  
+  /* ---> ЭТА СТРОКА РЕШАЕТ ПРОБЛЕМУ <--- */
+  margin-top: auto; /* Прижимает кнопку к низу, создавая пространство */
+
+  /* Эффект стекла и новое внутреннее свечение */
+  background-color: rgba(255, 255, 255, 0.05);
+  background-image: radial-gradient(
+    circle at 50% 100%, /* Свечение снизу */
+    rgba(139, 92, 246, 0.15), /* Violet */
+    transparent 70%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  /* Текст с эффектом "наклейки" */
+  text-align: center;
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+
+  /* Плавный переход для анимаций */
+  transition: all 0.2s ease-in-out;
+}
+
+.card-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: scale(1.03); /* Легкое увеличение */
+
+  /* Эффект неонового свечения, зажигающегося внутри */
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.5), /* Внешнее свечение */
+              inset 0 0 15px rgba(139, 92, 246, 0.3); /* Внутреннее свечение */
 }
