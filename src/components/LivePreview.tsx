@@ -1,52 +1,43 @@
 // src/components/LivePreview.tsx
+import type { TemplateName } from "./TemplateSelector";
+import { ClassicTemplate } from "./templates/ClassicTemplate";
+import { ModernTemplate } from "./templates/ModernTemplate";
+import { CreativeTemplate } from "./templates/CreativeTemplate";
+import { placeholderResume } from "@/lib/placeholder-data";
 
-// 1. Описываем, как выглядят наши пропсы
 interface LivePreviewProps {
   data: {
     result: string;
-  } | null; // data может быть объектом с полем 'result' или null
+  } | null;
+  template: TemplateName; // Добавляем пропс для имени шаблона
 }
 
-// 2. Применяем тип к пропсам
-export function LivePreview({ data }: LivePreviewProps) {
-  if (!data || !data.result) {
-    return <div className="text-center text-white/50">Your generated resume will appear here.</div>;
-  }
+export function LivePreview({ data, template }: LivePreviewProps) {
+  let resume;
 
   try {
-    // 3. Парсим JSON из строки data.result
-    const resume = JSON.parse(data.result);
-
-    return (
-      <div className="bg-white text-black p-8 rounded-lg gradient-border">
-        {resume.summary && (
-          <>
-            <h2 className="text-2xl font-bold mb-2">Professional Summary</h2>
-            <p className="mb-4">{resume.summary}</p>
-          </>
-        )}
-        
-        {resume.achievements && (
-          <>
-            <h2 className="text-2xl font-bold mb-2">Achievements</h2>
-            <ul className="list-disc list-inside mb-4">
-              {resume.achievements?.map((ach: string, index: number) => (
-                <li key={index}>{ach}</li>
-              ))}
-            </ul>
-          </>
-        )}
-
-        {resume.skills && (
-          <>
-            <h2 className="text-2xl font-bold mb-2">Skills</h2>
-            <p>{resume.skills?.join(', ')}</p>
-          </>
-        )}
-      </div>
-    );
+    // 2. Если есть реальные данные, используем их
+    if (data && data.result) {
+      resume = JSON.parse(data.result);
+    } else {
+      // 3. Если реальных данных нет, используем наши демо-данные
+      resume = placeholderResume;
+    }
   } catch (error) {
     console.error("Failed to parse resume data:", error);
-    return <div className="text-center text-red-400">Error displaying preview.</div>;
+    // В случае ошибки парсинга, тоже показываем демо-данные
+    resume = placeholderResume; 
   }
+
+    // В зависимости от пропса 'template' рендерим нужный компонент
+    switch (template) {
+      case "Классический":
+        return <ClassicTemplate resume={resume} />;
+      case "Современный":
+        return <ModernTemplate resume={resume} />;
+      case "Креативный":
+        return <CreativeTemplate resume={resume} />;
+      default:
+        return <ClassicTemplate resume={resume} />;
+    }
 }

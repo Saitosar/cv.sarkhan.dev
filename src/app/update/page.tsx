@@ -1,22 +1,27 @@
 // src/app/update/page.tsx
 "use client";
 
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import { LivePreview } from '@/components/LivePreview';
+import { TemplateSelector, type TemplateName } from '@/components/TemplateSelector';
+
+type ResumeData = {
+  result: string;
+} | null;
 
 export default function UpdatePage() {
-  const [resumeData, setResumeData] = useState(null);
-
+  const [resumeData, setResumeData] = useState<ResumeData>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>("Классический");
   // Здесь будет логика для обработки текста и отправки на API
-  const handleUpdate = async (event) => {
+  const handleUpdate = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const text = event.target.elements.updatedInfo.value;
-    
+    const text = (event.target as HTMLFormElement).elements.namedItem('updatedInfo') as HTMLTextAreaElement;
+        
     // Аналогичный вызов API, как и в CreateResumeForm
     const response = await fetch('/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ input: text }),
+      body: JSON.stringify({ input: text.value, template: selectedTemplate }),
     });
     const result = await response.json();
     setResumeData(result);
@@ -38,10 +43,18 @@ export default function UpdatePage() {
           </button>
         </form>
       </div>
-      <div className="glass-card p-8">
+      <div className="flex flex-col gap-8">
+        <div className="glass-card p-8 flex-grow">
         <h2 className="font-display text-2xl mb-4">Live Preview</h2>
-        <LivePreview data={resumeData} />
+       <LivePreview data={resumeData} template={selectedTemplate} />
       </div>
+      <div className="glass-card p-8">
+          <TemplateSelector
+            selectedTemplate={selectedTemplate}
+            onTemplateChange={setSelectedTemplate}
+          />
+        </div>
+        </div>
     </div>
   );
 }
