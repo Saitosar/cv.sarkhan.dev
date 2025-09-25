@@ -91,15 +91,16 @@ body { color: white; background-color: #0b0f19; }
     rgba(139, 92, 246, 0.15), /* Violet */
     transparent 70%
   );
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(146, 204, 255, 0.552);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 
   /* Текст с эффектом "наклейки" */
   text-align: center;
   font-weight: 600;
-  color: white;
+  color: rgb(207, 228, 250);
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+  font-size: 18px;
 
   /* Плавный переход для анимаций */
   transition: all 0.2s ease-in-out;
@@ -118,13 +119,13 @@ body { color: white; background-color: #0b0f19; }
 /* Новые классы для свечения иконок */
 .glow-pen {
   color: #7dd3fc; /* ЗАДАЕМ ЦВЕТ ИКОНКИ */
-  filter: drop-shadow(0 0 6px #7dd3fc);
+  filter: drop-shadow(0px 0px 1.5px #7dd3fc);
 }
 .glow-folder {
   color: #c4b5fd; /* ЗАДАЕМ ЦВЕТ ИКОНКИ */
-  filter: drop-shadow(0 0 6px #c4b5fd);
+  filter: drop-shadow(0 0 1.5px #c4b5fd);
 }
 .glow-linkedin {
   color: #38bdf8; /* ЗАДАЕМ ЦВЕТ ИКОНКИ */
-  filter: drop-shadow(0 0 6px #38bdf8);
+  filter: drop-shadow(0 0 1.5px #38bdf8);
 }
