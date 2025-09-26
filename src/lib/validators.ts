@@ -2,6 +2,11 @@
 import { z } from 'zod';
 
 export const resumeSchema = z.object({
+  // --- ДОБАВЛЕННЫЕ ПОЛЯ ---
+  fullName: z.string().min(2, "Full name must be at least 2 characters."),
+  jobTitle: z.string().min(2, "Job title must be at least 2 characters."),
+  
+  // --- СТАРЫЕ ПОЛЯ ---
   summary: z.string().min(10, "Summary must be at least 10 characters."),
   contact: z.object({
     email: z.string().email("Invalid email address."),
