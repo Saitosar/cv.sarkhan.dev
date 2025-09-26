@@ -168,3 +168,15 @@ body { color: white; background-color: #0b0f19; }
   box-shadow: 0 0 25px rgba(139, 92, 246, 0.5), /* Внешнее свечение */
               inset 0 0 15px rgba(139, 92, 246, 0.3); /* Внутреннее свечение */
 }
+
+/* src/app/globals.css */
+
+/* ... (здесь твой существующий код) ... */
+
+/* ДОБАВЬ ЭТИ СТРОКИ В КОНЕЦ ФАЙЛА */
+button,
+a,
+[role="button"],
+.cursor-pointer {
+  cursor: pointer;
+}

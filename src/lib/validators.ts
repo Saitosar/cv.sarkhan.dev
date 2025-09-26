@@ -6,12 +6,12 @@ export const resumeSchema = z.object({
   fullName: z.string().min(2, "Full name must be at least 2 characters."),
   jobTitle: z.string().min(2, "Job title must be at least 2 characters."),
   
-  // --- СТАРЫЕ ПОЛЯ ---
+  // --- СТАРЫЕ И ОБНОВЛЕННЫЕ ПОЛЯ ---
   summary: z.string().min(10, "Summary must be at least 10 characters."),
   contact: z.object({
     email: z.string().email("Invalid email address."),
-    phone: z.string().optional(),
-    linkedin: z.string().url("Invalid URL.").optional(),
+     phone: z.string().min(5, "Phone number is required."), // делали поле обязательным
+    linkedin: z.string().url("Invalid URL.").optional(), // Добавлено поле для LinkedIn
   }),
   experience: z.array(z.object({
     company: z.string().min(1, "Company name is required."),
