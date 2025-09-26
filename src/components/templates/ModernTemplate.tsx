@@ -1,5 +1,5 @@
 // src/components/templates/ModernTemplate.tsx
-// 1. Описываем структуру
+
 interface ResumeData {
   summary?: string;
   contact?: {
@@ -32,55 +32,99 @@ interface ResumeData {
   trainings?: string[];
   certifications?: string[];
 }
+
+
 export function ModernTemplate({ resume }: { resume: ResumeData }) {
+  // --- Новый компонент секции в виде "карточки" ---
+  const Section = ({ title, children }: { title: string, children: React.ReactNode }) => (
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h2 className="font-display text-lg font-bold text-cyan-600 uppercase tracking-widest mb-4">{title}</h2>
+      <div className="space-y-4">
+        {children}
+      </div>
+    </div>
+  );
+
   return (
-    <div className="bg-white text-gray-800 p-8 font-sans">
-      {/* ... Header ... */}
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-blue-700">{resume.summary?.split(':')[0]}</h1>
-        <p className="text-lg text-gray-600 mt-1">{resume.summary?.split(':')[1]?.split('\n')[0]}</p>
-        <p className="text-xs text-gray-500 mt-4">
+    // --- Основной фон, чтобы карточки выделялись ---
+    <div className="bg-slate-50 text-gray-700 p-10 font-sans space-y-8">
+      {/* --- Шапка (без карточки, она "над" всем) --- */}
+      <div className="text-center">
+        <h1 className="font-display text-5xl font-extrabold text-gray-800">{resume.summary?.split(':')[0]}</h1>
+        <p className="text-xl text-gray-500 mt-2">{resume.summary?.split(':')[1]?.split('\n')[0]}</p>
+        <p className="text-sm text-cyan-600 mt-4 tracking-wider">
           {resume.contact?.email} &middot; {resume.contact?.phone} &middot; {resume.contact?.linkedin}
         </p>
       </div>
 
-      {/* ... Summary, Experience ... */}
-      <div className="mb-6">
-        <h2 className="text-lg font-semibold text-blue-700 uppercase tracking-wider border-b-2 border-blue-200 pb-2 mb-3">Experience</h2>
+      {/* --- Каждая секция теперь "плавающая карточка" --- */}
+      <Section title="Summary">
+        <p className="text-sm">{resume.summary?.split('\n').slice(1).join('\n')}</p>
+      </Section>
+      
+      <Section title="Skills">
+        <div className="flex flex-wrap gap-2">
+            {resume.skills?.map(skill => (
+              <span key={skill} className="bg-cyan-50 text-cyan-800 text-xs font-medium px-3 py-1 rounded-full">
+                {skill}
+              </span>
+            ))}
+        </div>
+      </Section>
+      
+      <Section title="Experience">
         {resume.experience?.map((job, index) => (
-          <div key={index} className="mb-4">
-            <h3 className="text-lg font-bold">{job.position}</h3>
-            <p className="font-semibold text-sm text-gray-700">{job.company} | {job.years}</p>
+          <div key={index} className="border-t border-slate-100 pt-4 first:border-t-0 first:pt-0">
+            <div className="flex justify-between items-baseline">
+              <h3 className="text-lg font-bold text-gray-800">{job.position}</h3>
+              <p className="text-sm font-medium text-gray-500">{job.years}</p>
+            </div>
+            <p className="font-semibold text-md text-gray-600">{job.company}</p>
             <p className="text-sm mt-1">{job.description}</p>
           </div>
         ))}
-      </div>
+      </Section>
       
-      <div className="mb-6">
-        <h2 className="text-lg font-semibold text-blue-700 uppercase tracking-wider border-b-2 border-blue-200 pb-2 mb-3">Projects</h2>
+      <Section title="Projects">
         {resume.projects?.map((project, index) => (
-          <div key={index} className="mb-4">
-            <h3 className="text-lg font-bold">{project.name}</h3>
-            <p className="font-semibold text-sm text-gray-700">Technologies: {project.technologies}</p>
-            <p className="text-sm mt-1">{project.description}</p>
+          <div key={index} className="border-t border-slate-100 pt-4 first:border-t-0 first:pt-0">
+            <h3 className="text-lg font-bold text-gray-800">{project.name}</h3>
+            <p className="text-sm font-medium text-gray-500 mb-1">Technologies: {project.technologies}</p>
+            <p className="text-sm">{project.description}</p>
           </div>
         ))}
-      </div>
+      </Section>
 
-      {/* ... Education, Skills, Languages, Certifications ... */}
-      <div className="mb-6">
-        <h2 className="text-lg font-semibold text-blue-700 uppercase tracking-wider border-b-2 border-blue-200 pb-2 mb-3">Skills & Languages</h2>
-        <p className="text-sm mb-2"><strong>Skills:</strong> {resume.skills?.join(', ')}</p>
-        <p className="text-sm"><strong>Languages:</strong> {resume.languages?.map(l => `${l.language} (${l.proficiency})`).join(', ')}</p>
-      </div>
+      <Section title="Education">
+        {resume.education?.map((edu, index) => (
+           <div key={index} className="border-t border-slate-100 pt-4 first:border-t-0 first:pt-0">
+            <h3 className="text-lg font-bold text-gray-800">{edu.institution}</h3>
+            <p className="font-semibold text-md text-gray-600">{edu.degree}</p>
+            <p className="text-sm text-gray-500">{edu.years}</p>
+          </div>
+        ))}
+      </Section>
       
-      <div>
-        <h2 className="text-lg font-semibold text-blue-700 uppercase tracking-wider border-b-2 border-blue-200 pb-2 mb-3">Achievements & Certifications</h2>
-        <ul className="list-disc list-inside text-sm space-y-1">
-            {resume.achievements?.map((ach, index) => <li key={index}>{ach}</li>)}
-            {resume.certifications?.map((cert, index) => <li key={index}>{cert}</li>)}
-        </ul>
-      </div>
+      <Section title="Accomplishments">
+        <div>
+            <h4 className="text-md font-bold text-gray-800 mb-2">Achievements</h4>
+            <ul className="list-disc list-inside text-sm space-y-2">
+                {resume.achievements?.map((ach, index) => <li key={index}>{ach}</li>)}
+            </ul>
+        </div>
+        <div className="mt-4">
+            <h4 className="text-md font-bold text-gray-800 mb-2">Certifications</h4>
+            <ul className="list-disc list-inside text-sm space-y-2">
+                {resume.certifications?.map((cert, index) => <li key={index}>{cert}</li>)}
+            </ul>
+        </div>
+        <div className="mt-4">
+            <h4 className="text-md font-bold text-gray-800 mb-2">Trainings</h4>
+            <ul className="list-disc list-inside text-sm space-y-2">
+                {resume.trainings?.map((train, index) => <li key={index}>{train}</li>)}
+            </ul>
+        </div>
+      </Section>
     </div>
   );
 }
