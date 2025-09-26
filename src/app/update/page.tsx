@@ -1,60 +1,116 @@
 // src/app/update/page.tsx
+
 "use client";
 
-import { useState, type FormEvent } from 'react';
+import { useState, useEffect } from 'react';
 import { LivePreview } from '@/components/LivePreview';
 import { TemplateSelector, type TemplateName } from '@/components/TemplateSelector';
+import { ColorPalette } from '@/components/ColorPalette';
+import { ThemeToggle, type Theme } from '@/components/ThemeToggle';
+import { classicPalettes, modernPalettes, creativePalettes, type ColorScheme } from '@/lib/palettes';
 
-type ResumeData = {
-  result: string;
-} | null;
+type PreviewData = { result: string; } | null;
 
 export default function UpdatePage() {
-  const [resumeData, setResumeData] = useState<ResumeData>(null);
+  const [resumeData, setResumeData] = useState<PreviewData>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>("Классический");
-  // Здесь будет логика для обработки текста и отправки на API
-  const handleUpdate = async (event: FormEvent<HTMLFormElement>) => {
+  
+  // Вся необходимая логика для управления цветом и темой, как в create/page.tsx
+  const [palettes, setPalettes] = useState(classicPalettes);
+  const [accentColor, setAccentColor] = useState(classicPalettes[0]);
+  const [theme, setTheme] = useState<Theme>('dark');
+
+  // Умный помощник, который меняет палитру при смене шаблона
+  useEffect(() => {
+    switch (selectedTemplate) {
+      case "Современный":
+        setPalettes(modernPalettes);
+        setAccentColor(modernPalettes[0]);
+        break;
+      case "Креативный":
+        setPalettes(creativePalettes);
+        setAccentColor(creativePalettes[0]);
+        break;
+      default:
+        setPalettes(classicPalettes);
+        setAccentColor(classicPalettes[0]);
+    }
+  }, [selectedTemplate]);
+
+  const handleUpdate = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const text = (event.target as HTMLFormElement).elements.namedItem('updatedInfo') as HTMLTextAreaElement;
-        
-    // Аналогичный вызов API, как и в CreateResumeForm
-    const response = await fetch('/api/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ input: text.value, template: selectedTemplate }),
-    });
-    const result = await response.json();
-    setResumeData(result);
+    const formData = new FormData(event.currentTarget);
+    const updatedInfo = formData.get('updatedInfo') as string;
+    setResumeData({ result: updatedInfo });
   };
 
   return (
     <div className="container mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
       <div className="glass-card p-8">
-        <h1 className="font-display text-3xl mb-4">Update existing resume</h1>
-        <form onSubmit={handleUpdate}>
-          <textarea
-            name="updatedInfo"
-            rows={10}
-            className="w-full bg-white/10 border border-white/20 rounded-md p-3 text-white"
-            placeholder="Enter your updated information here..."
-          />
-          <button type="submit" className="card-button w-full mt-4">
-            Update Resume
-          </button>
+        
+        {/* Здесь форма со страницы Update */}
+        <form onSubmit={handleUpdate} className="space-y-6">
+            <div>
+                <label htmlFor="updatedInfo" className="block text-sm font-medium text-white/80 mb-2">
+                    Enter your updated information or a new job description.
+                </label>
+                <textarea
+                    id="updatedInfo"
+                    name="updatedInfo"
+                    rows={10}
+                    className="mt-1 block w-full bg-white/10 border border-white/20 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-neonViolet focus:border-neonViolet"
+                    placeholder="e.g., I want to apply for a Senior Product Manager role at Google..."
+                />
+            </div>
+            <div>
+                <label htmlFor="resumeUpload" className="block text-sm font-medium text-white/80 mb-2">
+                    Upload your existing resume (PDF/DOCX)
+                </label>
+                <input
+                    type="file"
+                    id="resumeUpload"
+                    name="resumeUpload"
+                    className="block w-full text-sm text-white/60 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-neonViolet file:text-black hover:file:bg-violet-400"
+                    accept=".pdf,.doc,.docx"
+                />
+            </div>
+            <button type="submit" className="card-button w-full !mt-8">
+                Update Resume
+            </button>
         </form>
+
       </div>
+
       <div className="flex flex-col gap-8">
         <div className="glass-card p-8 flex-grow">
-        <h2 className="font-display text-2xl mb-4">Live Preview</h2>
-       <LivePreview data={resumeData} template={selectedTemplate} />
-      </div>
-      <div className="glass-card p-8">
+          <LivePreview 
+            data={resumeData} 
+            template={selectedTemplate}
+            accentColor={accentColor}
+            theme={theme}
+          />
+        </div>
+        <div className="glass-card p-8 space-y-6">
           <TemplateSelector
             selectedTemplate={selectedTemplate}
             onTemplateChange={setSelectedTemplate}
           />
+          <div className="border-t border-white/20"></div>
+          <div className="flex justify-center items-center gap-8">
+            <ColorPalette 
+              palettes={palettes}
+              selectedColor={accentColor}
+              onColorChange={setAccentColor}
+            />
+            {selectedTemplate === "Креативный" && (
+              <ThemeToggle 
+                selectedTheme={theme}
+                onThemeChange={setTheme}
+              />
+            )}
+          </div>
         </div>
-        </div>
+      </div>
     </div>
   );
 }
