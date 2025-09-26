@@ -1,19 +1,41 @@
 // src/app/create/page.tsx
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CreateResumeForm } from "@/components/CreateResumeForm";
 import { LivePreview } from '@/components/LivePreview';
-import { TemplateSelector, type TemplateName } from '@/components/TemplateSelector'; // Импортируем компонент и тип
+import { TemplateSelector, type TemplateName } from '@/components/TemplateSelector';
+import { ColorPalette } from '@/components/ColorPalette';
+import { ThemeToggle, type Theme } from '@/components/ThemeToggle';
+import { classicPalettes, modernPalettes, creativePalettes, type ColorScheme } from '@/lib/palettes';
 
-type ResumeData = {
-  result: string;
-} | null;
+type ResumeData = { result: string; } | null;
 
 export default function CreatePage() {
   const [resumeData, setResumeData] = useState<ResumeData>(null);
-  // 1. Добавляем состояние для выбранного шаблона
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>("Классический");
+  
+  // --- Новые состояния для управления темами ---
+  const [palettes, setPalettes] = useState(classicPalettes);
+  const [accentColor, setAccentColor] = useState(classicPalettes[0]);
+  const [theme, setTheme] = useState<Theme>('dark');
+
+  // Этот эффект будет менять палитру и сбрасывать цвет при смене шаблона
+  useEffect(() => {
+    switch (selectedTemplate) {
+      case "Современный":
+        setPalettes(modernPalettes);
+        setAccentColor(modernPalettes[0]);
+        break;
+      case "Креативный":
+        setPalettes(creativePalettes);
+        setAccentColor(creativePalettes[0]);
+        break;
+      default:
+        setPalettes(classicPalettes);
+        setAccentColor(classicPalettes[0]);
+    }
+  }, [selectedTemplate]);
 
   const handleGenerate = (data: ResumeData) => {
     setResumeData(data);
@@ -21,29 +43,43 @@ export default function CreatePage() {
 
   return (
     <div className="container mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-      {/* Левая колонка: Форма */}
       <div className="glass-card p-8">
-        <h1 className="font-display text-3xl mb-4">Create from scratch</h1>
-        <p className="text-white/70 mb-6">Fill in the details below to generate your resume.</p>
-        {/* 2. Передаем выбранный шаблон в форму */}
         <CreateResumeForm 
           onGenerate={handleGenerate} 
           template={selectedTemplate} 
         />
       </div>
 
-      {/* Правая колонка: Предпросмотр и выбор шаблона */}
       <div className="flex flex-col gap-8">
         <div className="glass-card p-8 flex-grow">
-          <h2 className="font-display text-2xl mb-4">Live Preview</h2>
-          <LivePreview data={resumeData} template={selectedTemplate} />
+          <LivePreview 
+            data={resumeData} 
+            template={selectedTemplate}
+            accentColor={accentColor}
+            theme={theme}
+          />
         </div>
-        <div className="glass-card p-8">
-          {/* 3. Вставляем наш новый компонент */}
+        <div className="glass-card p-8 space-y-6">
           <TemplateSelector
             selectedTemplate={selectedTemplate}
             onTemplateChange={setSelectedTemplate}
           />
+          <div className="border-t border-white/20"></div>
+          
+          {/* --- Новые UI элементы --- */}
+          <div className="flex justify-center items-center gap-8">
+            <ColorPalette 
+              palettes={palettes}
+              selectedColor={accentColor}
+              onColorChange={setAccentColor}
+            />
+            {selectedTemplate === "Креативный" && (
+              <ThemeToggle 
+                selectedTheme={theme}
+                onThemeChange={setTheme}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>

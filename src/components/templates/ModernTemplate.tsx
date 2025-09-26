@@ -1,5 +1,7 @@
 // src/components/templates/ModernTemplate.tsx
 
+import type { ColorScheme } from "@/lib/palettes";
+
 interface ResumeData {
   summary?: string;
   contact?: {
@@ -34,11 +36,10 @@ interface ResumeData {
 }
 
 
-export function ModernTemplate({ resume }: { resume: ResumeData }) {
-  // --- Новый компонент секции в виде "карточки" ---
+export function ModernTemplate({ resume, accentColor }: { resume: ResumeData, accentColor: ColorScheme }) {
   const Section = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="font-display text-lg font-bold text-cyan-600 uppercase tracking-widest mb-4">{title}</h2>
+      <h2 className="font-display text-lg font-bold uppercase tracking-widest mb-4" style={{ color: accentColor.primary }}>{title}</h2>
       <div className="space-y-4">
         {children}
       </div>
@@ -52,7 +53,7 @@ export function ModernTemplate({ resume }: { resume: ResumeData }) {
       <div className="text-center">
         <h1 className="font-display text-5xl font-extrabold text-gray-800">{resume.summary?.split(':')[0]}</h1>
         <p className="text-xl text-gray-500 mt-2">{resume.summary?.split(':')[1]?.split('\n')[0]}</p>
-        <p className="text-sm text-cyan-600 mt-4 tracking-wider">
+        <p className="text-sm mt-4 tracking-wider" style={{ color: accentColor.primary }}>
           {resume.contact?.email} &middot; {resume.contact?.phone} &middot; {resume.contact?.linkedin}
         </p>
       </div>

@@ -1,4 +1,5 @@
 // src/components/templates/ClassicTemplate.tsx
+import type { ColorScheme } from "@/lib/palettes";
 
 interface ResumeData {
   summary?: string;
@@ -33,11 +34,11 @@ interface ResumeData {
   certifications?: string[];
 }
 
-export function ClassicTemplate({ resume }: { resume: ResumeData }) {
+export function ClassicTemplate({ resume, accentColor }: { resume: ResumeData, accentColor: ColorScheme }) {
   // --- ИСПРАВЛЕННЫЙ вспомогательный компонент для секций ---
   const Section = ({ title, children }: { title: string, children: React.ReactNode }) => (
-    <div className="mb-6 bg-gray-50 p-4 rounded-md border-l-4 border-gray-300">
-      <h2 className="text-xl font-bold text-gray-700 mb-3">{title}</h2>
+    <div className="mb-6 p-4 rounded-md border-l-4" style={{ backgroundColor: accentColor.primary, borderColor: accentColor.secondary }}>
+     <h2 className="text-xl font-bold text-gray-700 mb-3">{title}</h2>
       <div className="text-sm space-y-4">
         {children}
       </div>
@@ -46,8 +47,9 @@ export function ClassicTemplate({ resume }: { resume: ResumeData }) {
 
   return (
     <div className="bg-white text-gray-800 p-8 font-serif">
+      
       {/* --- Верхний блок (Шапка) --- */}
-      <div className="bg-gray-100 p-6 rounded-md mb-8 border-b-4 border-gray-300">
+      <div className="p-6 rounded-md mb-8 border-b-4" style={{ backgroundColor: accentColor.primary, borderColor: accentColor.secondary }}>
         <h1 className="text-4xl font-bold text-center text-gray-800">{resume.summary?.split(':')[0]}</h1>
         <p className="text-center text-lg text-gray-600 mb-4">{resume.summary?.split(':')[1]?.split('\n')[0]}</p>
         <div className="text-center text-xs text-gray-500">
