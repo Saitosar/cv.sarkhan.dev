@@ -2,16 +2,20 @@
 import { z } from 'zod';
 
 export const resumeSchema = z.object({
-  // --- ДОБАВЛЕННЫЕ ПОЛЯ ---
   fullName: z.string().min(2, "Full name must be at least 2 characters."),
   jobTitle: z.string().min(2, "Job title must be at least 2 characters."),
   
-  // --- СТАРЫЕ И ОБНОВЛЕННЫЕ ПОЛЯ ---
+  // --- НОВЫЙ НЕОБЯЗАТЕЛЬНЫЙ ОБЪЕКТ ---
+  targetJob: z.object({
+    title: z.string().optional(),
+    description: z.string().optional(),
+  }).optional(),
+  
   summary: z.string().min(10, "Summary must be at least 10 characters."),
   contact: z.object({
     email: z.string().email("Invalid email address."),
-     phone: z.string().min(5, "Phone number is required."), // делали поле обязательным
-    linkedin: z.string().url("Invalid URL.").optional(), // Добавлено поле для LinkedIn
+    phone: z.string().min(5, "Phone number is required."),
+    linkedin: z.string().url("Invalid URL.").optional(),
   }),
   experience: z.array(z.object({
     company: z.string().min(1, "Company name is required."),

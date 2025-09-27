@@ -15,18 +15,14 @@ interface CreateResumeFormProps {
   template: TemplateName;
 }
 
-// --- СТИЛИ (без изменений) ---
 const addButtonStyle = "mt-2 flex w-full cursor-pointer items-center justify-center rounded-md border border-dashed border-white/20 p-3 text-white/50 transition-all hover:border-white/40 hover:text-white/80";
 const removeButtonStyle = "absolute top-3 right-3 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-white/5 text-white/50 transition-all hover:bg-white/10 hover:text-red-400";
 const inputStyle = "mt-1 block w-full bg-white/10 border border-white/20 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-neonViolet focus:border-neonViolet";
 const baseLabelStyle = "block text-sm font-medium text-white/80";
 
-// --- ИКОНКИ (без изменений) ---
 const RemoveIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>;
-const AddIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>;
+const AddIcon = () => <svg xmlns="http://www.w.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>;
 
-// --- НОВЫЙ КОМПОНЕНТ ДЛЯ ЗАГОЛОВКОВ ПОЛЕЙ (РЕШЕНИЕ ЗАДАЧИ №1) ---
-// Этот компонент добавляет красную звездочку к обязательным полям
 const Label = ({ htmlFor, children, required = true }: { htmlFor: string, children: React.ReactNode, required?: boolean }) => (
     <label htmlFor={htmlFor} className={baseLabelStyle}>
         {children} {required && <span className="text-red-400">*</span>}
@@ -49,6 +45,7 @@ export function CreateResumeForm({ onGenerate, template }: CreateResumeFormProps
       achievements: [],
       trainings: [],
       certifications: [],
+      targetJob: { title: "", description: "" }, // Начальные значения для новых полей
     },
   });
 
@@ -62,34 +59,28 @@ export function CreateResumeForm({ onGenerate, template }: CreateResumeFormProps
   const { fields: certificationFields, append: appendCertification, remove: removeCertification } = useFieldArray({ control, name: "certifications" });
 
   const onFormSubmit = async (data: ResumeFormData) => {
-    const formattedData = {
-      ...data,
-      summary: `${data.fullName}: ${data.jobTitle}\n${data.summary}`,
-      skills: data.skills?.map(s => s.value).filter(Boolean),
-      achievements: data.achievements?.map(a => a.value).filter(Boolean),
-      trainings: data.trainings?.map(t => t.value).filter(Boolean),
-      certifications: data.certifications?.map(c => c.value).filter(Boolean),
-      experience: data.experience?.filter(e => e.company && e.position),
-      projects: data.projects?.filter(p => p.name),
-      education: data.education?.filter(e => e.institution && e.degree),
-      languages: data.languages?.filter(l => l.language && l.proficiency),
-    };
-    onGenerate({ result: JSON.stringify(formattedData, null, 2) });
+    const response = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+        const result = await response.json();
+        onGenerate({ result: JSON.stringify(result, null, 2) });
+    } else {
+        console.error("API call failed");
+    }
   };
 
-  // --- УЛУЧШЕННАЯ ОБРАБОТКА ОШИБОК (РЕШЕНИЕ ЗАДАЧИ №2) ---
   const onFormError = (errors: FieldErrors<ResumeFormData>) => {
-    // Находим имя первого поля с ошибкой
-    const firstErrorField = Object.keys(errors)[0];
-    if (firstErrorField) {
-        // Находим сам элемент на странице
-        const element = document.querySelector(`[name="${firstErrorField}"]`);
-        // Плавно скроллим к нему
-        element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const firstErrorKey = Object.keys(errors)[0];
+    if (firstErrorKey) {
+      const element = document.querySelector(`[name^="${firstErrorKey}"]`);
+      element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
   
-  // Мы передаем обе функции в handleSubmit. Первая вызывается при успехе, вторая - при ошибке.
   return (
     <form onSubmit={handleSubmit(onFormSubmit, onFormError)} className="space-y-8">
       
@@ -105,7 +96,25 @@ export function CreateResumeForm({ onGenerate, template }: CreateResumeFormProps
           {errors.jobTitle && <p className="mt-1 text-red-400 text-sm">{errors.jobTitle.message}</p>}
         </div>
       </div>
+      
+      <div className="border-t border-white/20"></div>
 
+      {/* --- НОВАЯ СЕКЦИЯ: TARGET JOB (OPTIONAL) --- */}
+      <div>
+        <h3 className="font-display text-xl mb-1">Target Vacancy (Optional)</h3>
+        <p className="text-sm text-white/60 mb-4">Provide details of the job you're applying for to tailor the resume.</p>
+        <div className="space-y-3 border border-white/20 p-4 rounded-md">
+          <div>
+              <Label htmlFor="targetJob.title" required={false}>Vacancy Title</Label>
+              <input {...register("targetJob.title")} id="targetJob.title" className={inputStyle} placeholder="e.g., Senior Product Manager"/>
+          </div>
+          <div>
+              <Label htmlFor="targetJob.description" required={false}>Vacancy Description</Label>
+              <textarea {...register("targetJob.description")} id="targetJob.description" rows={4} className={inputStyle} placeholder="Copy and paste the job description here..."/>
+          </div>
+        </div>
+      </div>
+      
       <div className="border-t border-white/20"></div>
 
       <div>
@@ -120,8 +129,9 @@ export function CreateResumeForm({ onGenerate, template }: CreateResumeFormProps
           {errors.contact?.email && <p className="mt-1 text-red-400 text-sm">{errors.contact.email.message}</p>}
         </div>
          <div>
-          <Label htmlFor="contact.phone" required={true}>Phone</Label>
+          <Label htmlFor="contact.phone">Phone</Label>
           <input {...register("contact.phone")} id="contact.phone" className={inputStyle} placeholder="+1 (555) 123-4567"/>
+          {errors.contact?.phone && <p className="mt-1 text-red-400 text-sm">{errors.contact.phone.message}</p>}
         </div>
         <div className="md:col-span-2">
             <Label htmlFor="contact.linkedin" required={false}>LinkedIn URL (Optional)</Label>
