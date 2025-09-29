@@ -223,3 +223,47 @@ a,
 .CircularProgressbar .CircularProgressbar-background {
     fill: #3e98c7;
 }
+
+/* Custom layout for scrollable columns */
+.page-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  /* Высота всего экрана минус отступы и примерная высота хедера */
+  height: calc(100vh - (2 * 1.5rem) - 84px);
+}
+
+.form-column {
+  overflow-y: auto; /* Включаем скролл для этой колонки */
+  padding-right: 1rem; /* Небольшой отступ для скроллбара */
+}
+
+.preview-column {
+  position: sticky;
+  top: 1.5rem; /* Отступ сверху, равный p-6 */
+  height: calc(100vh - (2 * 1.5rem) - 84px); /* Та же высота, что и у родителя */
+  overflow-y: auto; /* Включаем скролл и для этой колонки */
+  padding-right: 1rem; /* Небольшой отступ для скроллбара */
+}
+
+/* Стилизация скроллбара для красоты */
+.form-column::-webkit-scrollbar,
+.preview-column::-webkit-scrollbar {
+  width: 8px;
+}
+
+.form-column::-webkit-scrollbar-track,
+.preview-column::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.form-column::-webkit-scrollbar-thumb,
+.preview-column::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.form-column::-webkit-scrollbar-thumb:hover,
+.preview-column::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}

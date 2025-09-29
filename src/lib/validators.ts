@@ -5,7 +5,6 @@ export const resumeSchema = z.object({
   fullName: z.string().min(2, "Full name must be at least 2 characters."),
   jobTitle: z.string().min(2, "Job title must be at least 2 characters."),
   
-  // --- НОВЫЙ НЕОБЯЗАТЕЛЬНЫЙ ОБЪЕКТ ---
   targetJob: z.object({
     title: z.string().optional(),
     description: z.string().optional(),
@@ -50,3 +49,6 @@ export const resumeSchema = z.object({
     value: z.string().min(1, "Certification cannot be empty."),
   })).optional(),
 });
+
+// --- ДОБАВЛЕН ЭКСПОРТ ТИПА ОТСЮДА ---
+export type ResumeFormData = z.infer<typeof resumeSchema>;

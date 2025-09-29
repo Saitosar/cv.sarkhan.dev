@@ -5,7 +5,6 @@ import { z } from 'zod';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
-// 1. Упрощаем схему ответа. Убираем 'message'.
 const assessmentSchema = z.object({
   confidenceScore: z.number().min(0).max(100),
   recommendations: z.array(z.string()),
@@ -18,13 +17,16 @@ export async function POST(req: Request) {
 
     const { targetJob, ...resumeData } = parsedData;
 
-    // 2. Упрощаем и ужесточаем промпт.
+    // --- УЛУЧШЕННЫЙ ПРОМПТ ---
     let prompt = `
       You are an expert career coach with a friendly, supportive, and encouraging mentor persona. Your goal is to help the user feel confident.
 
       Analyze the following resume data. Provide a "confidence score" and a list of actionable recommendations.
 
-      The output MUST be a valid JSON object with the exact structure: { "confidenceScore": number, "recommendations": string[] }.
+      The output MUST be a valid JSON object and NOTHING ELSE. Do not include any text before or after the JSON object. Do not use markdown.
+
+      The JSON structure MUST be exactly: { "confidenceScore": number, "recommendations": string[] }.
+      Ensure the JSON is perfectly formatted. Do not use trailing commas in arrays or objects.
 
       **Confidence Score Rules:**
       - A number between 0 and 100.
@@ -45,13 +47,25 @@ export async function POST(req: Request) {
       ${targetJob?.description || 'Not provided'}
     `;
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite-001" }); // Используем более мощную модель для надежности
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = await response.text();
 
-    const cleanedText = text.replaceAll('```json', '').replaceAll('```', '').trim();
-    const jsonResponse = JSON.parse(cleanedText);
+    // --- НОВАЯ, БОЛЕЕ НАДЕЖНАЯ ЛОГИКА ПАРСИНГА ---
+    // Находим первое вхождение '{' и последнее '}'
+    const firstBrace = text.indexOf('{');
+    const lastBrace = text.lastIndexOf('}');
+
+    if (firstBrace === -1 || lastBrace === -1 || lastBrace < firstBrace) {
+      throw new Error("Could not find a valid JSON object in the AI response.");
+    }
+    
+    // Извлекаем только то, что находится между скобками
+    const jsonString = text.substring(firstBrace, lastBrace + 1);
+    
+    const jsonResponse = JSON.parse(jsonString);
+    // --- КОНЕЦ НОВОЙ ЛОГИКИ ---
 
     const validatedResponse = assessmentSchema.parse(jsonResponse);
 

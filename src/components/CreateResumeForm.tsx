@@ -3,33 +3,15 @@
 
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { resumeSchema } from "@/lib/validators";
-import type { z } from "zod";
-import type { TemplateName } from "./TemplateSelector";
+// --- ИЗМЕНЕНИЕ: Импортируем и схему, и тип из одного места ---
+import { resumeSchema, type ResumeFormData } from "@/lib/validators";
 import type { FieldErrors } from "react-hook-form";
-import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import ReactMarkdown from 'react-markdown';
-import { ScoreCircle } from './ScoreCircle';
-
-type ResumeFormData = z.infer<typeof resumeSchema>;
-
-// Тип для ответа от API (без message)
-type AssessmentApiResponse = {
-  confidenceScore: number;
-  recommendations: string[];
-};
-
-// Тип для состояния на клиенте (с message)
-type AssessmentResult = {
-  confidenceScore: number;
-  recommendations: string[];
-  message: string;
-};
 
 interface CreateResumeFormProps {
-  onGenerate: (data: any) => void;
-  template: TemplateName;
+  onGenerate: (data: ResumeFormData) => void;
+  onAssess: (data: ResumeFormData) => void;
+  isAssessing: boolean;
 }
 
 const addButtonStyle = "mt-2 flex w-full cursor-pointer items-center justify-center rounded-md border border-dashed border-white/20 p-3 text-white/50 transition-all hover:border-white/40 hover:text-white/80";
@@ -50,18 +32,7 @@ const SectionHeader = ({ title }: { title: string }) => (
   <h3 className="font-display text-xl mb-3">{title}</h3>
 );
 
-// --- НОВАЯ ФУНКЦИЯ ДЛЯ ВЫБОРА СООБЩЕНИЯ ---
-const getMotivationalMessage = (score: number): string => {
-  if (score >= 90) {
-    return "Great! Your CV is ATS-ready. Now you can apply with confidence 🚀";
-  }
-  if (score >= 50) {
-    return "Good start! A few quick fixes will make your CV shine brighter ✨";
-  }
-  return "Don’t worry, many CVs start here. Follow the tips — you’ll see fast progress 💪";
-};
-
-export function CreateResumeForm({ onGenerate, template }: CreateResumeFormProps) {
+export function CreateResumeForm({ onGenerate, onAssess, isAssessing }: CreateResumeFormProps) {
   const { register, control, handleSubmit, formState: { errors }, getValues } = useForm<ResumeFormData>({
     resolver: zodResolver(resumeSchema),
     defaultValues: {
@@ -77,10 +48,6 @@ export function CreateResumeForm({ onGenerate, template }: CreateResumeFormProps
     },
   });
 
-  const [isAssessing, setIsAssessing] = useState(false);
-  const [assessmentResult, setAssessmentResult] = useState<AssessmentResult | null>(null);
-  const [assessmentError, setAssessmentError] = useState<string | null>(null);
-
   const { fields: experienceFields, append: appendExperience, remove: removeExperience } = useFieldArray({ control, name: "experience" });
   const { fields: projectFields, append: appendProject, remove: removeProject } = useFieldArray({ control, name: "projects" });
   const { fields: educationFields, append: appendEducation, remove: removeEducation } = useFieldArray({ control, name: "education" });
@@ -90,10 +57,6 @@ export function CreateResumeForm({ onGenerate, template }: CreateResumeFormProps
   const { fields: trainingFields, append: appendTraining, remove: removeTraining } = useFieldArray({ control, name: "trainings" });
   const { fields: certificationFields, append: appendCertification, remove: removeCertification } = useFieldArray({ control, name: "certifications" });
 
-  const onFormSubmit = (data: ResumeFormData) => {
-    onGenerate(data);
-  };
-
   const onFormError = (errors: FieldErrors<ResumeFormData>) => {
     const firstErrorKey = Object.keys(errors)[0];
     if (firstErrorKey) {
@@ -101,42 +64,10 @@ export function CreateResumeForm({ onGenerate, template }: CreateResumeFormProps
       element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
-  
-  async function handleAssess() {
-    setIsAssessing(true);
-    setAssessmentResult(null);
-    setAssessmentError(null);
-    const values = getValues();
-    try {
-      const response = await fetch("/api/assess", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to assess resume.");
-      }
-      const data: AssessmentApiResponse = await response.json();
-      
-      // --- ИЗМЕНЕНИЕ: Генерируем сообщение и добавляем его к результату ---
-      const message = getMotivationalMessage(data.confidenceScore);
-      setAssessmentResult({ ...data, message });
-
-    } catch (error) {
-      console.error("Assessment error:", error);
-      setAssessmentError(
-        error instanceof Error ? error.message : "An unknown error occurred."
-      );
-    } finally {
-      setIsAssessing(false);
-    }
-  }
 
   return (
-    <>
-      <form onSubmit={handleSubmit(onFormSubmit, onFormError)} className="space-y-8">
-        
+    <div className="p-8">
+      <form onSubmit={handleSubmit(onGenerate, onFormError)} className="space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div><Label htmlFor="fullName">Full Name</Label><input {...register("fullName")} id="fullName" className={inputStyle} placeholder="e.g., John Doe"/>{errors.fullName && <p className="mt-1 text-red-400 text-sm">{errors.fullName.message}</p>}</div>
           <div><Label htmlFor="jobTitle">Job Title</Label><input {...register("jobTitle")} id="jobTitle" className={inputStyle} placeholder="e.g., Senior Frontend Developer"/>{errors.jobTitle && <p className="mt-1 text-red-400 text-sm">{errors.jobTitle.message}</p>}</div>
@@ -200,48 +131,11 @@ export function CreateResumeForm({ onGenerate, template }: CreateResumeFormProps
 
         <div className="flex flex-col md:flex-row items-center gap-4 !mt-10">
           <button type="submit" className="card-button w-full">Generate Resume</button>
-          <button type="button" onClick={handleAssess} disabled={isAssessing} className="card-button w-full">
+          <button type="button" onClick={() => onAssess(getValues())} disabled={isAssessing} className="card-button w-full">
             {isAssessing ? <Loader2 className="mx-auto h-5 w-5 animate-spin" /> : 'Assess Resume'}
           </button>
         </div>
-      </form>
-      
-      {isAssessing && <p className="mt-4 text-center text-white/70">Assessing your resume, please wait...</p>}
-      
-      {assessmentError && (
-        <div className="mt-4 p-4 border border-red-500 bg-red-50/10 rounded-lg">
-          <h3 className="text-lg font-semibold text-red-500">Assessment Error</h3>
-          <p className="text-red-400">{assessmentError}</p>
-        </div>
-      )}
-
-      {assessmentResult && (
-        <div className="mt-6 p-6 border border-white/20 rounded-lg shadow-lg bg-black/20">
-            <h2 className="text-2xl font-bold text-center mb-4 text-white">Resume Assessment</h2>
-
-            <div className="mb-6 p-4 rounded-md bg-white/5 text-center">
-              <p className="text-lg font-semibold text-white">{assessmentResult.message}</p>
-            </div>
-            
-            <div className="flex flex-col items-center gap-y-8">
-              <div className="flex flex-col items-center text-center">
-                <h3 className="text-xl font-semibold text-white/90 mb-4">Confidence Score</h3>
-                <ScoreCircle score={assessmentResult.confidenceScore} />
-              </div>
-              
-              <div className="w-full">
-                <h3 className="text-xl font-semibold text-white/90 text-center mb-4">Recommendations for Improvement</h3>
-                <div className="space-y-4">
-                  {assessmentResult.recommendations.map((rec, index) => (
-                      <div key={index} className="prose prose-invert max-w-none text-white/80 p-4 border border-white/10 rounded-lg bg-white/5 prose-p:my-2 prose-strong:text-neonCyan">
-                        <ReactMarkdown>{rec}</ReactMarkdown>
-                      </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-        </div>
-      )}
-    </>
+    </form>
+    </div>
   );
 }
