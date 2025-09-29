@@ -7,20 +7,20 @@ import { LivePreview } from '@/components/LivePreview';
 import { TemplateSelector, type TemplateName } from '@/components/TemplateSelector';
 import { ColorPalette } from '@/components/ColorPalette';
 import { ThemeToggle, type Theme } from '@/components/ThemeToggle';
-import { classicPalettes, modernPalettes, creativePalettes, type ColorScheme } from '@/lib/palettes';
+import { classicPalettes, modernPalettes, creativePalettes } from '@/lib/palettes';
+import { resumeSchema } from '@/lib/validators';
+import type { z } from 'zod';
 
-type ResumeData = { result: string; } | null;
+type ResumeData = z.infer<typeof resumeSchema> | null;
 
 export default function CreatePage() {
   const [resumeData, setResumeData] = useState<ResumeData>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>("Классический");
   
-  // --- Новые состояния для управления темами ---
   const [palettes, setPalettes] = useState(classicPalettes);
   const [accentColor, setAccentColor] = useState(classicPalettes[0]);
   const [theme, setTheme] = useState<Theme>('dark');
 
-  // Этот эффект будет менять палитру и сбрасывать цвет при смене шаблона
   useEffect(() => {
     switch (selectedTemplate) {
       case "Современный":
@@ -53,7 +53,7 @@ export default function CreatePage() {
       <div className="flex flex-col gap-8">
         <div className="glass-card p-8 flex-grow">
           <LivePreview 
-            data={resumeData} 
+            data={resumeData}
             template={selectedTemplate}
             accentColor={accentColor}
             theme={theme}
@@ -66,7 +66,6 @@ export default function CreatePage() {
           />
           <div className="border-t border-white/20"></div>
           
-          {/* --- Новые UI элементы --- */}
           <div className="flex justify-center items-center gap-8">
             <ColorPalette 
               palettes={palettes}

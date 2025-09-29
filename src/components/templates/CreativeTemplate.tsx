@@ -1,39 +1,7 @@
 // src/components/templates/CreativeTemplate.tsx
 import type { ColorScheme } from "@/lib/palettes";
 import type { Theme } from "@/components/ThemeToggle";
-
-interface ResumeData {
-  summary?: string;
-  contact?: {
-    email?: string;
-    phone?: string;
-    linkedin?: string;
-  };
-  experience?: Array<{
-    company?: string;
-    position?: string;
-    years?: string;
-    description?: string;
-  }>;
-  projects?: Array<{
-    name?: string;
-    description?: string;
-    technologies?: string;
-  }>;
-  education?: Array<{
-    institution?: string;
-    degree?: string;
-    years?:string;
-  }>;
-  skills?: string[];
-  languages?: Array<{
-    language?: string;
-    proficiency?: string;
-  }>;
-  achievements?: string[];
-  trainings?: string[];
-  certifications?: string[];
-}
+import type { ResumeData } from "@/lib/placeholder-data";
 
 export function CreativeTemplate({ resume, accentColor, theme }: { resume: ResumeData, accentColor: ColorScheme, theme: Theme }) {
   const hasContent = (arr: any[] | undefined) => arr && arr.length > 0;
@@ -42,14 +10,13 @@ export function CreativeTemplate({ resume, accentColor, theme }: { resume: Resum
   const bgColor = isDark ? 'bg-gray-900' : 'bg-white';
   const textColor = isDark ? 'text-gray-200' : 'text-gray-800';
   const subTextColor = isDark ? 'text-gray-400' : 'text-gray-500';
-  const sectionBg = isDark ? 'bg-black bg-opacity-20' : 'bg-gray-50';
 
   const Section = ({ title, children }: { title: string, children: React.ReactNode }) => (
-    <div className="mt-6">
-      <h2 className="text-lg font-bold border-b pb-1 mb-4" style={{ borderColor: accentColor.primary }}>
+    <div>
+      <h2 className="text-lg font-bold border-b pb-1 mb-3" style={{ borderColor: accentColor.primary }}>
         {title}
       </h2>
-      <div className={`${sectionBg} p-4 rounded-md border-l-4`} style={{ borderColor: accentColor.secondary }}>
+      <div className="text-sm">
         {children}
       </div>
     </div>
@@ -57,86 +24,83 @@ export function CreativeTemplate({ resume, accentColor, theme }: { resume: Resum
 
   return (
     <div className={`${bgColor} ${textColor} p-8 font-mono relative overflow-hidden transition-colors duration-300`}>
-      {isDark && <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full opacity-30 blur-2xl" style={{ backgroundColor: accentColor.primary }}></div>}
+      <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-repeat" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23${accentColor.primary.replace('#', '')}' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`}}></div>
       
-      <h1 className="text-4xl font-bold text-center mb-2" style={{ color: accentColor.primary }}>{resume.summary?.split(':')[0]}</h1>
-      <p className={`text-center mb-6 ${subTextColor}`}>{resume.summary?.split(':')[1]?.split('\n')[0]}</p>
-      <div className={`text-center text-xs mb-8 ${subTextColor} flex justify-center items-center gap-x-2 flex-wrap`} style={{ color: accentColor.primary }}>
-        <span>{resume.contact?.email}</span>
-        {resume.contact?.phone && <span className="before:content-['//'] before:mr-2">{resume.contact.phone}</span>}
-        {resume.contact?.linkedin && <span className="before:content-['//'] before:mr-2">{resume.contact.linkedin}</span>}
+      {/* ИСПРАВЛЕНО: Используем отдельные поля fullName и jobTitle */}
+      <h1 className="text-4xl font-bold text-center mb-2" style={{ color: accentColor.primary }}>{resume.fullName}</h1>
+      <p className={`text-center mb-6 ${subTextColor}`}>{resume.jobTitle}</p>
+      <div className={`text-center text-xs mb-8 ${subTextColor} flex justify-center items-center gap-x-2 flex-wrap`}>
+        <span>{resume.contact.email}</span>
+        {resume.contact.phone && <span className="before:content-['//'] before:mx-2">{resume.contact.phone}</span>}
+        {resume.contact.linkedin && <span className="before:content-['//'] before:mx-2">{resume.contact.linkedin}</span>}
       </div>
       
-      {hasContent(resume.experience) && (
-          <Section title="EXPERIENCE.log">
-            {resume.experience?.map((job, index) => (
-                <div key={index} className="mb-4 last:mb-0">
-                <h3 className="text-md" style={{ color: accentColor.primary }}> {job.position}</h3>
-                <p className={`text-sm pl-4 ${subTextColor}`}>{job.company} -- [{job.years}]</p>
-                <p className="text-sm mt-1 pl-4 text-justify" style={{ whiteSpace: 'pre-line' }}>{job.description}</p>
+      <div className="space-y-6">
+        {resume.summary && (
+          <div>
+            <p className="italic text-center" style={{ whiteSpace: 'pre-line' }}>{resume.summary}</p>
+          </div>
+        )}
+        
+        {hasContent(resume.experience) && (
+          <Section title=">> Experience">
+            <div className="space-y-4">
+              {resume.experience.map((job, index) => (
+                <div key={index}>
+                  <p className="font-bold">{job.position} <span className={subTextColor}>@ {job.company}</span></p>
+                  <p className="text-xs" style={{ color: accentColor.primary }}>{job.years}</p>
+                  <p className="mt-1" style={{ whiteSpace: 'pre-line' }}>{job.description}</p>
                 </div>
-            ))}
-          </Section>
-      )}
-
-      {hasContent(resume.projects) && (
-        <Section title="PROJECTS.md">
-            {resume.projects?.map((project, index) => (
-                <div key={index} className="mb-4 last:mb-0">
-                <h3 className="text-md" style={{ color: accentColor.primary }}># {project.name}</h3>
-                <p className={`text-sm mt-1 pl-4 ${subTextColor} text-justify`} style={{ whiteSpace: 'pre-line' }}>- {project.description}</p>
-                <p className={`text-xs mt-1 pl-4 ${isDark ? 'bg-gray-700' : 'bg-gray-200'} rounded p-1 inline-block`}>`{project.technologies}`</p>
-                </div>
-            ))}
-        </Section>
-      )}
-      
-      {hasContent(resume.education) && (
-          <Section title="EDUCATION.txt">
-            {resume.education?.map((edu, index) => (
-                <p key={index} className={`text-sm mb-2 last:mb-0 ${subTextColor}`}>* {edu.degree} at {edu.institution} ({edu.years})</p>
-            ))}
-          </Section>
-      )}
-      
-      {hasContent(resume.skills) && (
-        <Section title="SKILLS.csv">
-            <p className={`text-sm ${subTextColor}`}>
-                {resume.skills?.join(', ')}
-            </p>
-        </Section>
-      )}
-
-      {hasContent(resume.languages) && (
-          <Section title="LANGUAGES.json">
-            <pre className={`text-sm ${subTextColor}`}>
-                {JSON.stringify(resume.languages, null, 2)}
-            </pre>
-          </Section>
-      )}
-      
-      {hasContent(resume.achievements) && (
-          <Section title="ACHIEVEMENTS.ini">
-            <div className={`text-sm ${subTextColor} space-y-1`}>
-                {resume.achievements?.map((ach, index) => ach && (
-                    <p key={index}>{`achievement_${index + 1} = "${ach}"`}</p>
-                ))}
+              ))}
             </div>
           </Section>
-      )}
+        )}
 
-       {(hasContent(resume.certifications) || hasContent(resume.trainings)) && (
-           <Section title="CERTS_TRAINING.pem">
-            <div className={`text-sm ${subTextColor} space-y-2`}>
-                {hasContent(resume.certifications) && resume.certifications?.map((cert, index) => cert && (
-                <p key={index}>-----BEGIN CERTIFICATE-----<br/>{cert}<br/>-----END CERTIFICATE-----</p>
-                ))}
-                {hasContent(resume.trainings) && resume.trainings?.map((train, index) => train && (
-                <p key={index} className="mt-2">- {train}</p>
-                ))}
+        {hasContent(resume.projects) && (
+          <Section title=">> Projects">
+            <div className="space-y-4">
+              {resume.projects.map((project, index) => (
+                <div key={index}>
+                  <p className="font-bold">{project.name}</p>
+                  {project.technologies && <p className={`text-xs ${subTextColor}`}>{project.technologies}</p>}
+                  <p className="mt-1" style={{ whiteSpace: 'pre-line' }}>{project.description}</p>
+                </div>
+              ))}
             </div>
-           </Section>
-       )}
+          </Section>
+        )}
+
+        {hasContent(resume.skills) && (
+          <Section title=">> Skills">
+            <p>{resume.skills.join(' | ')}</p>
+          </Section>
+        )}
+
+        {hasContent(resume.education) && (
+          <Section title=">> Education">
+            {resume.education.map((edu, index) => (
+              <div key={index}>
+                <p className="font-bold">{edu.degree} <span className={subTextColor}>- {edu.institution}</span></p>
+                <p className={`text-xs ${subTextColor}`}>{edu.years}</p>
+              </div>
+            ))}
+          </Section>
+        )}
+
+        {hasContent(resume.languages) && (
+          <Section title=">> Languages">
+            <p>{resume.languages.map(lang => `${lang.language} (${lang.proficiency})`).join('; ')}</p>
+          </Section>
+        )}
+
+        {hasContent(resume.achievements) && (
+          <Section title=">> Achievements">
+            <ul className="list-disc list-inside space-y-1">
+              {resume.achievements.map((ach, index) => <li key={index}>{ach}</li>)}
+            </ul>
+          </Section>
+        )}
+      </div>
     </div>
   );
 }

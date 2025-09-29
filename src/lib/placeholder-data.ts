@@ -1,7 +1,14 @@
 // src/lib/placeholder-data.ts
 
+// 1. Определяем и экспортируем тип ResumeData на основе структуры объекта
+export type ResumeData = typeof placeholderResume;
+
 export const placeholderResume = {
-  summary: "John Doe: Senior Frontend Developer\nA highly skilled and motivated frontend developer with over 8 years of experience in creating responsive and user-friendly web applications.",
+  // 2. Добавляем недостающие поля fullName и jobTitle
+  fullName: "John Doe",
+  jobTitle: "Senior Frontend Developer",
+  // 3. Очищаем summary от лишней информации
+  summary: "A highly skilled and motivated frontend developer with over 8 years of experience in creating responsive and user-friendly web applications.",
   contact: {
     email: "john.doe@email.com",
     phone: "+1 (555) 123-4567",
