@@ -10,11 +10,17 @@ import type { FieldErrors } from "react-hook-form";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
-import { ScoreCircle } from './ScoreCircle'; // <-- ИМПОРТИРУЕМ НАШ НОВЫЙ КОМПОНЕНТ
+import { ScoreCircle } from './ScoreCircle';
 
 type ResumeFormData = z.infer<typeof resumeSchema>;
 
-// 1. ИСПРАВЛЕНИЕ: Обновляем тип, чтобы включить 'message'
+// Тип для ответа от API (без message)
+type AssessmentApiResponse = {
+  confidenceScore: number;
+  recommendations: string[];
+};
+
+// Тип для состояния на клиенте (с message)
 type AssessmentResult = {
   confidenceScore: number;
   recommendations: string[];
@@ -43,6 +49,17 @@ const Label = ({ htmlFor, children, required = true }: { htmlFor: string, childr
 const SectionHeader = ({ title }: { title: string }) => (
   <h3 className="font-display text-xl mb-3">{title}</h3>
 );
+
+// --- НОВАЯ ФУНКЦИЯ ДЛЯ ВЫБОРА СООБЩЕНИЯ ---
+const getMotivationalMessage = (score: number): string => {
+  if (score >= 90) {
+    return "Great! Your CV is ATS-ready. Now you can apply with confidence 🚀";
+  }
+  if (score >= 50) {
+    return "Good start! A few quick fixes will make your CV shine brighter ✨";
+  }
+  return "Don’t worry, many CVs start here. Follow the tips — you’ll see fast progress 💪";
+};
 
 export function CreateResumeForm({ onGenerate, template }: CreateResumeFormProps) {
   const { register, control, handleSubmit, formState: { errors }, getValues } = useForm<ResumeFormData>({
@@ -100,8 +117,12 @@ export function CreateResumeForm({ onGenerate, template }: CreateResumeFormProps
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to assess resume.");
       }
-      const data: AssessmentResult = await response.json();
-      setAssessmentResult(data);
+      const data: AssessmentApiResponse = await response.json();
+      
+      // --- ИЗМЕНЕНИЕ: Генерируем сообщение и добавляем его к результату ---
+      const message = getMotivationalMessage(data.confidenceScore);
+      setAssessmentResult({ ...data, message });
+
     } catch (error) {
       console.error("Assessment error:", error);
       setAssessmentError(
@@ -196,23 +217,23 @@ export function CreateResumeForm({ onGenerate, template }: CreateResumeFormProps
 
       {assessmentResult && (
         <div className="mt-6 p-6 border border-white/20 rounded-lg shadow-lg bg-black/20">
-            <h2 className="text-2xl font-bold mb-4 text-white">Resume Assessment</h2>
+            <h2 className="text-2xl font-bold text-center mb-4 text-white">Resume Assessment</h2>
 
             <div className="mb-6 p-4 rounded-md bg-white/5 text-center">
               <p className="text-lg font-semibold text-white">{assessmentResult.message}</p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-              <div className="md:col-span-1 flex flex-col items-center text-center">
+            <div className="flex flex-col items-center gap-y-8">
+              <div className="flex flex-col items-center text-center">
                 <h3 className="text-xl font-semibold text-white/90 mb-4">Confidence Score</h3>
-                {/* --- ЗАМЕНЯЕМ ТЕКСТ НА КОМПОНЕНТ --- */}
                 <ScoreCircle score={assessmentResult.confidenceScore} />
               </div>
-              <div className="md:col-span-2">
-                <h3 className="text-xl font-semibold text-white/90">Recommendations for Improvement</h3>
-                <div className="mt-2 space-y-4">
+              
+              <div className="w-full">
+                <h3 className="text-xl font-semibold text-white/90 text-center mb-4">Recommendations for Improvement</h3>
+                <div className="space-y-4">
                   {assessmentResult.recommendations.map((rec, index) => (
-                      <div key={index} className="prose prose-invert text-white/80 p-4 border border-white/10 rounded-lg bg-white/5 prose-p:my-2 prose-strong:text-neonCyan">
+                      <div key={index} className="prose prose-invert max-w-none text-white/80 p-4 border border-white/10 rounded-lg bg-white/5 prose-p:my-2 prose-strong:text-neonCyan">
                         <ReactMarkdown>{rec}</ReactMarkdown>
                       </div>
                   ))}

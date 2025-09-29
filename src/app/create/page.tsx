@@ -1,7 +1,7 @@
 // src/app/create/page.tsx
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react'; // 1. Импортируем useRef
 import { CreateResumeForm } from "@/components/CreateResumeForm";
 import { LivePreview } from '@/components/LivePreview';
 import { TemplateSelector, type TemplateName } from '@/components/TemplateSelector';
@@ -20,6 +20,9 @@ export default function CreatePage() {
   const [palettes, setPalettes] = useState(classicPalettes);
   const [accentColor, setAccentColor] = useState(classicPalettes[0]);
   const [theme, setTheme] = useState<Theme>('dark');
+  
+  // 2. Создаем "якорь" для блока с превью
+  const previewRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     switch (selectedTemplate) {
@@ -37,8 +40,11 @@ export default function CreatePage() {
     }
   }, [selectedTemplate]);
 
+  // 3. Обновляем функцию, добавляя логику скролла
   const handleGenerate = (data: ResumeData) => {
     setResumeData(data);
+    // После обновления данных, плавно скроллим к блоку с превью
+    previewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   return (
@@ -51,7 +57,8 @@ export default function CreatePage() {
       </div>
 
       <div className="flex flex-col gap-8">
-        <div className="glass-card p-8 flex-grow">
+        {/* 4. Привязываем "якорь" к этому div */}
+        <div ref={previewRef} className="glass-card p-8 flex-grow">
           <LivePreview 
             data={resumeData}
             template={selectedTemplate}
