@@ -10,6 +10,7 @@ import type { FieldErrors } from "react-hook-form";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
+import { ScoreCircle } from './ScoreCircle'; // <-- ИМПОРТИРУЕМ НАШ НОВЫЙ КОМПОНЕНТ
 
 type ResumeFormData = z.infer<typeof resumeSchema>;
 
@@ -193,24 +194,22 @@ export function CreateResumeForm({ onGenerate, template }: CreateResumeFormProps
         </div>
       )}
 
-      {/* --- 2. ИЗМЕНЕННЫЙ БЛОК ОТОБРАЖЕНИЯ РЕЗУЛЬТАТОВ --- */}
       {assessmentResult && (
         <div className="mt-6 p-6 border border-white/20 rounded-lg shadow-lg bg-black/20">
             <h2 className="text-2xl font-bold mb-4 text-white">Resume Assessment</h2>
 
-            {/* Блок с поддерживающим сообщением */}
             <div className="mb-6 p-4 rounded-md bg-white/5 text-center">
               <p className="text-lg font-semibold text-white">{assessmentResult.message}</p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="md:col-span-1 text-center">
-                <h3 className="text-xl font-semibold text-white/90">Confidence Score</h3>
-                <p className="text-6xl font-bold text-neonCyan mt-2">{assessmentResult.confidenceScore}%</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+              <div className="md:col-span-1 flex flex-col items-center text-center">
+                <h3 className="text-xl font-semibold text-white/90 mb-4">Confidence Score</h3>
+                {/* --- ЗАМЕНЯЕМ ТЕКСТ НА КОМПОНЕНТ --- */}
+                <ScoreCircle score={assessmentResult.confidenceScore} />
               </div>
               <div className="md:col-span-2">
                 <h3 className="text-xl font-semibold text-white/90">Recommendations for Improvement</h3>
-                {/* Блок с разделенными советами-карточками */}
                 <div className="mt-2 space-y-4">
                   {assessmentResult.recommendations.map((rec, index) => (
                       <div key={index} className="prose prose-invert text-white/80 p-4 border border-white/10 rounded-lg bg-white/5 prose-p:my-2 prose-strong:text-neonCyan">
