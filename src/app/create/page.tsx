@@ -81,15 +81,19 @@ export default function CreatePage() {
 
   return (
     <div className="container mx-auto p-6">
-      <div className="page-container">
-        <div className="form-column glass-card">
+      {/* --- ИЗМЕНЕНИЕ ЗДЕСЬ: Новый, более надежный макет --- */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8" style={{ height: 'calc(100vh - 120px)' }}>
+        {/* Левая колонка */}
+        <div className="glass-card overflow-y-auto custom-scrollbar">
           <CreateResumeForm 
             onGenerate={handleGenerate}
             onAssess={handleAssess}
             isAssessing={isAssessing}
           />
         </div>
-        <div className="preview-column glass-card">
+        
+        {/* Правая колонка */}
+        <div className="glass-card flex flex-col">
           <Tabs
             tabs={tabs}
             activeTab={rightPanelView}
@@ -117,11 +121,13 @@ export default function CreatePage() {
             </TabContent>
             
             <TabContent id="assessment">
-              <AssessmentResultDisplay 
-                result={assessmentResult}
-                error={assessmentError}
-                isLoading={isAssessing}
-              />
+                <div className="overflow-y-auto h-full custom-scrollbar">
+                    <AssessmentResultDisplay 
+                        result={assessmentResult}
+                        error={assessmentError}
+                        isLoading={isAssessing}
+                    />
+                </div>
             </TabContent>
           </Tabs>
         </div>
