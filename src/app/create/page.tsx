@@ -10,25 +10,14 @@ import { ThemeToggle, type Theme } from '@/components/ThemeToggle';
 import { classicPalettes, modernPalettes, creativePalettes } from '@/lib/palettes';
 import { AssessmentResultDisplay } from '@/components/AssessmentResultDisplay';
 import { Tabs, TabContent } from '@/components/ui/Tabs';
-// --- ИЗМЕНЕНИЕ: Импортируем тип из validators ---
 import { type ResumeFormData } from '@/lib/validators';
 
-// Типы для результатов оценки
-type AssessmentApiResponse = {
-  confidenceScore: number;
-  recommendations: string[];
-};
 type AssessmentResult = {
-  confidenceScore: number;
+  resume_score: number;
+  strengths: string[];
+  weaknesses: string[];
   recommendations: string[];
-  message: string;
-};
-
-// Функция для получения мотивационного сообщения
-const getMotivationalMessage = (score: number): string => {
-  if (score >= 80) return "Great! Your CV is ATS-ready. Now you can apply with confidence 🚀";
-  if (score >= 50) return "Good start! A few quick fixes will make your CV shine brighter ✨";
-  return "Don’t worry, many CVs start here. Follow the tips — you’ll see fast progress 💪";
+  mentorship_tone_example: string;
 };
 
 type RightPanelView = 'preview' | 'assessment';
@@ -75,9 +64,8 @@ export default function CreatePage() {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to assess resume.");
       }
-      const data: AssessmentApiResponse = await response.json();
-      const message = getMotivationalMessage(data.confidenceScore);
-      setAssessmentResult({ ...data, message });
+      const data: AssessmentResult = await response.json();
+      setAssessmentResult(data);
     } catch (error) {
       console.error("Assessment error:", error);
       setAssessmentError(error instanceof Error ? error.message : "An unknown error occurred.");

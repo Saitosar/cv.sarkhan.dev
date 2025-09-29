@@ -50,5 +50,4 @@ export const resumeSchema = z.object({
   })).optional(),
 });
 
-// --- ДОБАВЛЕН ЭКСПОРТ ТИПА ОТСЮДА ---
 export type ResumeFormData = z.infer<typeof resumeSchema>;

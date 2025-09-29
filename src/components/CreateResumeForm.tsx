@@ -3,7 +3,6 @@
 
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-// --- ИЗМЕНЕНИЕ: Импортируем и схему, и тип из одного места ---
 import { resumeSchema, type ResumeFormData } from "@/lib/validators";
 import type { FieldErrors } from "react-hook-form";
 import { Loader2 } from "lucide-react";
