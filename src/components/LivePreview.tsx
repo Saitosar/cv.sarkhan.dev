@@ -76,8 +76,8 @@ export function LivePreview({ data, template, accentColor, theme }: LivePreviewP
   };
 
   return (
-    <div className="w-full bg-white rounded-lg shadow-2xl overflow-hidden -m-4">
-      <div className="w-full h-full scale-[0.9] origin-top-left overflow-y-auto">
+    <div className="w-full bg-white rounded-lg shadow-2xl overflow-hidden">
+      <div className="w-full h-full origin-top-left overflow-y-auto">
         {renderTemplate()}
       </div>
     </div>
