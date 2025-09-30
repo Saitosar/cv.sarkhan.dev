@@ -1,7 +1,8 @@
 // src/app/create/page.tsx
 "use client";
 
-import { useState, useEffect } from 'react';
+// useRef и useReactToPrint БОЛЬШЕ НЕ НУЖНЫ
+import { useState, useEffect } from 'react'; 
 import { CreateResumeForm } from "@/components/CreateResumeForm";
 import { LivePreview } from '@/components/LivePreview';
 import { TemplateSelector, type TemplateName } from '@/components/TemplateSelector';
@@ -11,6 +12,7 @@ import { classicPalettes, modernPalettes, creativePalettes } from '@/lib/palette
 import { AssessmentResultDisplay } from '@/components/AssessmentResultDisplay';
 import { Tabs, TabContent } from '@/components/ui/Tabs';
 import { type ResumeFormData } from '@/lib/validators';
+import { Download } from 'lucide-react';
 
 type AssessmentResult = {
   resume_score: number;
@@ -34,6 +36,8 @@ export default function CreatePage() {
   const [isAssessing, setIsAssessing] = useState(false);
   const [assessmentResult, setAssessmentResult] = useState<AssessmentResult | null>(null);
   const [assessmentError, setAssessmentError] = useState<string | null>(null);
+
+  // --- УДАЛЕНА ЛОГИКА useReactToPrint ---
 
   useEffect(() => {
     switch (selectedTemplate) {
@@ -98,6 +102,7 @@ export default function CreatePage() {
             <TabContent id="preview">
               <div className="flex flex-col gap-8 h-full p-2">
                 <div className="p-8 flex-grow">
+                  {/* --- ОБРАТИТЕ ВНИМАНИЕ: ref больше не передается --- */}
                   <LivePreview 
                     data={resumeData}
                     template={selectedTemplate}
@@ -112,6 +117,11 @@ export default function CreatePage() {
                     <ColorPalette palettes={palettes} selectedColor={accentColor} onColorChange={setAccentColor} />
                     {selectedTemplate === "Креативный" && ( <ThemeToggle selectedTheme={theme} onThemeChange={setTheme} /> )}
                   </div>
+                  {/* --- ИЗМЕНЕНИЕ: Кнопка теперь вызывает window.print() --- */}
+                  <button onClick={() => window.print()} className="card-button w-full flex items-center justify-center gap-2">
+                    <Download size={20} />
+                    Download PDF
+                  </button>
                 </div>
               </div>
             </TabContent>

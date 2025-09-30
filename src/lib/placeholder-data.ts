@@ -1,10 +1,16 @@
 // src/lib/placeholder-data.ts
 
-// Тип для одного места работы
+// Явно определяем типы для каждой секции
+type Contact = {
+  email: string;
+  phone: string;
+  linkedin: string;
+};
+
 type Experience = {
   company: string;
   position: string;
-  description: string;
+  description?: string;
   startDate: { month: string; year: string };
   endDate?: {
     month?: string;
@@ -13,25 +19,58 @@ type Experience = {
   };
 };
 
-// 1. Определяем и экспортируем тип ResumeData на основе структуры объекта
-export type ResumeData = typeof placeholderResume;
+type Project = {
+  name: string;
+  description?: string;
+  technologies?: string;
+};
 
-// Функция для форматирования дат опыта работы
-export function formatExperienceDate({ startDate, endDate }: Experience): string {
-  const start = `${startDate.month} ${startDate.year}`;
+type Education = {
+  institution: string;
+  degree: string;
+  years?: string;
+};
+
+type Language = {
+  language: string;
+  proficiency: string;
+};
+
+// --- ГЛАВНОЕ ИЗМЕНЕНИЕ: Явное определение типа ResumeData ---
+export type ResumeData = {
+  fullName: string;
+  jobTitle: string;
+  summary: string;
+  contact: Contact;
+  experience: Experience[];
+  projects: Project[];
+  education: Education[];
+  skills: string[];
+  languages: Language[];
+  achievements: string[];
+  trainings: string[];
+  certifications: string[];
+};
+
+// Улучшенная функция форматирования дат
+export function formatExperienceDate(job: Experience): string {
+  if (!job.startDate.month || !job.startDate.year) return '';
   
-  if (endDate?.isCurrent) {
+  const start = `${job.startDate.month} ${job.startDate.year}`;
+  
+  if (job.endDate?.isCurrent) {
     return `${start} - Present`;
   }
   
-  if (endDate?.month && endDate?.year) {
-    return `${start} - ${endDate.month} ${endDate.year}`;
+  if (job.endDate?.month && job.endDate?.year) {
+    return `${start} - ${job.endDate.month} ${job.endDate.year}`;
   }
   
   return start;
 }
 
-export const placeholderResume = {
+// Placeholder теперь соответствует строгому типу ResumeData
+export const placeholderResume: ResumeData = {
   fullName: "John Doe",
   jobTitle: "Senior Frontend Developer",
   summary: "A highly skilled and motivated frontend developer with over 8 years of experience in creating responsive and user-friendly web applications.",
