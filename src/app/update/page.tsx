@@ -1,5 +1,4 @@
 // src/app/update/page.tsx
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -7,20 +6,19 @@ import { LivePreview } from '@/components/LivePreview';
 import { TemplateSelector, type TemplateName } from '@/components/TemplateSelector';
 import { ColorPalette } from '@/components/ColorPalette';
 import { ThemeToggle, type Theme } from '@/components/ThemeToggle';
-import { classicPalettes, modernPalettes, creativePalettes, type ColorScheme } from '@/lib/palettes';
+import { classicPalettes, modernPalettes, creativePalettes } from '@/lib/palettes';
 
-type PreviewData = { result: string; } | null;
+// Обновленный и более точный тип для данных этой страницы
+type SimplePreviewData = { result: string } | null;
 
 export default function UpdatePage() {
-  const [resumeData, setResumeData] = useState<PreviewData>(null);
+  const [resumeData, setResumeData] = useState<SimplePreviewData>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>("Классический");
   
-  // Вся необходимая логика для управления цветом и темой, как в create/page.tsx
   const [palettes, setPalettes] = useState(classicPalettes);
   const [accentColor, setAccentColor] = useState(classicPalettes[0]);
   const [theme, setTheme] = useState<Theme>('dark');
 
-  // Умный помощник, который меняет палитру при смене шаблона
   useEffect(() => {
     switch (selectedTemplate) {
       case "Современный":
@@ -48,7 +46,6 @@ export default function UpdatePage() {
     <div className="container mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
       <div className="glass-card p-8">
         
-        {/* Здесь форма со страницы Update */}
         <form onSubmit={handleUpdate} className="space-y-6">
             <div>
                 <label htmlFor="updatedInfo" className="block text-sm font-medium text-white/80 mb-2">

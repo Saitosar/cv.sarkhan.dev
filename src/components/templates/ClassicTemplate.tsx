@@ -1,6 +1,6 @@
 // src/components/templates/ClassicTemplate.tsx
 import type { ColorScheme } from "@/lib/palettes";
-import type { ResumeData } from "@/lib/placeholder-data";
+import { type ResumeData, formatExperienceDate } from "@/lib/placeholder-data";
 
 export function ClassicTemplate({ resume, accentColor }: { resume: ResumeData, accentColor: ColorScheme }) {
   const hasContent = (arr: any[] | undefined) => arr && arr.length > 0;
@@ -18,7 +18,6 @@ export function ClassicTemplate({ resume, accentColor }: { resume: ResumeData, a
     <div className="bg-white text-gray-800 p-8 font-serif">
       
       <div className="text-center mb-8 border-b-2 pb-4" style={{ borderColor: accentColor.primary }}>
-        {/* ИСПРАВЛЕНО: Используем отдельные поля fullName и jobTitle */}
         <h1 className="text-4xl font-bold text-gray-800">{resume.fullName}</h1>
         <p className="text-lg text-gray-600">{resume.jobTitle}</p>
         <div className="text-xs text-gray-500 mt-4 flex justify-center items-center gap-x-4 flex-wrap">
@@ -28,7 +27,6 @@ export function ClassicTemplate({ resume, accentColor }: { resume: ResumeData, a
         </div>
       </div>
       
-      {/* ИСПРАВЛЕНО: Отображаем summary напрямую */}
       {resume.summary && (
         <Section title="Professional Summary">
           <p className="text-justify" style={{ whiteSpace: 'pre-line' }}>{resume.summary}</p>
@@ -41,7 +39,8 @@ export function ClassicTemplate({ resume, accentColor }: { resume: ResumeData, a
             <div key={index}>
               <div className="flex justify-between items-baseline">
                 <h3 className="text-lg font-bold">{job.position}</h3>
-                <p className="text-sm font-medium text-gray-600">{job.years}</p>
+                {/* ИЗМЕНЕНИЕ ЗДЕСЬ */}
+                <p className="text-sm font-medium text-gray-600">{formatExperienceDate(job)}</p>
               </div>
               <p className="font-semibold text-md">{job.company}</p>
               <p className="text-sm mt-1 text-justify" style={{ whiteSpace: 'pre-line' }}>{job.description}</p>
@@ -50,6 +49,7 @@ export function ClassicTemplate({ resume, accentColor }: { resume: ResumeData, a
         </Section>
       )}
 
+      {/* ... (остальная часть файла без изменений) ... */}
       {hasContent(resume.projects) && (
         <Section title="Projects">
           {resume.projects.map((project, index) => (
@@ -61,7 +61,6 @@ export function ClassicTemplate({ resume, accentColor }: { resume: ResumeData, a
           ))}
         </Section>
       )}
-
       {hasContent(resume.education) && (
         <Section title="Education">
           {resume.education.map((edu, index) => (
@@ -75,19 +74,16 @@ export function ClassicTemplate({ resume, accentColor }: { resume: ResumeData, a
           ))}
         </Section>
       )}
-
       {hasContent(resume.skills) && (
         <Section title="Skills">
           <p>{resume.skills.join(', ')}</p>
         </Section>
       )}
-
       {hasContent(resume.languages) && (
         <Section title="Languages">
           <p>{resume.languages.map(lang => `${lang.language} (${lang.proficiency})`).join(', ')}</p>
         </Section>
       )}
-
       {hasContent(resume.achievements) && (
         <Section title="Achievements">
           <ul className="list-disc pl-5 space-y-1">
@@ -95,7 +91,6 @@ export function ClassicTemplate({ resume, accentColor }: { resume: ResumeData, a
           </ul>
         </Section>
       )}
-      
       {hasContent(resume.certifications) && (
         <Section title="Certifications">
           <ul className="list-disc pl-5 space-y-1">
@@ -103,7 +98,6 @@ export function ClassicTemplate({ resume, accentColor }: { resume: ResumeData, a
           </ul>
         </Section>
       )}
-
       {hasContent(resume.trainings) && (
         <Section title="Trainings">
           <ul className="list-disc pl-5 space-y-1">

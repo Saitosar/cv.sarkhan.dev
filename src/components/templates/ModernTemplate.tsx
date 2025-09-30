@@ -1,6 +1,6 @@
 // src/components/templates/ModernTemplate.tsx
 import type { ColorScheme } from "@/lib/palettes";
-import type { ResumeData } from "@/lib/placeholder-data";
+import { type ResumeData, formatExperienceDate } from "@/lib/placeholder-data";
 
 export function ModernTemplate({ resume, accentColor }: { resume: ResumeData, accentColor: ColorScheme }) {
   const hasContent = (arr: any[] | undefined) => arr && arr.length > 0;
@@ -19,7 +19,6 @@ export function ModernTemplate({ resume, accentColor }: { resume: ResumeData, ac
   return (
     <div className="bg-white text-gray-700 p-10 font-sans">
       <div className="text-center mb-10">
-        {/* ИСПРАВЛЕНО: Используем отдельные поля fullName и jobTitle */}
         <h1 className="text-5xl font-extrabold text-gray-800">{resume.fullName}</h1>
         <p className="text-xl text-gray-500 mt-2">{resume.jobTitle}</p>
         <div className="text-sm mt-4 tracking-wider flex justify-center items-center gap-x-2 flex-wrap" style={{ color: accentColor.primary }}>
@@ -30,7 +29,6 @@ export function ModernTemplate({ resume, accentColor }: { resume: ResumeData, ac
       </div>
 
       <div className="space-y-8">
-        {/* ИСПРАВЛЕНО: Отображаем summary напрямую */}
         {resume.summary && (
           <Section title="Summary">
             <p className="text-sm text-justify" style={{ whiteSpace: 'pre-line' }}>{resume.summary}</p>
@@ -55,7 +53,8 @@ export function ModernTemplate({ resume, accentColor }: { resume: ResumeData, ac
               <div key={index}>
                 <div className="flex justify-between items-baseline">
                   <h3 className="text-lg font-bold text-gray-800">{job.position}</h3>
-                  <p className="text-sm font-medium text-gray-500">{job.years}</p>
+                  {/* ИЗМЕНЕНИЕ ЗДЕСЬ */}
+                  <p className="text-sm font-medium text-gray-500">{formatExperienceDate(job)}</p>
                 </div>
                 <p className="font-semibold text-md text-gray-600">{job.company}</p>
                 <p className="text-sm mt-1 text-justify" style={{ whiteSpace: 'pre-line' }}>{job.description}</p>
@@ -63,7 +62,8 @@ export function ModernTemplate({ resume, accentColor }: { resume: ResumeData, ac
             ))}
           </Section>
         )}
-
+        
+        {/* ... (остальная часть файла без изменений) ... */}
         {hasContent(resume.projects) && (
           <Section title="Projects">
             {resume.projects.map((project, index) => (
@@ -75,7 +75,6 @@ export function ModernTemplate({ resume, accentColor }: { resume: ResumeData, ac
             ))}
           </Section>
         )}
-
         {hasContent(resume.education) && (
           <Section title="Education">
             {resume.education.map((edu, index) => (
@@ -89,13 +88,11 @@ export function ModernTemplate({ resume, accentColor }: { resume: ResumeData, ac
             ))}
           </Section>
         )}
-        
         {hasContent(resume.languages) && (
           <Section title="Languages">
             <p className="text-sm">{resume.languages.map(lang => `${lang.language} (${lang.proficiency})`).join(', ')}</p>
           </Section>
         )}
-
         {hasContent(resume.achievements) && (
           <Section title="Achievements">
             <ul className="list-disc pl-5 space-y-1 text-sm">
@@ -103,7 +100,6 @@ export function ModernTemplate({ resume, accentColor }: { resume: ResumeData, ac
             </ul>
           </Section>
         )}
-
         {hasContent(resume.certifications) && (
           <Section title="Certifications">
             <ul className="list-disc pl-5 space-y-1 text-sm">
@@ -111,7 +107,6 @@ export function ModernTemplate({ resume, accentColor }: { resume: ResumeData, ac
             </ul>
           </Section>
         )}
-
         {hasContent(resume.trainings) && (
           <Section title="Trainings">
             <ul className="list-disc pl-5 space-y-1 text-sm">

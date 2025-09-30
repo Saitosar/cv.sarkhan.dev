@@ -4,57 +4,36 @@
 import { ClassicTemplate } from './templates/ClassicTemplate';
 import { ModernTemplate } from './templates/ModernTemplate';
 import { CreativeTemplate } from './templates/CreativeTemplate';
-import { type TemplateName } from './TemplateSelector';
+import type { TemplateName } from './TemplateSelector';
 import { resumeSchema } from '@/lib/validators';
-import { placeholderResume, type ResumeData } from '@/lib/placeholder-data'; // Используем экспортированный тип ResumeData
+import { placeholderResume, type ResumeData as ResumeDataForTemplate } from '@/lib/placeholder-data';
 import type { z } from 'zod';
 import type { ColorScheme } from '@/lib/palettes';
 import type { Theme } from './ThemeToggle';
 
+// Тип данных, приходящих с основной формы создания
 type ResumeDataFromForm = z.infer<typeof resumeSchema>;
-
-// ResumeDataForTemplate теперь просто ссылается на ResumeData из placeholder-data.ts
-type ResumeDataForTemplate = ResumeData;
+// Тип данных со страниц update/import
+type SimplePreviewData = { result: string };
 
 interface LivePreviewProps {
-  data: ResumeDataFromForm | null;
+  data: ResumeDataFromForm | SimplePreviewData | null;
   template: TemplateName;
   accentColor: ColorScheme;
   theme: Theme;
 }
 
-// --- НОВАЯ ФУНКЦИЯ ДЛЯ КОНВЕРТАЦИИ ДАТЫ (ДЛЯ ШАБЛОНОВ) ---
-const formatExperienceYears = (exp: any): string => {
-  // Проверяем, что exp.startDate существует перед доступом к его свойствам
-  const start = exp.startDate ? `${exp.startDate.month} ${exp.startDate.year}`.trim() : '';
-  
-  if (exp.endDate?.isCurrent) {
-    return `${start} - Present`;
-  }
-  
-  if (exp.endDate?.month && exp.endDate?.year) {
-    return `${start} - ${exp.endDate.month} ${exp.endDate.year}`;
-  }
-  
-  if (exp.endDate?.year) {
-    return `${start} - ${exp.endDate.year}`;
-  }
-  
-  if (exp.startDate?.year) {
-    return start;
-  }
-
-  return 'Date range missing';
-};
-// ------------------------------------------
-
+// Вспомогательная функция для проверки типа данных
+function isResumeFormData(data: any): data is ResumeDataFromForm {
+  return data && typeof data === 'object' && 'fullName' in data;
+}
 
 export function LivePreview({ data, template, accentColor, theme }: LivePreviewProps) {
   
   let resumeContent: ResumeDataForTemplate;
 
-  if (data) {
-    // Преобразование данных формы в формат, ожидаемый шаблонами
+  if (isResumeFormData(data)) {
+    // Если это полные данные из формы, преобразуем их
     resumeContent = {
       fullName: data.fullName || '',
       jobTitle: data.jobTitle || '',
@@ -64,37 +43,26 @@ export function LivePreview({ data, template, accentColor, theme }: LivePreviewP
         phone: data.contact?.phone || '',
         linkedin: data.contact?.linkedin || '',
       },
-      experience: data.experience?.map(exp => ({
-        // ...exp включает startDate и endDate
-        ...exp,
-        years: formatExperienceYears(exp), // Форматированная строка 'years'
-        description: exp.description || '',
-        // Убедимся, что все поля, ожидаемые в ResumeData, присутствуют
-        startDate: { month: exp.startDate.month, year: exp.startDate.year },
-        endDate: exp.endDate || {},
-      })) || [],
-      
-      projects: data.projects?.map(proj => ({
-        ...proj,
-        description: proj.description || '',
-        technologies: proj.technologies || '',
-      })) || [],
-      education: data.education?.map(edu => ({
-        ...edu,
-        years: edu.years || '',
-      })) || [],
+      experience: data.experience?.map(exp => ({ ...exp, description: exp.description || '' })) || [],
+      projects: data.projects?.map(proj => ({ ...proj, description: proj.description || '', technologies: proj.technologies || '' })) || [],
+      education: data.education?.map(edu => ({ ...edu, years: edu.years || '' })) || [],
       languages: data.languages || [],
-      skills: data.skills?.map(item => item.value) || [],
-      achievements: data.achievements?.map(item => item.value) || [],
-      certifications: data.certifications?.map(item => item.value) || [],
-      trainings: data.trainings?.map(item => item.value) || [],
-    } as ResumeDataForTemplate;
-    
+      skills: data.skills?.map(item => item.value).filter(Boolean) || [],
+      achievements: data.achievements?.map(item => item.value).filter(Boolean) || [],
+      certifications: data.certifications?.map(item => item.value).filter(Boolean) || [],
+      trainings: data.trainings?.map(item => item.value).filter(Boolean) || [],
+    };
+  } else if (data && 'result' in data) {
+    // Если это простые данные со страниц update/import, используем placeholder и меняем только summary
+    resumeContent = {
+      ...placeholderResume,
+      summary: data.result,
+    };
   } else {
-    // Используем placeholderResume
+    // Если данных нет, показываем стандартный placeholder
     resumeContent = placeholderResume;
   }
-  
+
   const renderTemplate = () => {
     switch (template) {
       case "Современный":

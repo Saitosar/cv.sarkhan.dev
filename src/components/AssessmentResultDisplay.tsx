@@ -1,11 +1,11 @@
 // src/components/AssessmentResultDisplay.tsx
 "use client";
 
+import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { ScoreCircle } from './ScoreCircle';
 import { Loader2 } from 'lucide-react';
 
-// --- НОВЫЙ ТИП ДАННЫХ ---
 type AssessmentResult = {
   resume_score: number;
   strengths: string[];
@@ -20,7 +20,16 @@ interface AssessmentResultDisplayProps {
   isLoading: boolean;
 }
 
-// Компонент для секций, чтобы избежать повторения кода
+// Список подсказок для экрана загрузки
+const loadingTips = [
+  "Analyzing work experience for quantifiable achievements...",
+  "Checking for powerful action verbs to increase impact...",
+  "Comparing your skills against the target job description...",
+  "Assessing the clarity and structure of your summary...",
+  "Formatting personalized recommendations...",
+  "Almost there, just finalizing the report..."
+];
+
 const FeedbackSection = ({ title, items, icon, colorClass }: { title: string; items: string[]; icon: string; colorClass: string; }) => (
   <div>
     <h3 className={`text-lg font-semibold text-white/90 mb-3 flex items-center gap-2 ${colorClass}`}>
@@ -30,13 +39,7 @@ const FeedbackSection = ({ title, items, icon, colorClass }: { title: string; it
     <ul className="list-disc pl-5 space-y-4 text-white/80 text-sm">
       {items.map((item, index) => (
         <li key={index} className="text-white/90">
-          {/* ИСПОЛЬЗУЕМ REACT MARKDOWN ДЛЯ РЕНДЕРИНГА */}
-          <ReactMarkdown 
-            // Предотвращаем рендеринг вложенного <p> внутри <li>
-            components={{
-              p: ({ node, ...props }) => <span {...props} />,
-            }}
-          >
+          <ReactMarkdown components={{ p: ({ node, ...props }) => <span {...props} /> }}>
             {item}
           </ReactMarkdown>
         </li>
@@ -46,11 +49,25 @@ const FeedbackSection = ({ title, items, icon, colorClass }: { title: string; it
 );
 
 export function AssessmentResultDisplay({ result, error, isLoading }: AssessmentResultDisplayProps) {
+  const [currentTipIndex, setCurrentTipIndex] = useState(0);
+
+  useEffect(() => {
+    if (isLoading) {
+      const interval = setInterval(() => {
+        setCurrentTipIndex(prevIndex => (prevIndex + 1) % loadingTips.length);
+      }, 2500); // Меняем подсказку каждые 2.5 секунды
+
+      return () => clearInterval(interval); // Очистка при завершении загрузки
+    }
+  }, [isLoading]);
+
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-center p-4">
+      <div className="flex flex-col items-center justify-center h-full text-center p-4 transition-all duration-300">
         <Loader2 className="h-8 w-8 animate-spin text-white/80 mb-4" />
-        <p className="text-white/70 text-sm">Analyzing your resume, this may take a moment...</p>
+        <p className="text-white/70 text-sm h-10 flex items-center justify-center">
+          {loadingTips[currentTipIndex]}
+        </p>
       </div>
     );
   }

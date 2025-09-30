@@ -103,7 +103,7 @@ export async function POST(req: Request) {
     `;
 
     // ИСПОЛЬЗОВАНИЕ БОЛЕЕ МОЩНОЙ МОДЕЛИ для сложного анализа
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" }); 
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" }); 
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = await response.text();

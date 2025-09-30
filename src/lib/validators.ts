@@ -1,18 +1,6 @@
 // src/lib/validators.ts
 import { z } from 'zod';
 
-// Определяем переиспользуемые схемы для частей даты
-const datePartSchema = z.object({
-  month: z.string().min(1, "Month is required."),
-  year: z.string().regex(/^\d{4}$/, "Year must be 4 digits (YYYY)."),
-});
-
-const endDatePartSchema = z.object({
-  month: z.string().optional(),
-  year: z.string().regex(/^\d{4}$/, "Year must be 4 digits (YYYY).").optional(),
-  isCurrent: z.boolean().optional(),
-}).optional();
-
 export const resumeSchema = z.object({
   fullName: z.string().min(2, "Full name must be at least 2 characters."),
   jobTitle: z.string().min(2, "Job title must be at least 2 characters."),
@@ -31,13 +19,17 @@ export const resumeSchema = z.object({
   experience: z.array(z.object({
     company: z.string().min(1, "Company name is required."),
     position: z.string().min(1, "Position is required."),
-    
-    // --- ИЗМЕНЕНИЕ: Замена 'years' на структурированные даты ---
-    startDate: datePartSchema,
-    endDate: endDatePartSchema,
-    // -----------------------------------------------------------
-    
     description: z.string().optional(),
+    // НОВАЯ СТРУКТУРА ДАТ
+    startDate: z.object({
+      month: z.string().min(1, "Month is required"),
+      year: z.string().min(4, "Year is required"),
+    }),
+    endDate: z.object({
+      month: z.string().optional(),
+      year: z.string().optional(),
+      isCurrent: z.boolean().optional(),
+    }).optional(),
   })).optional(),
   projects: z.array(z.object({
     name: z.string().min(1, "Project name is required."),
