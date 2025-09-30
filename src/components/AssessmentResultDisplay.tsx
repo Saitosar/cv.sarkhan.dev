@@ -27,8 +27,20 @@ const FeedbackSection = ({ title, items, icon, colorClass }: { title: string; it
       <span>{icon}</span>
       {title}
     </h3>
-    <ul className="list-disc pl-5 space-y-2 text-white/80 text-sm">
-      {items.map((item, index) => <li key={index}>{item}</li>)}
+    <ul className="list-disc pl-5 space-y-4 text-white/80 text-sm">
+      {items.map((item, index) => (
+        <li key={index} className="text-white/90">
+          {/* ИСПОЛЬЗУЕМ REACT MARKDOWN ДЛЯ РЕНДЕРИНГА */}
+          <ReactMarkdown 
+            // Предотвращаем рендеринг вложенного <p> внутри <li>
+            components={{
+              p: ({ node, ...props }) => <span {...props} />,
+            }}
+          >
+            {item}
+          </ReactMarkdown>
+        </li>
+      ))}
     </ul>
   </div>
 );
