@@ -2,8 +2,8 @@
 import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
 import type { ResumeFormData } from '@/lib/validators';
 import { formatExperienceDate } from '@/lib/placeholder-data';
+import type { ColorScheme } from '@/lib/palettes';
 
-// --- РЕГИСТРАЦИЯ ШРИФТОВ ДЛЯ КИРИЛЛИЦЫ ---
 Font.register({
   family: 'Noto Sans',
   fonts: [
@@ -12,7 +12,8 @@ Font.register({
   ],
 });
 
-const styles = StyleSheet.create({
+// Стили обновлены согласно вашим пожеланиям
+const createStyles = (accentColor: ColorScheme) => StyleSheet.create({
   page: { 
     padding: 30, 
     fontSize: 10, 
@@ -22,18 +23,20 @@ const styles = StyleSheet.create({
   header: {
     textAlign: 'center',
     marginBottom: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-    paddingBottom: 10,
+    // Добавлен фон и убрана нижняя граница
+    backgroundColor: accentColor.secondary,
+    padding: 20,
+    borderRadius: 5,
   },
   fullName: { 
     fontSize: 24, 
     fontWeight: 'bold',
+    color: '#111827',
     marginBottom: 4 
   },
   jobTitle: { 
     fontSize: 14, 
-    color: '#6B7280' 
+    color: '#4B5563' 
   },
   contactLine: {
     fontSize: 9,
@@ -41,14 +44,19 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   section: { 
-    marginBottom: 10 
+    marginBottom: 15,
+    // Добавлена левая граница и отступ
+    borderLeftWidth: 2,
+    borderLeftColor: accentColor.primary,
+    paddingLeft: 10,
   },
   sectionTitle: { 
     fontSize: 14, 
     fontWeight: 'bold',
     marginBottom: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    // Линия стала толще
+    borderBottomWidth: 2, 
+    borderBottomColor: accentColor.primary,
     paddingBottom: 4,
     color: '#111827',
   },
@@ -67,26 +75,21 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     marginBottom: 4,
   },
-  // Убрали 'whiteSpace' отсюда
   jobDescription: {
     fontSize: 10,
   },
   skills: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  skill: {
-    backgroundColor: '#F3F4F6',
-    color: '#1F2937',
-    padding: '4px 8px',
-    borderRadius: 4,
-    marginRight: 6,
-    marginBottom: 6,
-    fontSize: 9,
+    fontSize: 10,
   }
 });
 
-export default function ResumePDF({ data }: { data: ResumeFormData }) {
+interface PdfProps {
+  data: ResumeFormData;
+  accentColor: ColorScheme;
+}
+
+export default function ClassicResumePDF({ data, accentColor }: PdfProps) {
+  const styles = createStyles(accentColor);
   const hasContent = (arr: any[] | undefined) => arr && arr.length > 0;
   
   return (
@@ -105,7 +108,6 @@ export default function ResumePDF({ data }: { data: ResumeFormData }) {
         {data.summary && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Professional Summary</Text>
-            {/* Убрали стиль отсюда */}
             <Text>{data.summary}</Text>
           </View>
         )}
@@ -113,11 +115,7 @@ export default function ResumePDF({ data }: { data: ResumeFormData }) {
         {hasContent(data.skills) && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Skills</Text>
-            <View style={styles.skills}>
-              {data.skills?.map((skill, i) => (
-                <Text key={i} style={styles.skill}>{skill.value}</Text>
-              ))}
-            </View>
+            <Text style={styles.skills}>{data.skills?.map(s => s.value).join(', ')}</Text>
           </View>
         )}
         

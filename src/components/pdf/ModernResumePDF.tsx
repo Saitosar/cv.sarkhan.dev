@@ -2,25 +2,26 @@
 import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
 import type { ResumeFormData } from '@/lib/validators';
 import { formatExperienceDate } from '@/lib/placeholder-data';
+import type { ColorScheme } from '@/lib/palettes';
 
 Font.register({
   family: 'Noto Sans',
   fonts: [
-    { src: 'https://fonts.gstatic.com/s/notosans/v27/o-0IIpQlx3QUlC5A4PNb4g.ttf' }, // Regular
+    { src: 'https://fonts.gstatic.com/s/notosans/v27/o-0IIpQlx3QUlC5A4PNb4g.ttf' },
     { src: 'https://fonts.gstatic.com/s/notosans/v27/o-0NIpQlx3QUlC5A4PNjXhFlYw.ttf', fontWeight: 'bold' },
   ],
 });
 
-const styles = StyleSheet.create({
+const createStyles = (accentColor: ColorScheme) => StyleSheet.create({
   page: {
     flexDirection: 'row',
     fontFamily: 'Noto Sans',
     fontSize: 10,
-    color: '#374151', // text-gray-700
+    color: '#374151', 
   },
   leftColumn: {
     width: '30%',
-    backgroundColor: '#F9FAFB', // bg-gray-50
+    backgroundColor: '#F9FAFB', 
     padding: 20,
   },
   rightColumn: {
@@ -34,24 +35,24 @@ const styles = StyleSheet.create({
   fullName: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1F2937', // text-gray-800
+    color: '#1F2937', 
   },
   jobTitle: {
     fontSize: 14,
-    color: '#6B7280', // text-gray-500
+    color: '#6B7280', 
     marginTop: 4,
   },
   contactInfo: {
     marginTop: 8,
     fontSize: 9,
-    color: '#0891B2', // accentColor.primary (cyan)
+    color: accentColor.primary,
   },
   sectionTitle: {
     fontSize: 11,
     fontWeight: 'bold',
     textTransform: 'uppercase',
     letterSpacing: 1,
-    color: '#0891B2', // accentColor.primary (cyan)
+    color: accentColor.primary,
     marginBottom: 10,
     paddingBottom: 4,
     borderBottomWidth: 1,
@@ -86,8 +87,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   skill: {
-    backgroundColor: '#E0F2F9', // bg-cyan-50
-    color: '#0E7490', // text-cyan-800
+    backgroundColor: '#E0F2F9', 
+    color: '#0E7490', 
     fontSize: 8,
     padding: '3px 6px',
     borderRadius: 12,
@@ -96,7 +97,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function ModernResumePDF({ data }: { data: ResumeFormData }) {
+interface PdfProps {
+  data: ResumeFormData;
+  accentColor: ColorScheme;
+}
+
+export default function ModernResumePDF({ data, accentColor }: PdfProps) {
+  const styles = createStyles(accentColor);
   const hasContent = (arr: any[] | undefined) => arr && arr.length > 0;
 
   return (

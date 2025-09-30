@@ -9,13 +9,17 @@ import CreativeResumePDF from '@/components/pdf/CreativeResumePDF';
 import type { ResumeFormData } from '@/lib/validators';
 import { Loader2 } from 'lucide-react';
 import { type TemplateName, TEMPLATE_NAMES } from './TemplateSelector';
+import type { ColorScheme } from '@/lib/palettes';
+import type { Theme } from './ThemeToggle';
 
 interface DownloadPdfButtonProps {
     data: ResumeFormData | null;
     template: TemplateName;
+    accentColor: ColorScheme;
+    theme: Theme;
 }
 
-export default function DownloadPdfButton({ data, template }: DownloadPdfButtonProps) {
+export default function DownloadPdfButton({ data, template, accentColor, theme }: DownloadPdfButtonProps) {
   const [loading, setLoading] = useState(false);
 
   const renderPdfDocument = () => {
@@ -23,12 +27,12 @@ export default function DownloadPdfButton({ data, template }: DownloadPdfButtonP
 
     switch (template) {
         case TEMPLATE_NAMES.MODERN:
-            return <ModernResumePDF data={data} />;
+            return <ModernResumePDF data={data} accentColor={accentColor} />;
         case TEMPLATE_NAMES.CREATIVE:
-            return <CreativeResumePDF data={data} />;
+            return <CreativeResumePDF data={data} accentColor={accentColor} theme={theme} />;
         case TEMPLATE_NAMES.CLASSIC:
         default:
-            return <ClassicResumePDF data={data} />;
+            return <ClassicResumePDF data={data} accentColor={accentColor} />;
     }
   };
 

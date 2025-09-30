@@ -114,7 +114,7 @@ export default function CreatePage() {
                     {selectedTemplate === TEMPLATE_NAMES.CREATIVE && ( <ThemeToggle selectedTheme={theme} onThemeChange={setTheme} /> )}
                   </div>
                   <div className="border-t border-white/20 pt-6">
-                    <DownloadPdfButton data={resumeData} template={selectedTemplate} />
+                    <DownloadPdfButton data={resumeData} template={selectedTemplate} accentColor={accentColor} theme={theme} />
                   </div>
                 </div>
               </div>

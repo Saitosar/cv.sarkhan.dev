@@ -2,79 +2,88 @@
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import type { ResumeFormData } from '@/lib/validators';
 import { formatExperienceDate } from '@/lib/placeholder-data';
+import type { ColorScheme } from '@/lib/palettes';
+import type { Theme } from '../ThemeToggle';
 
-// Стили были исправлены: убран кастомный шрифт и 'fontStyle'
-const styles = StyleSheet.create({
-  page: {
-    padding: 30,
-    fontSize: 10,
-    // Используем стандартный, надежный шрифт
-    fontFamily: 'Helvetica', 
-    backgroundColor: '#111827',
-    color: '#D1D5DB',
-  },
-  header: {
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  fullName: {
-    fontSize: 28,
-    fontFamily: 'Helvetica-Bold',
-    color: '#8B5CF6',
-    marginBottom: 4,
-  },
-  jobTitle: {
-    fontSize: 14,
-    color: '#9CA3AF',
-  },
-  contactLine: {
-    fontSize: 9,
-    color: '#9CA3AF',
-    marginTop: 8,
-  },
-  summary: {
-    textAlign: 'center',
-    marginBottom: 20,
-    color: '#E5E7EB',
-    // Убрали fontStyle: 'italic', который вызывал проблему
-  },
-  section: {
-    marginBottom: 15,
-  },
-  sectionTitle: {
-    fontSize: 12,
-    fontFamily: 'Helvetica-Bold',
-    color: '#D1D5DB',
-    borderBottomWidth: 1,
-    borderBottomColor: '#8B5CF6',
-    paddingBottom: 3,
-    marginBottom: 8,
-  },
-  entry: {
-    marginBottom: 10,
-  },
-  position: {
-    fontSize: 11,
-    fontFamily: 'Helvetica-Bold',
-    color: '#F9FAFB',
-  },
-  company: {
-    color: '#9CA3AF',
-  },
-  date: {
-    fontSize: 9,
-    color: '#8B5CF6',
-    marginBottom: 4,
-  },
-  description: {
-    fontSize: 10,
-  },
-  skills: {
-    fontSize: 10,
-  }
-});
+const createStyles = (accentColor: ColorScheme, theme: Theme) => {
+  const isDark = theme === 'dark';
+  return StyleSheet.create({
+    page: {
+      padding: 30,
+      fontSize: 10,
+      fontFamily: 'Helvetica',
+      backgroundColor: isDark ? '#111827' : '#FFFFFF',
+      color: isDark ? '#D1D5DB' : '#111827',
+    },
+    header: {
+      textAlign: 'center',
+      marginBottom: 20,
+    },
+    fullName: {
+      fontSize: 28,
+      fontFamily: 'Helvetica-Bold',
+      color: accentColor.primary,
+      marginBottom: 4,
+    },
+    jobTitle: {
+      fontSize: 14,
+      color: isDark ? '#9CA3AF' : '#6B7280',
+    },
+    contactLine: {
+      fontSize: 9,
+      color: isDark ? '#9CA3AF' : '#6B7280',
+      marginTop: 8,
+    },
+    summary: {
+      textAlign: 'center',
+      marginBottom: 20,
+      color: isDark ? '#E5E7EB' : '#374151',
+    },
+    section: {
+      marginBottom: 15,
+    },
+    sectionTitle: {
+      fontSize: 12,
+      fontFamily: 'Helvetica-Bold',
+      color: isDark ? '#D1D5DB' : '#111827',
+      borderBottomWidth: 1,
+      borderBottomColor: accentColor.primary,
+      paddingBottom: 3,
+      marginBottom: 8,
+    },
+    entry: {
+      marginBottom: 10,
+    },
+    position: {
+      fontSize: 11,
+      fontFamily: 'Helvetica-Bold',
+      color: isDark ? '#F9FAFB' : '#1F2937',
+    },
+    company: {
+      color: isDark ? '#9CA3AF' : '#6B7280',
+    },
+    date: {
+      fontSize: 9,
+      color: accentColor.primary,
+      marginBottom: 4,
+    },
+    description: {
+      fontSize: 10,
+    },
+    skills: {
+      fontSize: 10,
+    }
+  });
+};
 
-export default function CreativeResumePDF({ data }: { data: ResumeFormData }) {
+interface PdfProps {
+  data: ResumeFormData;
+  accentColor: ColorScheme;
+  theme: Theme;
+}
+
+export default function CreativeResumePDF({ data, accentColor, theme }: PdfProps) {
+  const styles = createStyles(accentColor, theme);
   const hasContent = (arr: any[] | undefined) => arr && arr.length > 0;
   
   return (
