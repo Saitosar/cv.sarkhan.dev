@@ -1,7 +1,7 @@
 // src/components/CreateResumeForm.tsx
 "use client";
 
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, useFormContext } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { resumeSchema, type ResumeFormData } from "@/lib/validators";
 import type { FieldErrors } from "react-hook-form";
@@ -16,6 +16,7 @@ interface CreateResumeFormProps {
 const addButtonStyle = "mt-2 flex w-full cursor-pointer items-center justify-center rounded-md border border-dashed border-white/20 p-3 text-white/50 transition-all hover:border-white/40 hover:text-white/80";
 const removeButtonStyle = "absolute top-3 right-3 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-white/5 text-white/50 transition-all hover:bg-white/10 hover:text-red-400";
 const inputStyle = "mt-1 block w-full bg-white/10 border border-white/20 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-neonViolet focus:border-neonViolet";
+const selectStyle = "mt-1 block w-full rounded-md border border-white/20 bg-white/10 px-3 py-2 text-white shadow-sm focus:outline-none focus:ring-1 focus:ring-neonViolet focus:border-neonViolet dark:text-gray-800 dark:bg-white"; // <-- ИЗМЕНЕНИЕ: Белый фон и темный текст в темном режиме для Select
 const baseLabelStyle = "block text-sm font-medium text-white/80";
 
 const RemoveIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>;
@@ -31,11 +32,87 @@ const SectionHeader = ({ title }: { title: string }) => (
   <h3 className="font-display text-xl mb-3">{title}</h3>
 );
 
+// --- КОМПОНЕНТ ДЛЯ ВВОДА ДАТЫ ---
+const months = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
+interface DateInputsProps {
+  index: number;
+  register: any;
+  watch: any;
+  errors: any;
+  inputStyle: string;
+}
+
+const DateInputs: React.FC<DateInputsProps> = ({ index, register, watch, errors, inputStyle }) => {
+  const isCurrent = watch(`experience.${index}.endDate.isCurrent`);
+  const expErrors = errors.experience?.[index];
+
+  return (
+    <div className="space-y-3">
+      {/* START DATE */}
+      <div className="grid grid-cols-2 gap-2">
+        <div className="col-span-2 text-sm font-medium text-white/80">Start Date *</div>
+        
+        {/* ИЗМЕНЕНИЕ: Используем selectStyle */}
+        <select {...register(`experience.${index}.startDate.month`)} className={selectStyle}>
+          <option value="">Month</option>
+          {months.map(m => <option key={m} value={m} className="dark:bg-white dark:text-gray-800">{m}</option>)}
+        </select>
+        
+        <input {...register(`experience.${index}.startDate.year`)} placeholder="Year (YYYY) *" className={inputStyle} type="number" pattern="\d{4}" />
+      </div>
+      {(expErrors?.startDate?.month || expErrors?.startDate?.year) && 
+        <p className="mt-1 text-red-400 text-sm">
+          {expErrors.startDate.month?.message || expErrors.startDate.year?.message}
+        </p>
+      }
+
+      {/* END DATE Toggle */}
+      <div className="flex items-center gap-2">
+          <input 
+            type="checkbox" 
+            {...register(`experience.${index}.endDate.isCurrent`)} 
+            id={`isCurrent-${index}`} 
+            className="w-4 h-4 text-neonViolet bg-gray-700 border-gray-600 rounded focus:ring-neonViolet"
+          />
+          <Label htmlFor={`isCurrent-${index}`} required={false}>I currently work here</Label>
+      </div>
+
+      {/* END DATE Fields */}
+      {!isCurrent && (
+        <div className="grid grid-cols-2 gap-2">
+            <div className="col-span-2 text-sm font-medium text-white/80">End Date (Optional)</div>
+            
+            {/* ИЗМЕНЕНИЕ: Используем selectStyle */}
+            <select {...register(`experience.${index}.endDate.month`)} className={selectStyle}>
+              <option value="">Month</option>
+              {months.map(m => <option key={m} value={m} className="dark:bg-white dark:text-gray-800">{m}</option>)}
+            </select>
+            
+            <input {...register(`experience.${index}.endDate.year`)} placeholder="Year (YYYY)" className={inputStyle} type="number" pattern="\d{4}" />
+            {expErrors?.endDate?.year && <p className="mt-1 text-red-400 text-sm col-span-2">{expErrors.endDate.year.message}</p>}
+        </div>
+      )}
+    </div>
+  );
+};
+// --- КОНЕЦ НОВОГО КОМПОНЕНТА ---
+
+
 export function CreateResumeForm({ onGenerate, onAssess, isAssessing }: CreateResumeFormProps) {
-  const { register, control, handleSubmit, formState: { errors }, getValues } = useForm<ResumeFormData>({
+  const { register, control, handleSubmit, formState: { errors }, getValues, watch } = useForm<ResumeFormData>({
     resolver: zodResolver(resumeSchema),
     defaultValues: {
-      experience: [{ company: "", position: "", years: "", description: "" }],
+      experience: [{ 
+        company: "", 
+        position: "", 
+        startDate: { month: "", year: "" }, 
+        endDate: { isCurrent: true }, 
+        description: "" 
+      }],
       projects: [],
       education: [],
       skills: [{ value: "" }],
@@ -89,8 +166,30 @@ export function CreateResumeForm({ onGenerate, onAssess, isAssessing }: CreateRe
         </div>
         <div>
           <SectionHeader title="Work Experience" />
-          {experienceFields.map((field, index) => (<div key={field.id} className="space-y-3 border border-white/20 p-4 rounded-md mb-4 relative"><input {...register(`experience.${index}.position`)} placeholder="Position *" className={inputStyle} /><input {...register(`experience.${index}.company`)} placeholder="Company *" className={inputStyle} /><input {...register(`experience.${index}.years`)} placeholder="Years *" className={inputStyle} /><textarea {...register(`experience.${index}.description`)} placeholder="Description..." rows={3} className={inputStyle} /><button type="button" onClick={() => removeExperience(index)} className={removeButtonStyle}><RemoveIcon /></button></div>))}
-          <button type="button" onClick={() => appendExperience({ company: "", position: "", years: "", description: "" })} className={addButtonStyle}><AddIcon /></button>
+          {experienceFields.map((field, index) => (
+            <div key={field.id} className="space-y-3 border border-white/20 p-4 rounded-md mb-4 relative">
+              <input {...register(`experience.${index}.position`)} placeholder="Position *" className={inputStyle} />
+              <input {...register(`experience.${index}.company`)} placeholder="Company *" className={inputStyle} />
+              
+              <DateInputs 
+                index={index} 
+                register={register} 
+                watch={watch} 
+                errors={errors} 
+                inputStyle={inputStyle} 
+              />
+              
+              <textarea {...register(`experience.${index}.description`)} placeholder="Description..." rows={3} className={inputStyle} />
+              <button type="button" onClick={() => removeExperience(index)} className={removeButtonStyle}><RemoveIcon /></button>
+            </div>
+          ))}
+          <button type="button" onClick={() => appendExperience({ 
+            company: "", 
+            position: "", 
+            startDate: { month: "", year: "" }, 
+            endDate: { isCurrent: true }, 
+            description: "" 
+          })} className={addButtonStyle}><AddIcon /></button>
         </div>
         <div>
           <SectionHeader title="Projects" />

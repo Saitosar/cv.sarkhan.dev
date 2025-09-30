@@ -1,7 +1,7 @@
 // src/lib/placeholder-data.ts
 
-// 1. Определяем и экспортируем тип ResumeData на основе структуры объекта
-export type ResumeData = typeof placeholderResume;
+// Мы не экспортируем тип ResumeData явно здесь, чтобы избежать циклической зависимости.
+// Тип ResumeData будет выводиться из константы placeholderResume в LivePreview.
 
 export const placeholderResume = {
   // 2. Добавляем недостающие поля fullName и jobTitle
@@ -18,13 +18,21 @@ export const placeholderResume = {
     {
       company: "Tech Solutions Inc.",
       position: "Senior Frontend Developer",
-      years: "2020 - Present",
+      // --- КОРРЕКТИРОВКА: Включаем все структурированные поля ---
+      years: "January 2020 - Present", 
+      startDate: { month: "January", year: "2020" }, 
+      endDate: { isCurrent: true, month: undefined, year: undefined }, // Указываем все опциональные поля
+      // -----------------------------------------------------
       description: "Led the development of a new e-commerce platform, resulting in a 30% increase in sales. Optimized application performance, reducing page load time by 50%.",
     },
     {
       company: "Web Innovators LLC",
       position: "Frontend Developer",
-      years: "2017 - 2020",
+      // --- КОРРЕКТИРОВКА: Включаем все структурированные поля ---
+      years: "June 2017 - December 2020", 
+      startDate: { month: "June", year: "2017" }, 
+      endDate: { month: "December", year: "2020", isCurrent: false },
+      // -----------------------------------------------------
       description: "Developed and maintained user interfaces for various client websites using React and Vue.js. Collaborated with designers to create pixel-perfect, responsive designs.",
     },
   ],
@@ -66,3 +74,6 @@ export const placeholderResume = {
     'AWS Certified Developer - Associate',
   ],
 };
+
+// Экспортируем тип после определения константы, чтобы избежать ошибки в LivePreview
+export type ResumeData = typeof placeholderResume;

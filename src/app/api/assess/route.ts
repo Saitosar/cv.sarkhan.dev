@@ -20,8 +20,10 @@ export async function POST(req: Request) {
     const parsedData = resumeSchema.parse(body);
     const { targetJob, ...resumeData } = parsedData;
 
-    // --- ДОБАВЛЕНО: Получение и форматирование текущей даты для контекста AI ---
-    const currentDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    // --- НОВОЕ: Форматирование текущей даты для контекста AI ---
+    const now = new Date();
+    // Передаем текущую дату в машиночитаемом формате, чтобы избежать ошибок парсинга
+    const currentDate = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
     // --- НОВЫЙ, УЛУЧШЕННЫЙ ПРОМПТ ---
     const prompt = `
@@ -31,8 +33,9 @@ export async function POST(req: Request) {
 
       ---
       **[ВАЖНЫЙ КОНТЕКСТ ВРЕМЕНИ]**
-      Текущая дата для анализа 'experience' и проверки на будущие даты: ${currentDate}.
-      Дата начала работы (StartDate) не должна быть позже этой даты.
+      Текущая дата для анализа 'experience' и проверки на будущие даты: **${currentDate}**.
+      Поле 'experience' теперь содержит **структурированные даты (startDate: {month, year}, endDate: {month, year, isCurrent})**.
+      Вы можете полагаться на эти структурированные данные для точной проверки временной шкалы.
       ---
       
       Part 1: Resume Fields and Data Structure Context
@@ -100,7 +103,7 @@ export async function POST(req: Request) {
     `;
 
     // ИСПОЛЬЗОВАНИЕ БОЛЕЕ МОЩНОЙ МОДЕЛИ для сложного анализа
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" }); 
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" }); 
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = await response.text();
