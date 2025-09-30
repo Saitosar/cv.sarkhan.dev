@@ -5,8 +5,43 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* базовый dark-тон */
-:root { color-scheme: dark; --radius: 0.625rem; --background: oklch(1 0 0); --foreground: oklch(0.145 0 0); --card: oklch(1 0 0); --card-foreground: oklch(0.145 0 0); --popover: oklch(1 0 0); --popover-foreground: oklch(0.145 0 0); --primary: oklch(0.205 0 0); --primary-foreground: oklch(0.985 0 0); --secondary: oklch(0.97 0 0); --secondary-foreground: oklch(0.205 0 0); --muted: oklch(0.97 0 0); --muted-foreground: oklch(0.556 0 0); --accent: oklch(0.97 0 0); --accent-foreground: oklch(0.205 0 0); --destructive: oklch(0.577 0.245 27.325); --border: oklch(0.922 0 0); --input: oklch(0.922 0 0); --ring: oklch(0.708 0 0); --chart-1: oklch(0.646 0.222 41.116); --chart-2: oklch(0.6 0.118 184.704); --chart-3: oklch(0.398 0.07 227.392); --chart-4: oklch(0.828 0.189 84.429); --chart-5: oklch(0.769 0.188 70.08); --sidebar: oklch(0.985 0 0); --sidebar-foreground: oklch(0.145 0 0); --sidebar-primary: oklch(0.205 0 0); --sidebar-primary-foreground: oklch(0.985 0 0); --sidebar-accent: oklch(0.97 0 0); --sidebar-accent-foreground: oklch(0.205 0 0); --sidebar-border: oklch(0.922 0 0); --sidebar-ring: oklch(0.708 0 0); }
+/* базовый light-тон (замена oklch на hex) */
+:root { 
+  color-scheme: dark; 
+  --radius: 0.625rem; 
+  --background: #ffffff; 
+  --foreground: #252525; 
+  --card: #ffffff; 
+  --card-foreground: #252525; 
+  --popover: #ffffff; 
+  --popover-foreground: #252525; 
+  --primary: #343434; 
+  --primary-foreground: #fafafa; 
+  --secondary: #f7f7f7; 
+  --secondary-foreground: #343434; 
+  --muted: #f7f7f7; 
+  --muted-foreground: #8e8e8e; 
+  --accent: #f7f7f7; 
+  --accent-foreground: #343434; 
+  --destructive: #ef5350; 
+  --border: #ebebeb; 
+  --input: #ebebeb; 
+  --ring: #b5b5b5; 
+  --chart-1: #c67a39; 
+  --chart-2: #0093a3; 
+  --chart-3: #5c5c9a; 
+  --chart-4: #a4cc3b; 
+  --chart-5: #e1b12c; 
+  --sidebar: #fafafa; 
+  --sidebar-foreground: #252525; 
+  --sidebar-primary: #343434; 
+  --sidebar-primary-foreground: #fafafa; 
+  --sidebar-accent: #f7f7f7; 
+  --sidebar-accent-foreground: #343434; 
+  --sidebar-border: #ebebeb; 
+  --sidebar-ring: #b5b5b5; 
+}
+
 html, body { height: 100%; }
 body { color: white; background-color: #0b0f19; }
 
@@ -80,7 +115,6 @@ body { color: white; background-color: #0b0f19; }
 }
 
 /* Новый базовый стиль для кнопок на карточках */
-/* Стало: */
 .card-button {
   /* Форма и размер (без изменений) */
   display: block;
@@ -122,62 +156,48 @@ body { color: white; background-color: #0b0f19; }
 
 /* Новые классы для свечения иконок */
 .glow-pen {
-  color: #7afdff; /* ЗАДАЕМ ЦВЕТ ИКОНКИ */
+  color: #7afdff;
   filter: drop-shadow(0px 0px 1px #7dd3fc);
 }
 .glow-folder {
-  color: #e8a8ff; /* ЗАДАЕМ ЦВЕТ ИКОНКИ */
+  color: #e8a8ff;
   filter: drop-shadow(0 0 1px #c4b5fd);
 }
 .glow-linkedin {
-  color: #5ad0ff; /* ЗАДАЕМ ЦВЕТ ИКОНКИ */
+  color: #5ad0ff;
   filter: drop-shadow(0 0 1px #38bdf8);
 }
 
 .signin-button {
-  /* Форма и размер (без изменений) */
   display: block;
   width: 8rem;
   padding: 0.8rem 1.5rem;
   border-radius: 0.75rem;
-
-  /* Эффект стекла и новое внутреннее свечение */
   background-color: rgba(255, 255, 255, 0.05);
   background-image: radial-gradient(
-    circle at 50% 100%, /* Свечение снизу */
-    rgba(139, 92, 246, 0.15), /* Violet */
+    circle at 50% 100%,
+    rgba(139, 92, 246, 0.15),
     transparent 70%
   );
   border: 1px solid rgba(146, 204, 255, 0.552);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-
-  /* Текст с эффектом "наклейки" */
   text-align: center;
   font-weight: 600;
   color: rgb(207, 228, 250);
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
   font-size: 18px;
-
-  /* Плавный переход для анимаций */
   transition: all 0.2s ease-in-out;
-  }
-
-  .signin-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.4);
-  transform: scale(1.03); /* Легкое увеличение */
-
-  /* Эффект неонового свечения, зажигающегося внутри */
-  box-shadow: 0 0 25px rgba(139, 92, 246, 0.5), /* Внешнее свечение */
-              inset 0 0 15px rgba(139, 92, 246, 0.3); /* Внутреннее свечение */
 }
 
-/* src/app/globals.css */
+.signin-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: scale(1.03);
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.5),
+              inset 0 0 15px rgba(139, 92, 246, 0.3);
+}
 
-/* ... (здесь твой существующий код) ... */
-
-/* ДОБАВЬ ЭТИ СТРОКИ В КОНЕЦ ФАЙЛА */
 button,
 a,
 [role="button"],
@@ -185,9 +205,78 @@ a,
   cursor: pointer;
 }
 
-@theme inline { --radius-sm: calc(var(--radius) - 4px); --radius-md: calc(var(--radius) - 2px); --radius-lg: var(--radius); --radius-xl: calc(var(--radius) + 4px); --color-background: var(--background); --color-foreground: var(--foreground); --color-card: var(--card); --color-card-foreground: var(--card-foreground); --color-popover: var(--popover); --color-popover-foreground: var(--popover-foreground); --color-primary: var(--primary); --color-primary-foreground: var(--primary-foreground); --color-secondary: var(--secondary); --color-secondary-foreground: var(--secondary-foreground); --color-muted: var(--muted); --color-muted-foreground: var(--muted-foreground); --color-accent: var(--accent); --color-accent-foreground: var(--accent-foreground); --color-destructive: var(--destructive); --color-border: var(--border); --color-input: var(--input); --color-ring: var(--ring); --color-chart-1: var(--chart-1); --color-chart-2: var(--chart-2); --color-chart-3: var(--chart-3); --color-chart-4: var(--chart-4); --color-chart-5: var(--chart-5); --color-sidebar: var(--sidebar); --color-sidebar-foreground: var(--sidebar-foreground); --color-sidebar-primary: var(--sidebar-primary); --color-sidebar-primary-foreground: var(--sidebar-primary-foreground); --color-sidebar-accent: var(--sidebar-accent); --color-sidebar-accent-foreground: var(--sidebar-accent-foreground); --color-sidebar-border: var(--sidebar-border); --color-sidebar-ring: var(--sidebar-ring); }
+@theme inline { 
+  --radius-sm: calc(var(--radius) - 4px); 
+  --radius-md: calc(var(--radius) - 2px); 
+  --radius-lg: var(--radius); 
+  --radius-xl: calc(var(--radius) + 4px); 
+  --color-background: var(--background); 
+  --color-foreground: var(--foreground); 
+  --color-card: var(--card); 
+  --color-card-foreground: var(--card-foreground); 
+  --color-popover: var(--popover); 
+  --color-popover-foreground: var(--popover-foreground); 
+  --color-primary: var(--primary); 
+  --color-primary-foreground: var(--primary-foreground); 
+  --color-secondary: var(--secondary); 
+  --color-secondary-foreground: var(--secondary-foreground); 
+  --color-muted: var(--muted); 
+  --color-muted-foreground: var(--muted-foreground); 
+  --color-accent: var(--accent); 
+  --color-accent-foreground: var(--accent-foreground); 
+  --color-destructive: var(--destructive); 
+  --color-border: var(--border); 
+  --color-input: var(--input); 
+  --color-ring: var(--ring); 
+  --color-chart-1: var(--chart-1); 
+  --color-chart-2: var(--chart-2); 
+  --color-chart-3: var(--chart-3); 
+  --color-chart-4: var(--chart-4); 
+  --color-chart-5: var(--chart-5); 
+  --color-sidebar: var(--sidebar); 
+  --color-sidebar-foreground: var(--sidebar-foreground); 
+  --color-sidebar-primary: var(--sidebar-primary); 
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground); 
+  --color-sidebar-accent: var(--sidebar-accent); 
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground); 
+  --color-sidebar-border: var(--sidebar-border); 
+  --color-sidebar-ring: var(--sidebar-ring); 
+}
 
-.dark { --background: oklch(0.145 0 0); --foreground: oklch(0.985 0 0); --card: oklch(0.205 0 0); --card-foreground: oklch(0.985 0 0); --popover: oklch(0.205 0 0); --popover-foreground: oklch(0.985 0 0); --primary: oklch(0.922 0 0); --primary-foreground: oklch(0.205 0 0); --secondary: oklch(0.269 0 0); --secondary-foreground: oklch(0.985 0 0); --muted: oklch(0.269 0 0); --muted-foreground: oklch(0.708 0 0); --accent: oklch(0.269 0 0); --accent-foreground: oklch(0.985 0 0); --destructive: oklch(0.704 0.191 22.216); --border: oklch(1 0 0 / 10%); --input: oklch(1 0 0 / 15%); --ring: oklch(0.556 0 0); --chart-1: oklch(0.488 0.243 264.376); --chart-2: oklch(0.696 0.17 162.48); --chart-3: oklch(0.769 0.188 70.08); --chart-4: oklch(0.627 0.265 303.9); --chart-5: oklch(0.645 0.246 16.439); --sidebar: oklch(0.205 0 0); --sidebar-foreground: oklch(0.985 0 0); --sidebar-primary: oklch(0.488 0.243 264.376); --sidebar-primary-foreground: oklch(0.985 0 0); --sidebar-accent: oklch(0.269 0 0); --sidebar-accent-foreground: oklch(0.985 0 0); --sidebar-border: oklch(1 0 0 / 10%); --sidebar-ring: oklch(0.556 0 0); }
+/* базовый dark-тон (замена oklch на hex/rgba) */
+.dark { 
+  --background: #252525; 
+  --foreground: #fafafa; 
+  --card: #343434; 
+  --card-foreground: #fafafa; 
+  --popover: #343434; 
+  --popover-foreground: #fafafa; 
+  --primary: #ebebeb; 
+  --primary-foreground: #343434; 
+  --secondary: #454545; 
+  --secondary-foreground: #fafafa; 
+  --muted: #454545; 
+  --muted-foreground: #b5b5b5; 
+  --accent: #454545; 
+  --accent-foreground: #fafafa; 
+  --destructive: #e57373; 
+  --border: rgba(255, 255, 255, 0.1); 
+  --input: rgba(255, 255, 255, 0.15); 
+  --ring: #8e8e8e; 
+  --chart-1: #8a4ecf; 
+  --chart-2: #29b6f6; 
+  --chart-3: #e1b12c; 
+  --chart-4: #d81b60; 
+  --chart-5: #f4511e; 
+  --sidebar: #343434; 
+  --sidebar-foreground: #fafafa; 
+  --sidebar-primary: #8a4ecf; 
+  --sidebar-primary-foreground: #fafafa; 
+  --sidebar-accent: #454545; 
+  --sidebar-accent-foreground: #fafafa; 
+  --sidebar-border: rgba(255, 255, 255, 0.1); 
+  --sidebar-ring: #8e8e8e; 
+}
 
 @layer base {
   * {
@@ -208,12 +297,11 @@ a,
 
 .CircularProgressbar .CircularProgressbar-trail {
     stroke-linecap: round;
-    /* Used when trail is not full circle, i.e. when props.circleRatio is set */
     transform-origin: center center;
 }
 
 .CircularProgressbar .CircularProgressbar-text {
-    fill: #fff; /* Цвет текста по умолчанию */
+    fill: #fff;
     font-size: 20px;
     font-weight: bold;
     dominant-baseline: middle;
@@ -229,24 +317,23 @@ a,
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
-  /* Высота всего экрана минус отступы и примерная высота хедера */
   height: calc(100vh - (2 * 1.5rem) - 84px);
 }
 
 .form-column {
-  overflow-y: auto; /* Включаем скролл для этой колонки */
-  padding-right: 1rem; /* Небольшой отступ для скроллбара */
+  overflow-y: auto;
+  padding-right: 1rem;
 }
 
 .preview-column {
   position: sticky;
-  top: 1.5rem; /* Отступ сверху, равный p-6 */
-  height: calc(100vh - (2 * 1.5rem) - 84px); /* Та же высота, что и у родителя */
-  overflow-y: auto; /* Включаем скролл и для этой колонки */
-  padding-right: 1rem; /* Небольшой отступ для скроллбара */
+  top: 1.5rem;
+  height: calc(100vh - (2 * 1.5rem) - 84px);
+  overflow-y: auto;
+  padding-right: 1rem;
 }
 
-/* Стилизация скроллбара для красоты */
+/* Стилизация скроллбара */
 .form-column::-webkit-scrollbar,
 .preview-column::-webkit-scrollbar {
   width: 8px;
@@ -269,7 +356,7 @@ a,
 }
 
 
-/* --- ЕДИНЫЙ СТИЛЬ ДЛЯ ВСЕХ СКРОЛЛБАРОВ --- */
+/* ЕДИНЫЙ СТИЛЬ ДЛЯ ВСЕХ СКРОЛЛБАРОВ */
 .form-column::-webkit-scrollbar,
 .preview-column .overflow-y-auto::-webkit-scrollbar,
 .custom-scrollbar::-webkit-scrollbar,
@@ -303,7 +390,7 @@ textarea::-webkit-scrollbar-thumb:hover {
 ::-webkit-scrollbar-corner {
   background: transparent;
 }
-/* --- НОВЫЕ СТИЛИ ДЛЯ ВЫПАДАЮЩИХ СПИСКОВ --- */
+/* НОВЫЕ СТИЛИ ДЛЯ ВЫПАДАЮЩИХ СПИСКОВ */
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -320,81 +407,62 @@ select option {
   color: white;
 }
 
-/* ... (весь ваш существующий CSS код до этого момента) ... */
-
-/* --- НОВЫЕ СТИЛИ ДЛЯ ВЫПАДАЮЩИХ СПИСКОВ --- */
-select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-position: right 0.7rem center;
-  background-repeat: no-repeat;
-  background-size: 1em;
-  padding-right: 2.5rem;
-}
-
-select option {
-  background-color: #0b0f19;
-  color: white;
-}
-
-/* --- НОВЫЕ СТИЛИ ДЛЯ ПЕЧАТИ --- */
+/* --- СТИЛИ ДЛЯ ПЕЧАТИ --- */
 @media print {
-  body {
-    background-color: white !important; /* Убираем темный фон */
+  /* Скрываем всё, что не нужно печатать */
+  header,
+  .form-column,
+  .preview-column .p-8.space-y-6, /* Контролы под превью */
+  .preview-column .flex.justify-center.p-2, /* Табы */
+  .no-print /* Наш новый класс для фона */ { 
+    display: none !important;
   }
 
-  /* Скрываем все, кроме области печати резюме */
-  body > *:not(.resume-print-container) {
-    display: none;
+  /* Сбрасываем стили для body и основного контейнера */
+  body, #__next, main, .container, .page-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: none !important;
   }
 
-  /* Разворачиваем контейнер резюме на всю страницу */
-  .resume-print-container {
-    position: absolute;
-    left: 0;
-    top: 0;
+  /* Настраиваем контейнер превью на всю страницу */
+  .preview-column {
+    position: static;
     width: 100%;
-    height: 100%;
-    border-radius: 0 !important;
+    height: auto;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: none !important;
     box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     overflow: visible !important;
   }
+  
+  /* Настраиваем сам компонент превью */
+  .preview-column .glass-card,
+  .preview-column .flex-grow {
+    padding: 0 !important;
+    background: none !important;
+  }
 
-  /* Убираем внутренний скроллбар */
-  .resume-print-container > div {
+  /* Убираем обертку с тенью и скроллом */
+  .live-preview-wrapper {
+    background: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+  }
+  
+  .live-preview-wrapper .custom-scrollbar {
     overflow: visible !important;
     height: auto !important;
   }
-}
 
-
-/* --- ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ ПЕЧАТИ --- */
-@media print {
-  body * {
-    visibility: hidden; /* Скрываем все по умолчанию */
-  }
-
-  /* Показываем только контейнер для печати и его содержимое */
-  .resume-print-container, .resume-print-container * {
-    visibility: visible;
-  }
-
-  /* Располагаем контейнер в левом верхнем углу страницы */
-  .resume-print-container {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: auto;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    border: none !important;
-  }
-
-  /* Убираем фон и лишние эффекты с body */
-  body {
-    background: white !important;
+  /* Настройки для страницы печати */
+  @page {
+    size: A4;
+    margin: 20mm;
   }
 }

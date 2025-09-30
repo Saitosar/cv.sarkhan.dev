@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { resumeSchema, type ResumeFormData } from "@/lib/validators";
 import { Loader2 } from "lucide-react";
 
-// ... (интерфейсы и стили остаются без изменений)
 interface CreateResumeFormProps {
   onGenerate: (data: ResumeFormData) => void;
   onAssess: (data: ResumeFormData) => void;
@@ -90,6 +89,7 @@ export function CreateResumeForm({ onGenerate, onAssess, isAssessing }: CreateRe
              <p className={hintTextStyle}>Your current or desired job title.</p>
           </div>
         </div>
+
         <div className="border-t border-white/20"></div>
         <div>
           <h3 className="font-display text-xl mb-1">Target Vacancy (Optional)</h3>

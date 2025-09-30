@@ -1,9 +1,18 @@
 // src/components/TemplateSelector.tsx
 "use client";
 
-// Определяем типы шаблонов для надежности
-export type TemplateName = "Классический" | "Современный" | "Креативный";
-const templates: TemplateName[] = ["Классический", "Современный", "Креативный"];
+// Определяем константы для названий шаблонов
+export const TEMPLATE_NAMES = {
+  CLASSIC: "Классический",
+  MODERN: "Современный",
+  CREATIVE: "Креативный",
+} as const;
+
+// Создаем тип на основе этих констант
+export type TemplateName = typeof TEMPLATE_NAMES[keyof typeof TEMPLATE_NAMES];
+
+// Используем константы для создания массива
+const templates: TemplateName[] = [TEMPLATE_NAMES.CLASSIC, TEMPLATE_NAMES.MODERN, TEMPLATE_NAMES.CREATIVE];
 
 interface TemplateSelectorProps {
   selectedTemplate: TemplateName;

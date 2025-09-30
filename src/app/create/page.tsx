@@ -1,18 +1,17 @@
 // src/app/create/page.tsx
 "use client";
 
-// useRef и useReactToPrint БОЛЬШЕ НЕ НУЖНЫ
-import { useState, useEffect } from 'react'; 
+import { useState, useEffect } from 'react';
 import { CreateResumeForm } from "@/components/CreateResumeForm";
 import { LivePreview } from '@/components/LivePreview';
-import { TemplateSelector, type TemplateName } from '@/components/TemplateSelector';
+import { TemplateSelector, type TemplateName, TEMPLATE_NAMES } from '@/components/TemplateSelector';
 import { ColorPalette } from '@/components/ColorPalette';
 import { ThemeToggle, type Theme } from '@/components/ThemeToggle';
 import { classicPalettes, modernPalettes, creativePalettes } from '@/lib/palettes';
 import { AssessmentResultDisplay } from '@/components/AssessmentResultDisplay';
 import { Tabs, TabContent } from '@/components/ui/Tabs';
 import { type ResumeFormData } from '@/lib/validators';
-import { Download } from 'lucide-react';
+import DownloadPdfButton from '@/components/DownloadPdfButton';
 
 type AssessmentResult = {
   resume_score: number;
@@ -26,7 +25,7 @@ type RightPanelView = 'preview' | 'assessment';
 
 export default function CreatePage() {
   const [resumeData, setResumeData] = useState<ResumeFormData | null>(null);
-  const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>("Классический");
+  const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>(TEMPLATE_NAMES.CLASSIC);
   const [palettes, setPalettes] = useState(classicPalettes);
   const [accentColor, setAccentColor] = useState(classicPalettes[0]);
   const [theme, setTheme] = useState<Theme>('dark');
@@ -37,12 +36,10 @@ export default function CreatePage() {
   const [assessmentResult, setAssessmentResult] = useState<AssessmentResult | null>(null);
   const [assessmentError, setAssessmentError] = useState<string | null>(null);
 
-  // --- УДАЛЕНА ЛОГИКА useReactToPrint ---
-
   useEffect(() => {
     switch (selectedTemplate) {
-      case "Современный": setPalettes(modernPalettes); setAccentColor(modernPalettes[0]); break;
-      case "Креативный": setPalettes(creativePalettes); setAccentColor(creativePalettes[0]); break;
+      case TEMPLATE_NAMES.MODERN: setPalettes(modernPalettes); setAccentColor(modernPalettes[0]); break;
+      case TEMPLATE_NAMES.CREATIVE: setPalettes(creativePalettes); setAccentColor(creativePalettes[0]); break;
       default: setPalettes(classicPalettes); setAccentColor(classicPalettes[0]);
     }
   }, [selectedTemplate]);
@@ -102,7 +99,6 @@ export default function CreatePage() {
             <TabContent id="preview">
               <div className="flex flex-col gap-8 h-full p-2">
                 <div className="p-8 flex-grow">
-                  {/* --- ОБРАТИТЕ ВНИМАНИЕ: ref больше не передается --- */}
                   <LivePreview 
                     data={resumeData}
                     template={selectedTemplate}
@@ -115,13 +111,11 @@ export default function CreatePage() {
                   <div className="border-t border-white/20"></div>
                   <div className="flex justify-center items-center gap-8">
                     <ColorPalette palettes={palettes} selectedColor={accentColor} onColorChange={setAccentColor} />
-                    {selectedTemplate === "Креативный" && ( <ThemeToggle selectedTheme={theme} onThemeChange={setTheme} /> )}
+                    {selectedTemplate === TEMPLATE_NAMES.CREATIVE && ( <ThemeToggle selectedTheme={theme} onThemeChange={setTheme} /> )}
                   </div>
-                  {/* --- ИЗМЕНЕНИЕ: Кнопка теперь вызывает window.print() --- */}
-                  <button onClick={() => window.print()} className="card-button w-full flex items-center justify-center gap-2">
-                    <Download size={20} />
-                    Download PDF
-                  </button>
+                  <div className="border-t border-white/20 pt-6">
+                    <DownloadPdfButton data={resumeData} template={selectedTemplate} />
+                  </div>
                 </div>
               </div>
             </TabContent>
