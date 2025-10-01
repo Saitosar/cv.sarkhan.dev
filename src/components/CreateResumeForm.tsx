@@ -80,7 +80,7 @@ export function CreateResumeForm({ onGenerate, onAssess, isAssessing }: CreateRe
             <Label htmlFor="fullName">Full Name</Label>
             <input {...register("fullName")} id="fullName" className={inputStyle} placeholder="e.g., John Doe"/>
             {errors.fullName && <p className={errorTextStyle}>{errors.fullName.message}</p>}
-            <p className={hintTextStyle}>Your full name as you'd like it to appear on the resume.</p>
+            <p className={hintTextStyle}>Your full name as you&apos;d like it to appear on the resume.</p>
           </div>
           <div>
             <Label htmlFor="jobTitle">Job Title</Label>
@@ -93,7 +93,7 @@ export function CreateResumeForm({ onGenerate, onAssess, isAssessing }: CreateRe
         <div className="border-t border-white/20"></div>
         <div>
           <h3 className="font-display text-xl mb-1">Target Vacancy (Optional)</h3>
-          <p className="text-sm text-white/60 mb-4">Provide details of the job you're applying for to tailor the resume.</p>
+          <p className="text-sm text-white/60 mb-4">Provide details of the job you&apos;re applying for to tailor the resume.</p>
           <div className="space-y-3 border border-white/20 p-4 rounded-md">
             <div><Label htmlFor="targetJob.title" required={false}>Vacancy Title</Label><input {...register("targetJob.title")} id="targetJob.title" className={inputStyle} placeholder="e.g., Senior Product Manager"/></div>
             <div><Label htmlFor="targetJob.description" required={false}>Vacancy Description</Label><textarea {...register("targetJob.description")} id="targetJob.description" rows={4} className={inputStyle} placeholder="Copy and paste the job description here..."/></div>

@@ -24,8 +24,8 @@ interface LivePreviewProps {
 }
 
 // Вспомогательная функция для проверки типа данных
-function isResumeFormData(data: any): data is ResumeDataFromForm {
-  return data && typeof data === 'object' && 'fullName' in data;
+function isResumeFormData(data: unknown): data is ResumeDataFromForm {
+  return !!data && typeof data === 'object' && 'fullName' in data;
 }
 
 export function LivePreview({ data, template, accentColor, theme }: LivePreviewProps) {

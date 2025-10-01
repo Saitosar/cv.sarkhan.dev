@@ -1,7 +1,7 @@
 // src/components/pdf/CreativeResumePDF.tsx
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import type { ResumeFormData } from '@/lib/validators';
-import { formatExperienceDate } from '@/lib/placeholder-data';
+import { formatExperienceDate, type Experience } from '@/lib/placeholder-data';
 import type { ColorScheme } from '@/lib/palettes';
 import type { Theme } from '../ThemeToggle';
 
@@ -84,7 +84,7 @@ interface PdfProps {
 
 export default function CreativeResumePDF({ data, accentColor, theme }: PdfProps) {
   const styles = createStyles(accentColor, theme);
-  const hasContent = (arr: any[] | undefined) => arr && arr.length > 0;
+  const hasContent = (arr: unknown[] | undefined) => arr && arr.length > 0;
   
   return (
     <Document>
@@ -99,7 +99,7 @@ export default function CreativeResumePDF({ data, accentColor, theme }: PdfProps
           </Text>
         </View>
 
-        {data.summary && <Text style={styles.summary}>"{data.summary}"</Text>}
+        {data.summary && <Text style={styles.summary}>&quot;{data.summary}&quot;</Text>}
         
         {hasContent(data.experience) && (
           <View style={styles.section}>
@@ -107,7 +107,7 @@ export default function CreativeResumePDF({ data, accentColor, theme }: PdfProps
             {data.experience?.map((job, i) => (
               <View key={i} style={styles.entry}>
                 <Text style={styles.position}>{job.position} <Text style={styles.company}>@ {job.company}</Text></Text>
-                <Text style={styles.date}>{formatExperienceDate(job as any)}</Text>
+                <Text style={styles.date}>{formatExperienceDate(job as Experience)}</Text>
                 <Text style={styles.description}>{job.description}</Text>
               </View>
             ))}

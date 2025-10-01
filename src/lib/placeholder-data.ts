@@ -7,7 +7,8 @@ type Contact = {
   linkedin: string;
 };
 
-type Experience = {
+// ИЗМЕНЕНИЕ ЗДЕСЬ: Добавлено слово 'export'
+export type Experience = {
   company: string;
   position: string;
   description?: string;
