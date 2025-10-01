@@ -3,7 +3,7 @@ import type { ColorScheme } from "@/lib/palettes";
 import { type ResumeData, formatExperienceDate } from "@/lib/placeholder-data";
 
 export function ClassicTemplate({ resume, accentColor }: { resume: ResumeData, accentColor: ColorScheme }) {
-  const hasContent = (arr: any[] | undefined) => arr && arr.length > 0;
+  const hasContent = (arr: unknown[] | undefined) => arr && arr.length > 0;
 
   const Section = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <div className="mb-4">

@@ -1,7 +1,7 @@
 // src/components/pdf/ModernResumePDF.tsx
 import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
 import type { ResumeFormData } from '@/lib/validators';
-import { formatExperienceDate } from '@/lib/placeholder-data';
+import { formatExperienceDate, type Experience } from '@/lib/placeholder-data';
 import type { ColorScheme } from '@/lib/palettes';
 
 Font.register({
@@ -17,11 +17,11 @@ const createStyles = (accentColor: ColorScheme) => StyleSheet.create({
     flexDirection: 'row',
     fontFamily: 'Noto Sans',
     fontSize: 10,
-    color: '#374151', 
+    color: '#374151',
   },
   leftColumn: {
     width: '30%',
-    backgroundColor: '#F9FAFB', 
+    backgroundColor: '#F9FAFB',
     padding: 20,
   },
   rightColumn: {
@@ -35,11 +35,11 @@ const createStyles = (accentColor: ColorScheme) => StyleSheet.create({
   fullName: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1F2937', 
+    color: '#1F2937',
   },
   jobTitle: {
     fontSize: 14,
-    color: '#6B7280', 
+    color: '#6B7280',
     marginTop: 4,
   },
   contactInfo: {
@@ -87,8 +87,8 @@ const createStyles = (accentColor: ColorScheme) => StyleSheet.create({
     flexWrap: 'wrap',
   },
   skill: {
-    backgroundColor: '#E0F2F9', 
-    color: '#0E7490', 
+    backgroundColor: '#E0F2F9',
+    color: '#0E7490',
     fontSize: 8,
     padding: '3px 6px',
     borderRadius: 12,
@@ -104,7 +104,7 @@ interface PdfProps {
 
 export default function ModernResumePDF({ data, accentColor }: PdfProps) {
   const styles = createStyles(accentColor);
-  const hasContent = (arr: any[] | undefined) => arr && arr.length > 0;
+  const hasContent = (arr: unknown[] | undefined) => arr && arr.length > 0;
 
   return (
     <Document>
@@ -134,7 +134,7 @@ export default function ModernResumePDF({ data, accentColor }: PdfProps) {
                 <View key={i} style={styles.entry}>
                   <Text style={styles.position}>{job.position}</Text>
                   <Text style={styles.company}>{job.company}</Text>
-                  <Text style={styles.date}>{formatExperienceDate(job as any)}</Text>
+                  <Text style={styles.date}>{formatExperienceDate(job as Experience)}</Text>
                   <Text style={styles.description}>{job.description}</Text>
                 </View>
               ))}

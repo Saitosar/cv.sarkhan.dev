@@ -4,7 +4,7 @@ import type { Theme } from "@/components/ThemeToggle";
 import { type ResumeData, formatExperienceDate } from "@/lib/placeholder-data";
 
 export function CreativeTemplate({ resume, accentColor, theme }: { resume: ResumeData, accentColor: ColorScheme, theme: Theme }) {
-  const hasContent = (arr: any[] | undefined) => arr && arr.length > 0;
+  const hasContent = (arr: unknown[] | undefined) => arr && arr.length > 0;
 
   const isDark = theme === 'dark';
   const bgColor = isDark ? 'bg-gray-900' : 'bg-white';
