@@ -1,7 +1,7 @@
 // src/components/pdf/ResumePDF.tsx
 import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
 import type { ResumeFormData } from '@/lib/validators';
-import { formatExperienceDate } from '@/lib/placeholder-data';
+import { formatExperienceDate, type Experience } from '@/lib/placeholder-data';
 import type { ColorScheme } from '@/lib/palettes';
 
 Font.register({
@@ -12,6 +12,7 @@ Font.register({
   ],
 });
 
+// Стили обновлены согласно вашим пожеланиям
 const createStyles = (accentColor: ColorScheme) => StyleSheet.create({
   page: { 
     padding: 30, 
@@ -22,6 +23,7 @@ const createStyles = (accentColor: ColorScheme) => StyleSheet.create({
   header: {
     textAlign: 'center',
     marginBottom: 20,
+    // Добавлен фон и убрана нижняя граница
     backgroundColor: accentColor.secondary,
     padding: 20,
     borderRadius: 5,
@@ -43,6 +45,7 @@ const createStyles = (accentColor: ColorScheme) => StyleSheet.create({
   },
   section: { 
     marginBottom: 15,
+    // Добавлена левая граница и отступ
     borderLeftWidth: 2,
     borderLeftColor: accentColor.primary,
     paddingLeft: 10,
@@ -51,14 +54,11 @@ const createStyles = (accentColor: ColorScheme) => StyleSheet.create({
     fontSize: 14, 
     fontWeight: 'bold',
     marginBottom: 8,
+    // Линия стала толще
     borderBottomWidth: 2, 
     borderBottomColor: accentColor.primary,
     paddingBottom: 4,
     color: '#111827',
-  },
-  // НОВЫЙ СТИЛЬ ДЛЯ ВЫРАВНИВАНИЯ ТЕКСТА
-  justifiedText: {
-    textAlign: 'justify',
   },
   entry: {
     marginBottom: 10,
@@ -77,7 +77,6 @@ const createStyles = (accentColor: ColorScheme) => StyleSheet.create({
   },
   jobDescription: {
     fontSize: 10,
-    textAlign: 'justify', // Также применим здесь для консистентности
   },
   skills: {
     fontSize: 10,
@@ -109,8 +108,7 @@ export default function ClassicResumePDF({ data, accentColor }: PdfProps) {
         {data.summary && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Professional Summary</Text>
-            {/* ПРИМЕНЯЕМ НОВЫЙ СТИЛЬ */}
-            <Text style={styles.justifiedText}>{data.summary}</Text>
+            <Text>{data.summary}</Text>
           </View>
         )}
 
@@ -128,8 +126,7 @@ export default function ClassicResumePDF({ data, accentColor }: PdfProps) {
               <View key={i} style={styles.entry}>
                 <Text style={styles.jobPosition}>{job.position}</Text>
                 <Text style={styles.jobCompany}>{job.company}</Text>
-                <Text style={styles.jobDate}>{formatExperienceDate(job as any)}</Text>
-                {/* ПРИМЕНЯЕМ ВЫРАВНИВАНИЕ И ЗДЕСЬ */}
+                <Text style={styles.jobDate}>{formatExperienceDate(job as Experience)}</Text>
                 <Text style={styles.jobDescription}>{job.description}</Text>
               </View>
             ))}

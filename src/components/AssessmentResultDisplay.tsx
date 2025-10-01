@@ -39,7 +39,7 @@ const FeedbackSection = ({ title, items, icon, colorClass }: { title: string; it
     <ul className="list-disc pl-5 space-y-4 text-white/80 text-sm">
       {items.map((item, index) => (
         <li key={index} className="text-white/90">
-          <ReactMarkdown components={{ p: ({ node, ...props }) => <span {...props} /> }}>
+          <ReactMarkdown components={{ p: ({ ...props }) => <span {...props} /> }}>
             {item}
           </ReactMarkdown>
         </li>
@@ -84,7 +84,7 @@ export function AssessmentResultDisplay({ result, error, isLoading }: Assessment
   if (!result) {
     return (
       <div className="flex items-center justify-center h-full p-4">
-        <p className="text-center text-white/70">Click "Assess Resume" to get feedback.</p>
+        <p className="text-center text-white/70">Click &quot;Assess Resume&quot; to get feedback.</p>
       </div>
     );
   }
@@ -94,7 +94,7 @@ export function AssessmentResultDisplay({ result, error, isLoading }: Assessment
       <h2 className="text-2xl font-bold text-center mb-4 text-white">Resume Assessment</h2>
       
       <div className="mb-6 p-4 rounded-md bg-white/5 text-center">
-        <p className="text-lg font-semibold text-white italic">"{result.mentorship_tone_example}"</p>
+        <p className="text-lg font-semibold text-white italic">&quot;{result.mentorship_tone_example}&quot;</p>
       </div>
       
       <div className="flex flex-col items-center gap-y-8">
