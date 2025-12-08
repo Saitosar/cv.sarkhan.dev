@@ -42,10 +42,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // VALIDATION: At least one source must be provided
-    if (!oldCvText && !linkedInUrl && !additionalInfo) {
+    // VALIDATION: At least CV file or additional info must be provided
+    // LinkedIn URL alone is not sufficient - it must be combined with CV or additional info
+    if (!oldCvText && !additionalInfo) {
       return NextResponse.json(
-        { error: 'At least one of the following must be provided: old CV text, LinkedIn URL, or additional information.' },
+        { error: 'Please provide either your old CV file or additional information. LinkedIn profile URL alone is not sufficient for generating an accurate resume.' },
         { status: 400 }
       );
     }
@@ -124,15 +125,23 @@ Note: This is raw extracted text from an old CV. Extract relevant information bu
 **LINKEDIN PROFILE URL:**
 ${linkedInUrl}
 
-IMPORTANT: The user has provided their LinkedIn profile URL. Based on typical LinkedIn profile structures, extract and include:
-- Current position and company
-- Recent work experience (positions, companies, dates)
-- Skills and endorsements
-- Education background
-- Any notable achievements or certifications mentioned
-- Professional summary/headline
+CRITICAL: The user has provided a LinkedIn profile URL. However, you CANNOT actually access or scrape LinkedIn profiles. 
 
-Note: If you cannot access the actual profile content, use the URL as context and make reasonable inferences based on the profile URL structure, or ask the user to provide more details in the additional information section.
+DO NOT make up or guess information like:
+- Email addresses (DO NOT use placeholder emails like "user@example.com" unless explicitly provided)
+- Phone numbers (DO NOT use placeholder numbers unless explicitly provided)
+- Specific job details, dates, or companies (unless provided in other sources)
+
+WHAT YOU SHOULD DO:
+1. Use the LinkedIn URL ONLY as a reference that the user has a LinkedIn profile
+2. Extract information ONLY from other provided sources (old CV text, additional info)
+3. If contact information is missing, you may include the LinkedIn URL in the contact.linkedin field
+4. For missing required fields (email, phone), use very clear placeholders that indicate they need to be updated:
+   - Email: "[Please provide your email]"
+   - Phone: "[Please provide your phone number]"
+5. Focus on creating a well-structured resume template that the user can fill in with accurate information
+
+IMPORTANT: The user should provide their actual information in the "Additional Information" field if they want specific details included. Do not fabricate professional details.
 ---
 `;
     }
@@ -175,7 +184,10 @@ IMPORTANT: Tailor the resume to match this target job. Use keywords from the job
 5. If dates are missing or unclear, use reasonable estimates but mark endDate.isCurrent as true for the most recent position if it seems current
 6. Create compelling, achievement-oriented descriptions for experience entries
 7. Ensure the resume is ATS-friendly (use standard section names, clear formatting in JSON structure)
-8. If contact information is missing from sources, use placeholder values that make sense (e.g., "user@example.com" for email, "+1-XXX-XXX-XXXX" for phone) - but clearly indicate these are placeholders
+8. If contact information is missing from sources, use clear placeholders that indicate the user needs to provide them:
+   - Email: "[Please provide your email address]"
+   - Phone: "[Please provide your phone number]"
+   DO NOT use generic placeholders like "user@example.com" - make it clear these need to be filled in
 
 **CRITICAL DATA TYPE REQUIREMENTS:**
 - "description" in experience MUST be a STRING (not an array). If you have multiple bullet points, join them with "\\n" or "; "
@@ -330,9 +342,9 @@ Return the complete resume JSON now:
               .join('\n');
           }
           
-          // Fix endDate: remove if month/year are null, or omit the field if completely null
-          if (normalizedExp.endDate) {
-            if (normalizedExp.endDate === null) {
+          // Fix endDate: remove if null or invalid
+          if ('endDate' in normalizedExp) {
+            if (normalizedExp.endDate === null || normalizedExp.endDate === undefined) {
               delete normalizedExp.endDate;
             } else if (typeof normalizedExp.endDate === 'object') {
               const endDate = normalizedExp.endDate as Record<string, unknown>;

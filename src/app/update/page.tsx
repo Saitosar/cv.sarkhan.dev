@@ -59,9 +59,10 @@ export default function UpdatePage() {
     e.preventDefault();
     setError(null);
     
-    // VALIDATION: At least one input must be provided
-    if (!cvFile && !linkedInUrl.trim() && !additionalInfo.trim()) {
-      setError('Please provide at least one of: CV file, LinkedIn URL, or additional information.');
+    // VALIDATION: At least CV file or additional info must be provided
+    // LinkedIn URL alone is not sufficient - it must be combined with CV or additional info
+    if (!cvFile && !additionalInfo.trim()) {
+      setError('Please provide either your old CV file or additional information. LinkedIn profile alone is not sufficient.');
       return;
     }
 
@@ -156,7 +157,7 @@ export default function UpdatePage() {
           <div className="p-8">
             <h1 className="font-display text-3xl mb-3">Update Your CV</h1>
             <p className="text-white/50 text-sm mb-8">
-              Provide your old CV, LinkedIn profile, or new information. We&apos;ll create an ATS-friendly resume.
+              Upload your old CV or add new information. Include your LinkedIn profile for better results. We&apos;ll create an ATS-friendly resume.
             </p>
 
             <form onSubmit={handleUpdate} className="space-y-5">
@@ -234,6 +235,9 @@ export default function UpdatePage() {
                     </button>
                   )}
                 </div>
+                <p className="mt-2 text-xs text-white/50">
+                  Note: We cannot access your LinkedIn profile directly. Please add your details in the &quot;What&apos;s New?&quot; section below for best results.
+                </p>
               </div>
 
               {/* Target Job */}
@@ -277,9 +281,10 @@ export default function UpdatePage() {
               </div>
 
               {/* Helper Message */}
-              {(!cvFile && !linkedInUrl.trim() && !additionalInfo.trim()) && (
+              {(!cvFile && !additionalInfo.trim()) && (
                 <div className="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg text-yellow-200/90 text-xs">
-                  <p className="font-medium">Provide at least one: CV file, LinkedIn URL, or additional info</p>
+                  <p className="font-medium mb-1">⚠️ Required: Upload your old CV or add information in &quot;What&apos;s New?&quot;</p>
+                  <p className="text-white/70">LinkedIn profile alone is not sufficient. Combine it with your CV or additional details for best results.</p>
                 </div>
               )}
 
@@ -303,7 +308,7 @@ export default function UpdatePage() {
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={isProcessing || (!cvFile && !linkedInUrl && !additionalInfo.trim())}
+                disabled={isProcessing || (!cvFile && !additionalInfo.trim())}
                 className="card-button card-button-shine w-full !mt-6 disabled:opacity-50 disabled:cursor-not-allowed !flex !items-center !justify-center gap-2 !py-3 !text-white !font-semibold"
                 style={{ textShadow: '0 0 10px rgba(255, 255, 255, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3)' }}
               >
