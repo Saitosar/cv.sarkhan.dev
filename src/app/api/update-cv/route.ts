@@ -334,15 +334,16 @@ Return the complete resume JSON now:
           if (normalizedExp.endDate) {
             if (normalizedExp.endDate === null) {
               delete normalizedExp.endDate;
-            } else {
+            } else if (typeof normalizedExp.endDate === 'object') {
+              const endDate = normalizedExp.endDate as Record<string, unknown>;
               // If month or year is null, and it's not a current position, remove endDate
-              if ((normalizedExp.endDate.month === null || normalizedExp.endDate.year === null) && 
-                  !normalizedExp.endDate.isCurrent) {
+              if ((endDate.month === null || endDate.year === null) && 
+                  endDate.isCurrent !== true) {
                 delete normalizedExp.endDate;
               } else {
                 // Remove null month/year if present
-                if (normalizedExp.endDate.month === null) delete normalizedExp.endDate.month;
-                if (normalizedExp.endDate.year === null) delete normalizedExp.endDate.year;
+                if (endDate.month === null) delete endDate.month;
+                if (endDate.year === null) delete endDate.year;
               }
             }
           }
