@@ -203,9 +203,10 @@ Return the complete resume JSON now:
             throw new Error(`Model ${modelName} returned empty response`);
           }
           return responseText;
-        } catch (error: any) {
-          const isRateLimit = error.status === 429 || error.message?.includes('429') || error.message?.includes('rate limit');
-          const isServiceUnavailable = error.status === 503 || error.message?.includes('503') || error.message?.includes('overloaded') || error.message?.includes('Service Unavailable');
+        } catch (error: unknown) {
+          const errorObj = error as { status?: number; message?: string };
+          const isRateLimit = errorObj.status === 429 || errorObj.message?.includes('429') || errorObj.message?.includes('rate limit');
+          const isServiceUnavailable = errorObj.status === 503 || errorObj.message?.includes('503') || errorObj.message?.includes('overloaded') || errorObj.message?.includes('Service Unavailable');
           
           // Retry on rate limit or service unavailable
           if ((isRateLimit || isServiceUnavailable) && attempt < maxRetries) {
@@ -233,8 +234,8 @@ Return the complete resume JSON now:
       "gemini-2.5-flash-lite"
     ];
     
-    let lastError: any = null;
-    let triedModels: string[] = [];
+    let lastError: Error | null = null;
+    const triedModels: string[] = [];
     
     for (const modelName of modelsToTry) {
       try {
@@ -242,13 +243,14 @@ Return the complete resume JSON now:
         text = await generateWithRetry(modelName);
         console.log(`Successfully used model: ${modelName}`);
         break; // Success! Exit the loop
-      } catch (modelError: any) {
+      } catch (modelError: unknown) {
         triedModels.push(modelName);
-        lastError = modelError;
+        const errorObj = modelError as { status?: number; message?: string };
+        lastError = modelError instanceof Error ? modelError : new Error(String(modelError));
         
-        const isRateLimit = modelError.status === 429 || modelError.message?.includes('429') || modelError.message?.includes('rate limit');
-        const isServiceUnavailable = modelError.status === 503 || modelError.message?.includes('503') || modelError.message?.includes('overloaded') || modelError.message?.includes('Service Unavailable');
-        const isNotFound = modelError.status === 404 || modelError.message?.includes('404') || modelError.message?.includes('not found');
+        const isRateLimit = errorObj.status === 429 || errorObj.message?.includes('429') || errorObj.message?.includes('rate limit');
+        const isServiceUnavailable = errorObj.status === 503 || errorObj.message?.includes('503') || errorObj.message?.includes('overloaded') || errorObj.message?.includes('Service Unavailable');
+        const isNotFound = errorObj.status === 404 || errorObj.message?.includes('404') || errorObj.message?.includes('not found');
         
         // If it's a rate limit, service unavailable, or not found, try next model
         if (isRateLimit || isServiceUnavailable || isNotFound) {
@@ -256,7 +258,8 @@ Return the complete resume JSON now:
           continue; // Try next model
         } else {
           // For other errors, log but still try next model
-          console.warn(`Model ${modelName} failed with error: ${modelError.message}, trying next model...`);
+          const errorMsg = errorObj.message || String(modelError);
+          console.warn(`Model ${modelName} failed with error: ${errorMsg}, trying next model...`);
           continue;
         }
       }
@@ -302,25 +305,28 @@ Return the complete resume JSON now:
     }
     
     // Normalize the data to fix common AI response issues
-    const normalizeResumeData = (data: any): any => {
-      const normalized = { ...data };
+    const normalizeResumeData = (data: unknown): unknown => {
+      if (!data || typeof data !== 'object') return data;
+      const normalized = { ...data as Record<string, unknown> };
       
       // Fix contact.linkedin: remove if null
-      if (normalized.contact) {
-        if (normalized.contact.linkedin === null || normalized.contact.linkedin === undefined) {
-          delete normalized.contact.linkedin;
+      if (normalized.contact && typeof normalized.contact === 'object') {
+        const contact = normalized.contact as Record<string, unknown>;
+        if (contact.linkedin === null || contact.linkedin === undefined) {
+          delete contact.linkedin;
         }
       }
       
       // Fix experience descriptions: convert arrays to strings
       if (normalized.experience && Array.isArray(normalized.experience)) {
-        normalized.experience = normalized.experience.map((exp: any) => {
-          const normalizedExp = { ...exp };
+        normalized.experience = normalized.experience.map((exp: unknown) => {
+          if (!exp || typeof exp !== 'object') return exp;
+          const normalizedExp = { ...exp as Record<string, unknown> };
           
           // Convert description array to string
           if (Array.isArray(normalizedExp.description)) {
             normalizedExp.description = normalizedExp.description
-              .filter((item: any) => item !== null && item !== undefined)
+              .filter((item: unknown) => item !== null && item !== undefined)
               .join('\n');
           }
           
@@ -373,9 +379,9 @@ Return the complete resume JSON now:
           console.error('Parsed JSON that failed validation:', JSON.stringify(jsonResponse, null, 2));
           
           // Throw with detailed error that will be caught by outer catch
-          const detailedError = new Error(`Resume validation failed: ${errorMessages}`);
-          (detailedError as any).isValidationError = true;
-          (detailedError as any).validationDetails = errorMessages;
+          const detailedError = new Error(`Resume validation failed: ${errorMessages}`) as Error & { isValidationError: boolean; validationDetails: string };
+          detailedError.isValidationError = true;
+          detailedError.validationDetails = errorMessages;
           throw detailedError;
         }
       }
@@ -384,8 +390,8 @@ Return the complete resume JSON now:
       console.error('Non-ZodError validation failure');
       console.error('Parsed JSON:', JSON.stringify(jsonResponse, null, 2));
       const errorMessage = validationError instanceof Error ? validationError.message : 'Unknown validation error';
-      const detailedError = new Error(`Resume validation failed: ${errorMessage}`);
-      (detailedError as any).isValidationError = true;
+      const detailedError = new Error(`Resume validation failed: ${errorMessage}`) as Error & { isValidationError: boolean };
+      detailedError.isValidationError = true;
       throw detailedError;
     }
 
@@ -399,11 +405,12 @@ Return the complete resume JSON now:
     console.error("Error:", error);
     
     // Check if it's a validation error (from our inner catch)
-    if ((error as any)?.isValidationError) {
+    const validationError = error as Error & { isValidationError?: boolean; validationDetails?: string };
+    if (validationError?.isValidationError) {
       return NextResponse.json(
         { 
           error: "Resume validation failed",
-          details: (error as any)?.validationDetails || (error instanceof Error ? error.message : "The AI response doesn't match the expected schema. Please try again.")
+          details: validationError.validationDetails || (error instanceof Error ? error.message : "The AI response doesn't match the expected schema. Please try again.")
         },
         { status: 400 }
       );

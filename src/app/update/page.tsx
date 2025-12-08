@@ -128,7 +128,7 @@ export default function UpdatePage() {
         try {
           const errorData = await updateResponse.json();
           errorMessage = errorData.error || errorData.details || errorMessage;
-        } catch (parseError) {
+        } catch {
           // If response is not JSON, try to get text
           const errorText = await updateResponse.text();
           errorMessage = errorText || `Server error: ${updateResponse.status} ${updateResponse.statusText}`;
@@ -156,7 +156,7 @@ export default function UpdatePage() {
           <div className="p-8">
             <h1 className="font-display text-3xl mb-3">Update Your CV</h1>
             <p className="text-white/50 text-sm mb-8">
-              Provide your old CV, LinkedIn profile, or new information. We'll create an ATS-friendly resume.
+              Provide your old CV, LinkedIn profile, or new information. We&apos;ll create an ATS-friendly resume.
             </p>
 
             <form onSubmit={handleUpdate} className="space-y-5">
@@ -264,7 +264,7 @@ export default function UpdatePage() {
               <div className="border-t border-white/10 pt-5">
                 <label htmlFor="additionalInfo" className="block text-sm font-medium text-white/90 mb-3 flex items-center gap-2">
                   <MessageSquare className="w-4 h-4" />
-                  What's New? <span className="text-white/50 font-normal text-xs">(Optional)</span>
+                  What&apos;s New? <span className="text-white/50 font-normal text-xs">(Optional)</span>
                 </label>
                 <textarea
                   id="additionalInfo"

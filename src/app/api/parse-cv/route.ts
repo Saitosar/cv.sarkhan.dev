@@ -1,13 +1,13 @@
 // src/app/api/parse-cv/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { Readable } from 'stream';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const pdfParse = require('pdf-parse') as (buffer: Buffer) => Promise<{ text: string }>;
+import mammoth from 'mammoth';
 
 // For PDF parsing
 async function parsePDF(buffer: Buffer): Promise<string> {
   try {
-    // Using pdf-parse (need to install: npm install pdf-parse)
-    const pdf = require('pdf-parse');
-    const data = await pdf(buffer);
+    const data = await pdfParse(buffer);
     return data.text;
   } catch (error) {
     console.error('PDF parsing error:', error);
@@ -18,8 +18,6 @@ async function parsePDF(buffer: Buffer): Promise<string> {
 // For DOCX parsing
 async function parseDOCX(buffer: Buffer): Promise<string> {
   try {
-    // Using mammoth (need to install: npm install mammoth)
-    const mammoth = require('mammoth');
     const result = await mammoth.extractRawText({ buffer });
     return result.value;
   } catch (error) {
