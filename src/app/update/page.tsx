@@ -304,7 +304,8 @@ export default function UpdatePage() {
               <button
                 type="submit"
                 disabled={isProcessing || (!cvFile && !linkedInUrl && !additionalInfo.trim())}
-                className="w-full mt-6 py-3 px-4 bg-neonViolet hover:bg-violet-600 text-black font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-neonViolet flex items-center justify-center gap-2 shadow-lg shadow-neonViolet/20"
+                className="card-button card-button-shine w-full !mt-6 disabled:opacity-50 disabled:cursor-not-allowed !flex !items-center !justify-center gap-2 !py-3 !text-white !font-semibold"
+                style={{ textShadow: '0 0 10px rgba(255, 255, 255, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3)' }}
               >
                 {isProcessing ? (
                   <>
