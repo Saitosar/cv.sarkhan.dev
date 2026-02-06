@@ -8,7 +8,7 @@ export function getGemini() {
 
 export async function generateResume(input: string) {
   const genAI = getGemini();
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite-001" });
+  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
   const prompt = `
 You are a professional resume writer. From the input below, produce:
 1) A 3–4 sentence professional summary.
