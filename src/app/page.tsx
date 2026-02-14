@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PenLine, FolderUp, Linkedin } from "lucide-react";
+import { PenLine, FolderUp, Sparkles } from "lucide-react";
 
 function Card({
   title,
@@ -12,17 +12,37 @@ function Card({
   cta: string;
   icon: React.ReactNode;
 }) {
+  const isComingSoon = href === "#";
+
+  if (isComingSoon) {
+    return (
+      <div className="card-3d gradient-border relative no-select opacity-70 cursor-not-allowed">
+        <div className="glass-card relative h-full p-5 md:p-7 lg:p-8 flex flex-col items-center text-center justify-center gap-y-6 md:gap-y-8 min-h-[280px]">
+
+          {/* Icon */}
+          {icon}
+
+          {/* Title */}
+          <h3 className="font-display text-xl md:text-2xl pb-3 md:pb-5">{title}</h3>
+
+          {/* Button */}
+          <span className="card-button opacity-60">{cta}</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <Link href={href} className="card-3d gradient-border relative">
-      <div className="glass-card relative h-full p-7 md:p-8 flex flex-col items-center text-center justify-center gap-y-8">
-        
-        {/* ИЗМЕНЕНИЕ 1: Мы убрали 'стеклянный контейнер' вокруг иконки */}
+    <Link href={href} className="card-3d gradient-border relative tap-feedback no-select">
+      <div className="glass-card relative h-full p-5 md:p-7 lg:p-8 flex flex-col items-center text-center justify-center gap-y-6 md:gap-y-8 min-h-[280px]">
+
+        {/* Icon */}
         {icon}
 
-        {/* Заголовок */}
-        <h3 className="font-display text-2xl pb-5">{title}</h3>
+        {/* Title */}
+        <h3 className="font-display text-xl md:text-2xl pb-3 md:pb-5">{title}</h3>
 
-        {/* Кнопка */}
+        {/* Button */}
         <span className="card-button">{cta}</span>
       </div>
     </Link>
@@ -32,8 +52,8 @@ function Card({
 
 export default function Home() {
   return (
-<main className="flex min-h-screen flex-col items-center p-8 md:p-24 pt-24">
-      <div className="mt-12 grid gap-8 md:grid-cols-3 max-w-5xl w-full">
+<main className="flex min-h-screen flex-col items-center p-4 md:p-8 lg:p-24 pt-16 md:pt-24">
+      <div className="mt-8 md:mt-12 grid gap-4 md:gap-6 lg:gap-8 grid-cols-1 md:grid-cols-3 max-w-5xl w-full">
         <Card
           title="Create from scratch"
           href="/create"
@@ -61,15 +81,15 @@ export default function Home() {
           }
         />
         <Card
-          title="Modify from LinkedIn"
-          href="/import"
-          cta="Import"
+          title="More features soon"
+          href="#"
+          cta="Coming Soon"
           icon={
-          
-            <Linkedin 
-              size={72} 
-              strokeWidth={0.5} 
-              className="glow-linkedin"
+
+            <Sparkles
+              size={72}
+              strokeWidth={0.5}
+              className="glow-soon"
             />
           }
         />

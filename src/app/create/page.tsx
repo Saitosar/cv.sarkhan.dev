@@ -81,7 +81,7 @@ export default function CreatePage() {
   ];
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-3 md:p-6 pb-24 md:pb-6">
       <div className="page-container">
         <div className="form-column glass-card">
           <CreateResumeForm 
