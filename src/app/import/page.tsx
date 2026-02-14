@@ -44,8 +44,8 @@ export default function ImportPage() {
   };
 
   return (
-    <div className="container mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div className="glass-card p-8">
+    <div className="container mx-auto p-3 md:p-6 pb-24 md:pb-6 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+      <div className="glass-card p-4 md:p-8">
         
         <form onSubmit={handleImport} className="space-y-6">
             <div>
