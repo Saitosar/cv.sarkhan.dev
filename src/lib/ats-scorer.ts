@@ -69,7 +69,7 @@ function scoreKeywordMatch(resumeData: ResumeFormData, targetKeywords: string[])
     resumeData.summary,
     ...(resumeData.experience || []).map(e => `${e.position} ${e.company} ${e.description}`),
     ...(resumeData.skills || []).map(s => s.value),
-    ...(resumeData.education || []).map(e => `${e.degree} ${e.institution} ${e.field}`),
+    ...(resumeData.education || []).map(e => `${e.degree} ${e.institution}`),
   ].join(' ').toLowerCase();
 
   const matched = targetKeywords.filter(keyword =>
