@@ -67,9 +67,9 @@ function scoreKeywordMatch(resumeData: ResumeFormData, targetKeywords: string[])
     resumeData.fullName,
     resumeData.jobTitle,
     resumeData.summary,
-    ...resumeData.experience.map(e => `${e.position} ${e.company} ${e.description}`),
-    ...resumeData.skills.map(s => s.value),
-    ...resumeData.education.map(e => `${e.degree} ${e.institution} ${e.field}`),
+    ...(resumeData.experience || []).map(e => `${e.position} ${e.company} ${e.description}`),
+    ...(resumeData.skills || []).map(s => s.value),
+    ...(resumeData.education || []).map(e => `${e.degree} ${e.institution} ${e.field}`),
   ].join(' ').toLowerCase();
 
   const matched = targetKeywords.filter(keyword =>
@@ -102,22 +102,22 @@ function scoreFormatting(resumeData: ResumeFormData): { score: number; issues: s
   }
 
   // Check experience descriptions
-  const hasActionVerbs = resumeData.experience.some(exp => {
+  const hasActionVerbs = (resumeData.experience || []).some(exp => {
     const desc = exp.description?.toLowerCase() || '';
     return ACTION_VERBS.some(verb => desc.includes(verb));
   });
 
-  if (!hasActionVerbs) {
+  if (!hasActionVerbs && (resumeData.experience || []).length > 0) {
     issues.push('Use action verbs (achieved, developed, led) in descriptions');
     score -= 15;
   }
 
   // Check for dates in experience
-  const hasDates = resumeData.experience.every(exp =>
+  const hasDates = (resumeData.experience || []).every(exp =>
     exp.startDate?.year && (exp.endDate?.year || exp.endDate?.isCurrent)
   );
 
-  if (!hasDates) {
+  if (!hasDates && (resumeData.experience || []).length > 0) {
     issues.push('Add dates to all work experience');
     score -= 10;
   }
@@ -134,8 +134,8 @@ function scoreCompleteness(resumeData: ResumeFormData): { score: number; missing
     { field: resumeData.fullName, name: 'Full name', weight: 15 },
     { field: resumeData.jobTitle, name: 'Job title', weight: 15 },
     { field: resumeData.summary, name: 'Professional summary', weight: 20 },
-    { field: resumeData.experience.length > 0, name: 'Work experience', weight: 25 },
-    { field: resumeData.skills.length > 0, name: 'Skills', weight: 15 },
+    { field: (resumeData.experience || []).length > 0, name: 'Work experience', weight: 25 },
+    { field: (resumeData.skills || []).length > 0, name: 'Skills', weight: 15 },
     { field: resumeData.contact?.email, name: 'Email', weight: 10 },
   ];
 
@@ -167,23 +167,23 @@ function scoreReadability(resumeData: ResumeFormData): { score: number; suggesti
   }
 
   // Check for quantifiable achievements
-  const hasNumbers = resumeData.experience.some(exp => {
+  const hasNumbers = (resumeData.experience || []).some(exp => {
     const desc = exp.description || '';
     return /\d+%|\$\d+|\d+\s*(users|customers|projects)/i.test(desc);
   });
 
-  if (!hasNumbers) {
+  if (!hasNumbers && (resumeData.experience || []).length > 0) {
     suggestions.push('Add quantifiable achievements (e.g., "increased sales by 40%")');
     score -= 20;
   }
 
   // Check bullet points format
-  const hasBullets = resumeData.experience.some(exp => {
+  const hasBullets = (resumeData.experience || []).some(exp => {
     const desc = exp.description || '';
     return desc.includes('•') || desc.includes('-') || desc.includes('*');
   });
 
-  if (resumeData.experience.length > 0 && !hasBullets) {
+  if ((resumeData.experience || []).length > 0 && !hasBullets) {
     suggestions.push('Use bullet points for better readability');
     score -= 10;
   }
