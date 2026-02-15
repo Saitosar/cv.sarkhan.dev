@@ -29,7 +29,7 @@ export function useAutoSave<T>(
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const lastDataRef = useRef<string>('');
-  const saveTimeoutRef = useRef<NodeJS.Timeout>();
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Save to localStorage
   const save = (dataToSave: T) => {
