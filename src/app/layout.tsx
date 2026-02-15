@@ -1,20 +1,30 @@
 import type { Metadata } from 'next';
-import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google';
+import { Inter, Geist } from 'next/font/google';
 import './globals.css';
 import BackgroundFX from '@/components/BackgroundFX';
 import { Header } from '@/components/Header';
 import { MobileNav } from '@/components/MobileNav';
 
-// Настройка шрифтов с CSS переменными
-const inter = Inter({ 
-  subsets: ['latin'], 
-  variable: '--font-inter' 
+// Body font - Inter for excellent readability
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
 });
 
-const grotesk = SpaceGrotesk({
+// Alternative body font - Geist (modern, clean)
+const geist = Geist({
   subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-grotesk', // Используем '--font-grotesk' для консистентности
+  variable: '--font-geist',
+  display: 'swap',
+});
+
+// Display font - Inter Tight for headings (powerful, modern)
+const interTight = Inter({
+  subsets: ['latin'],
+  weight: ['600', '700', '800'],
+  variable: '--font-display',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -64,7 +74,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="512x512" href="/manifest-icon-512.maskable.png" />
       </head>
       {/* Применяем переменные шрифтов к телу документа */}
-      <body className={`${inter.variable} ${grotesk.variable} font-sans pb-20 md:pb-0`}>
+      <body className={`${inter.variable} ${geist.variable} ${interTight.variable} font-sans pb-20 md:pb-0`}>
         {/* Компоненты, которые будут на всех страницах */}
         <BackgroundFX />
         <Header />

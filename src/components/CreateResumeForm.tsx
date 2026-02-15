@@ -5,6 +5,9 @@ import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { resumeSchema, type ResumeFormData } from "@/lib/validators";
 import { Loader2 } from "lucide-react";
+import { useAutoSave } from "@/hooks/useAutoSave";
+import { AutoSaveIndicator } from "./AutoSaveIndicator";
+import { useEffect } from "react";
 
 interface CreateResumeFormProps {
   onGenerate: (data: ResumeFormData) => void;
@@ -35,16 +38,16 @@ const Label = ({ htmlFor, children, required = true }: { htmlFor: string, childr
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 export function CreateResumeForm({ onGenerate, onAssess, isAssessing }: CreateResumeFormProps) {
-  const { register, control, handleSubmit, formState: { errors }, getValues, watch } = useForm<ResumeFormData>({
+  const { register, control, handleSubmit, formState: { errors }, getValues, watch, reset } = useForm<ResumeFormData>({
     resolver: zodResolver(resumeSchema),
     defaultValues: {
       fullName: "",
       jobTitle: "",
       summary: "",
       contact: { email: "", phone: "" },
-      experience: [{ 
-        company: "", 
-        position: "", 
+      experience: [{
+        company: "",
+        position: "",
         description: "",
         startDate: { month: "", year: "" },
         endDate: { month: "", year: "", isCurrent: false }
@@ -71,10 +74,37 @@ export function CreateResumeForm({ onGenerate, onAssess, isAssessing }: CreateRe
 
   const experienceWatch = watch("experience");
 
+  // Watch all form data for auto-save
+  const formData = watch();
+
+  // Auto-save hook
+  const autoSave = useAutoSave(formData, {
+    key: 'resume-draft',
+    interval: 30000, // 30 seconds
+    enabled: true,
+  });
+
+  // Restore saved data on mount
+  useEffect(() => {
+    const savedData = autoSave.restore();
+    if (savedData) {
+      reset(savedData);
+    }
+  }, []);
+
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
+      {/* Auto-save indicator */}
+      <div className="mb-4 flex justify-end">
+        <AutoSaveIndicator
+          isSaving={autoSave.isSaving}
+          lastSaved={autoSave.lastSaved}
+          hasUnsavedChanges={autoSave.hasUnsavedChanges}
+        />
+      </div>
+
       <form onSubmit={handleSubmit(onGenerate)} className="space-y-8">
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <Label htmlFor="fullName">Full Name</Label>
