@@ -42,7 +42,6 @@ export function FillSampleDataButton({ jobTitle, onFill }: FillSampleDataButtonP
         },
       ],
       skills: randomSkills.map(skill => ({ value: skill })),
-      achievements: randomAchievements.map(a => ({ text: a.text })),
     });
   };
 
