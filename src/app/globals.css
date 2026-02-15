@@ -52,6 +52,26 @@ body {
   -webkit-overflow-scrolling: touch;
   /* Prevent text size adjustment on orientation change */
   -webkit-text-size-adjust: 100%;
+  /* Use Inter for body text */
+  font-family: var(--font-inter), sans-serif;
+}
+
+/* Typography system - Premium fonts for commercial product */
+h1, h2, h3, h4, h5, h6,
+.font-display {
+  font-family: var(--font-display), var(--font-inter), sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.font-body {
+  font-family: var(--font-inter), sans-serif;
+  line-height: 1.6;
+}
+
+.font-geist {
+  font-family: var(--font-geist), sans-serif;
 }
 
 /* Safe area support for notched devices */
@@ -295,6 +315,21 @@ a,
 
 .animate-bounce-in {
   animation: bounce-in 0.3s ease;
+}
+
+/* Shimmer animation for skeleton loaders */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite linear;
+  background-size: 1000px 100%;
 }
 
 /* Smooth scroll behavior */

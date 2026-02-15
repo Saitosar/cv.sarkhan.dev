@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import { CreateResumeForm } from "@/components/CreateResumeForm";
 import { LivePreview } from '@/components/LivePreview';
+import { SkeletonPreview } from '@/components/SkeletonPreview';
 import { TemplateSelector, type TemplateName, TEMPLATE_NAMES } from '@/components/TemplateSelector';
 import { ColorPalette } from '@/components/ColorPalette';
 import { ThemeToggle, type Theme } from '@/components/ThemeToggle';
@@ -12,6 +13,7 @@ import { AssessmentResultDisplay } from '@/components/AssessmentResultDisplay';
 import { Tabs, TabContent } from '@/components/ui/Tabs';
 import { type ResumeFormData } from '@/lib/validators';
 import DownloadPdfButton from '@/components/DownloadPdfButton';
+import { useAIStatus } from '@/hooks/useAIStatus';
 
 type AssessmentResult = {
   resume_score: number;
@@ -29,12 +31,16 @@ export default function CreatePage() {
   const [palettes, setPalettes] = useState(classicPalettes);
   const [accentColor, setAccentColor] = useState(classicPalettes[0]);
   const [theme, setTheme] = useState<Theme>('dark');
-  
+
   const [rightPanelView, setRightPanelView] = useState<RightPanelView>('preview');
-  
+
+  const [isGenerating, setIsGenerating] = useState(false);
   const [isAssessing, setIsAssessing] = useState(false);
   const [assessmentResult, setAssessmentResult] = useState<AssessmentResult | null>(null);
   const [assessmentError, setAssessmentError] = useState<string | null>(null);
+
+  // AI status messages during generation
+  const aiStatus = useAIStatus(isGenerating || isAssessing);
 
   useEffect(() => {
     switch (selectedTemplate) {
@@ -44,9 +50,20 @@ export default function CreatePage() {
     }
   }, [selectedTemplate]);
 
-  const handleGenerate = (data: ResumeFormData) => {
-    setResumeData(data);
-    setRightPanelView('preview'); 
+  const handleGenerate = async (data: ResumeFormData) => {
+    setIsGenerating(true);
+    setRightPanelView('preview');
+
+    try {
+      // Simulate AI generation with actual API call
+      // In real scenario, this would call /api/generate
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Minimum time to show statuses
+      setResumeData(data);
+    } catch (error) {
+      console.error('Generation error:', error);
+    } finally {
+      setIsGenerating(false);
+    }
   };
   
   const handleAssess = async (values: ResumeFormData) => {
@@ -99,12 +116,16 @@ export default function CreatePage() {
             <TabContent id="preview">
               <div className="flex flex-col gap-8 h-full p-2">
                 <div className="p-8 flex-grow">
-                  <LivePreview 
-                    data={resumeData}
-                    template={selectedTemplate}
-                    accentColor={accentColor}
-                    theme={theme}
-                  />
+                  {isGenerating ? (
+                    <SkeletonPreview status={aiStatus} />
+                  ) : (
+                    <LivePreview
+                      data={resumeData}
+                      template={selectedTemplate}
+                      accentColor={accentColor}
+                      theme={theme}
+                    />
+                  )}
                 </div>
                 <div className="p-8 space-y-6">
                   <TemplateSelector selectedTemplate={selectedTemplate} onTemplateChange={setSelectedTemplate} />
@@ -121,11 +142,15 @@ export default function CreatePage() {
             </TabContent>
             
             <TabContent id="assessment">
-              <AssessmentResultDisplay 
-                result={assessmentResult}
-                error={assessmentError}
-                isLoading={isAssessing}
-              />
+              {isAssessing ? (
+                <SkeletonPreview status={aiStatus} />
+              ) : (
+                <AssessmentResultDisplay
+                  result={assessmentResult}
+                  error={assessmentError}
+                  isLoading={false}
+                />
+              )}
             </TabContent>
           </Tabs>
         </div>
