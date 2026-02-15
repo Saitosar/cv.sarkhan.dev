@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { CreateResumeForm } from "@/components/CreateResumeForm";
 import { LivePreview } from '@/components/LivePreview';
 import { SkeletonPreview } from '@/components/SkeletonPreview';
+import { ATSScoreCard } from '@/components/ATSScoreCard';
 import { TemplateSelector, type TemplateName, TEMPLATE_NAMES } from '@/components/TemplateSelector';
 import { ColorPalette } from '@/components/ColorPalette';
 import { ThemeToggle, type Theme } from '@/components/ThemeToggle';
@@ -23,7 +24,7 @@ type AssessmentResult = {
   mentorship_tone_example: string;
 };
 
-type RightPanelView = 'preview' | 'assessment';
+type RightPanelView = 'preview' | 'assessment' | 'ats-score';
 
 export default function CreatePage() {
   const [resumeData, setResumeData] = useState<ResumeFormData | null>(null);
@@ -94,6 +95,7 @@ export default function CreatePage() {
   
   const tabs: { id: RightPanelView, label: string }[] = [
       { id: 'preview', label: 'Preview' },
+      { id: 'ats-score', label: 'ATS Score' },
       { id: 'assessment', label: 'Assessment' }
   ];
 
@@ -140,7 +142,16 @@ export default function CreatePage() {
                 </div>
               </div>
             </TabContent>
-            
+
+            <TabContent id="ats-score">
+              <div className="p-6">
+                <ATSScoreCard
+                  resumeData={resumeData}
+                  targetJobDescription={resumeData?.targetJob?.description}
+                />
+              </div>
+            </TabContent>
+
             <TabContent id="assessment">
               {isAssessing ? (
                 <SkeletonPreview status={aiStatus} />

@@ -7,7 +7,16 @@ import { resumeSchema, type ResumeFormData } from "@/lib/validators";
 import { Loader2 } from "lucide-react";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { AutoSaveIndicator } from "./AutoSaveIndicator";
-import { useEffect } from "react";
+import { FillSampleDataButton } from "./FillSampleDataButton";
+import { AchievementsSuggestions } from "./AchievementsSuggestions";
+import { ValidationMessage } from "./ValidationMessage";
+import {
+  validateSummary,
+  validateEmail,
+  validatePhone,
+  validateSkillsCount,
+} from "@/lib/field-validators";
+import { useEffect, useState, useMemo } from "react";
 
 interface CreateResumeFormProps {
   onGenerate: (data: ResumeFormData) => void;
@@ -73,9 +82,29 @@ export function CreateResumeForm({ onGenerate, onAssess, isAssessing }: CreateRe
   const { fields: certificationFields, append: appendCertification, remove: removeCertification } = useFieldArray({ control, name: "certifications" });
 
   const experienceWatch = watch("experience");
+  const jobTitleWatch = watch("jobTitle");
+  const summaryWatch = watch("summary");
+  const emailWatch = watch("contact.email");
+  const phoneWatch = watch("contact.phone");
+  const skillsWatch = watch("skills");
 
   // Watch all form data for auto-save
   const formData = watch();
+
+  // Validation results
+  const summaryValidation = useMemo(() => validateSummary(summaryWatch || ""), [summaryWatch]);
+  const emailValidation = useMemo(() => validateEmail(emailWatch || ""), [emailWatch]);
+  const phoneValidation = useMemo(() => validatePhone(phoneWatch || ""), [phoneWatch]);
+  const skillsValidation = useMemo(() => validateSkillsCount(skillsWatch?.filter(s => s.value).length || 0), [skillsWatch]);
+
+  // Handle Fill Sample Data
+  const handleFillSample = (sampleData: Partial<ResumeFormData>) => {
+    const currentValues = getValues();
+    reset({
+      ...currentValues,
+      ...sampleData,
+    });
+  };
 
   // Auto-save hook
   const autoSave = useAutoSave(formData, {
@@ -94,8 +123,12 @@ export function CreateResumeForm({ onGenerate, onAssess, isAssessing }: CreateRe
 
   return (
     <div className="p-4 md:p-8">
-      {/* Auto-save indicator */}
-      <div className="mb-4 flex justify-end">
+      {/* Header with auto-save and fill sample */}
+      <div className="mb-4 flex items-center justify-between gap-4">
+        <FillSampleDataButton
+          jobTitle={jobTitleWatch}
+          onFill={handleFillSample}
+        />
         <AutoSaveIndicator
           isSaving={autoSave.isSaving}
           lastSaved={autoSave.lastSaved}
@@ -130,10 +163,43 @@ export function CreateResumeForm({ onGenerate, onAssess, isAssessing }: CreateRe
           </div>
         </div>
         <div className="border-t border-white/20"></div>
-        <div><Label htmlFor="summary">Professional Summary</Label><textarea {...register("summary")} id="summary" rows={4} className={inputStyle} placeholder="A highly skilled and motivated developer..."/>{errors.summary && <p className={errorTextStyle}>{errors.summary.message}</p>}<p className={hintTextStyle}>A brief, 2-4 sentence summary of your skills and experience.</p></div>
+        <div>
+          <Label htmlFor="summary">Professional Summary</Label>
+          <textarea {...register("summary")} id="summary" rows={4} className={inputStyle} placeholder="A highly skilled and motivated developer..."/>
+          {errors.summary && <p className={errorTextStyle}>{errors.summary.message}</p>}
+
+          {/* Real-time validation */}
+          {summaryWatch && <ValidationMessage result={summaryValidation} />}
+
+          <p className={hintTextStyle}>A brief, 2-4 sentence summary of your skills and experience.</p>
+
+          {/* AI Suggestions for Summary */}
+          {jobTitleWatch && (
+            <AchievementsSuggestions
+              jobTitle={jobTitleWatch}
+              currentField="summary"
+              onSelect={(text) => {
+                reset({
+                  ...getValues(),
+                  summary: text,
+                });
+              }}
+            />
+          )}
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div><Label htmlFor="contact.email">Email</Label><input {...register("contact.email")} id="contact.email" className={inputStyle} placeholder="john.doe@email.com"/>{errors.contact?.email && <p className={errorTextStyle}>{errors.contact.email.message}</p>}</div>
-          <div><Label htmlFor="contact.phone">Phone</Label><input {...register("contact.phone")} id="contact.phone" className={inputStyle} placeholder="+1 (555) 123-4567"/>{errors.contact?.phone && <p className={errorTextStyle}>{errors.contact.phone.message}</p>}</div>
+          <div>
+            <Label htmlFor="contact.email">Email</Label>
+            <input {...register("contact.email")} id="contact.email" className={inputStyle} placeholder="john.doe@email.com"/>
+            {errors.contact?.email && <p className={errorTextStyle}>{errors.contact.email.message}</p>}
+            {emailWatch && <ValidationMessage result={emailValidation} />}
+          </div>
+          <div>
+            <Label htmlFor="contact.phone">Phone</Label>
+            <input {...register("contact.phone")} id="contact.phone" className={inputStyle} placeholder="+1 (555) 123-4567"/>
+            {errors.contact?.phone && <p className={errorTextStyle}>{errors.contact.phone.message}</p>}
+            {phoneWatch && <ValidationMessage result={phoneValidation} />}
+          </div>
           <div className="md:col-span-2"><Label htmlFor="contact.linkedin" required={false}>LinkedIn URL (Optional)</Label><input {...register("contact.linkedin")} id="contact.linkedin" className={inputStyle} placeholder="https://linkedin.com/in/johndoe"/>{errors.contact?.linkedin && <p className={errorTextStyle}>{errors.contact.linkedin.message}</p>}</div>
         </div>
 
