@@ -1,6 +1,7 @@
 // src/app/api/update/route.ts
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { z } from 'zod';
+import { parseLinkedInProfile, enrichResumeWithLinkedIn } from '@/lib/linkedin-parser';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
@@ -10,6 +11,7 @@ const updateRequestSchema = z.object({
   targetJobTitle: z.string().optional(),
   targetJobDescription: z.string().optional(),
   linkedinUrl: z.string().url().optional().or(z.literal('')),
+  linkedinProfileText: z.string().optional(),
 });
 
 export async function POST(req: Request) {
@@ -17,7 +19,22 @@ export async function POST(req: Request) {
     const body = await req.json();
     const validatedData = updateRequestSchema.parse(body);
 
-    const { oldResume, targetJobTitle, targetJobDescription, linkedinUrl } = validatedData;
+    const { oldResume, targetJobTitle, targetJobDescription, linkedinUrl, linkedinProfileText } = validatedData;
+
+    // Parse and enrich with LinkedIn context if provided
+    let enrichedResume = oldResume;
+    let linkedInContext = null;
+
+    if (linkedinProfileText && linkedinProfileText.trim().length > 50) {
+      try {
+        linkedInContext = await parseLinkedInProfile(linkedinProfileText);
+        enrichedResume = enrichResumeWithLinkedIn(oldResume, linkedInContext);
+        console.log('LinkedIn context parsed successfully:', Object.keys(linkedInContext));
+      } catch (error) {
+        console.error('Failed to parse LinkedIn profile:', error);
+        // Continue without LinkedIn enrichment
+      }
+    }
 
     // Build the AI prompt based on whether target job is provided
     let prompt = '';
@@ -66,7 +83,7 @@ Your mission: Transform the provided resume to PERFECTLY align with the target j
 **[INPUT DATA]**
 
 **Original Resume:**
-${oldResume}
+${enrichedResume}
 
 **Target Job Title:**
 ${targetJobTitle || 'Not provided'}
@@ -75,6 +92,8 @@ ${targetJobTitle || 'Not provided'}
 ${targetJobDescription || 'Not provided'}
 
 ${linkedinUrl ? `**LinkedIn Profile URL:** ${linkedinUrl}\n(Use this as additional context for professional brand and skills)` : ''}
+
+${linkedInContext ? `**LinkedIn Context Extracted:**\n${JSON.stringify(linkedInContext, null, 2)}\n(Use this to enrich the resume with additional professional context)` : ''}
 
 ---
 **[OUTPUT FORMAT]**
@@ -151,9 +170,11 @@ Task: Improve the provided resume by enhancing clarity, impact, and ATS-friendli
 5. **ATS Optimization**: Use standard headings, clear structure, proper date formats
 
 **Original Resume:**
-${oldResume}
+${enrichedResume}
 
 ${linkedinUrl ? `**LinkedIn Profile URL:** ${linkedinUrl}\n(Use as additional context)` : ''}
+
+${linkedInContext ? `**LinkedIn Context Extracted:**\n${JSON.stringify(linkedInContext, null, 2)}\n(Enrich the resume with this professional context)` : ''}
 
 ---
 **[OUTPUT FORMAT]**

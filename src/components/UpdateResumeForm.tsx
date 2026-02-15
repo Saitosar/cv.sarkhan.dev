@@ -15,6 +15,7 @@ const updateResumeSchema = z.object({
   targetJobTitle: z.string().optional(),
   targetJobDescription: z.string().optional(),
   linkedinUrl: z.string().url('Invalid LinkedIn URL').optional().or(z.literal('')),
+  linkedinProfileText: z.string().optional(),
 });
 
 export type UpdateResumeFormData = z.infer<typeof updateResumeSchema>;
@@ -26,6 +27,7 @@ interface UpdateResumeFormProps {
 
 export function UpdateResumeForm({ onTailor, isTailoring }: UpdateResumeFormProps) {
   const [uploadedFileName, setUploadedFileName] = useState<string>('');
+  const [showLinkedInHelp, setShowLinkedInHelp] = useState(false);
 
   const {
     register,
@@ -40,6 +42,7 @@ export function UpdateResumeForm({ onTailor, isTailoring }: UpdateResumeFormProp
       targetJobTitle: '',
       targetJobDescription: '',
       linkedinUrl: '',
+      linkedinProfileText: '',
     },
   });
 
@@ -219,16 +222,47 @@ export function UpdateResumeForm({ onTailor, isTailoring }: UpdateResumeFormProp
 
       {/* LinkedIn Section */}
       <div className="space-y-4">
-        <div className="flex items-center gap-2">
-          <Linkedin size={20} className="text-blue-400" />
-          <h3 className="text-lg font-semibold text-white">LinkedIn Profile (Optional)</h3>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Linkedin size={20} className="text-blue-400" />
+            <h3 className="text-lg font-semibold text-white">LinkedIn Context (Optional)</h3>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowLinkedInHelp(!showLinkedInHelp)}
+            className="text-xs text-blue-400 hover:text-blue-300 underline transition-colors"
+          >
+            {showLinkedInHelp ? 'Hide' : 'How to use?'}
+          </button>
         </div>
+
         <p className="text-xs text-white/50">
-          Adding your LinkedIn profile helps the AI understand your professional brand and fill any
-          gaps in your resume text.
+          Adding your LinkedIn context helps the AI understand your professional brand and enriches
+          your resume with additional details.
         </p>
 
+        {/* Help Section */}
+        {showLinkedInHelp && (
+          <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-400/30 space-y-3">
+            <h4 className="text-sm font-semibold text-blue-300">📋 How to Copy LinkedIn Profile:</h4>
+            <ol className="text-xs text-white/70 space-y-2 list-decimal list-inside">
+              <li>Open your LinkedIn profile in browser</li>
+              <li>Click "More" → "Save to PDF" OR copy text from your profile page</li>
+              <li>If using PDF: Open it and copy all text</li>
+              <li>Paste the text below in the "Profile Text" field</li>
+              <li>AI will extract: headline, about, skills, experience, certifications</li>
+            </ol>
+            <p className="text-xs text-blue-300 mt-2">
+              💡 <strong>Tip:</strong> Include About, Experience, and Skills sections for best results
+            </p>
+          </div>
+        )}
+
+        {/* LinkedIn URL (for reference) */}
         <div>
+          <label className="block text-sm font-medium text-white/80 mb-2">
+            LinkedIn Profile URL (optional)
+          </label>
           <input
             {...register('linkedinUrl')}
             type="url"
@@ -238,6 +272,22 @@ export function UpdateResumeForm({ onTailor, isTailoring }: UpdateResumeFormProp
           {errors.linkedinUrl && (
             <p className="mt-2 text-sm text-red-400">{errors.linkedinUrl.message}</p>
           )}
+        </div>
+
+        {/* LinkedIn Profile Text */}
+        <div>
+          <label className="block text-sm font-medium text-white/80 mb-2">
+            LinkedIn Profile Text
+          </label>
+          <textarea
+            {...register('linkedinProfileText')}
+            rows={6}
+            placeholder="Paste text from your LinkedIn profile here...&#10;&#10;Include: About section, Experience descriptions, Skills, Certifications, etc."
+            className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/20 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none font-mono text-sm"
+          />
+          <p className="mt-2 text-xs text-white/40">
+            ℹ️ This helps AI understand your professional brand and fill any gaps in your resume
+          </p>
         </div>
       </div>
 
