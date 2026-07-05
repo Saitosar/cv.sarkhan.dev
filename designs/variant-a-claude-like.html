@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Variant A — Claude-like | cv.sarkhan.dev</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary-from: #6366F1;
+  --primary-to: #8B5CF6;
+  --bg: #0F0F1A;
+  --bg-secondary: #1A1A2E;
+  --surface: rgba(255,255,255,0.05);
+  --surface-hover: rgba(255,255,255,0.08);
+  --text: #FFFFFF;
+  --text-muted: #A0A0B0;
+  --text-dim: #6B6B80;
+  --accent: #22C55E;
+  --accent-bg: rgba(34,197,94,0.12);
+  --border: rgba(255,255,255,0.06);
+  --border-light: rgba(255,255,255,0.1);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 24px;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ===== DESKTOP SPLIT-SCREEN ===== */
+.desktop-view {
+  display: flex;
+  height: 100vh;
+  position: relative;
+}
+
+/* Chat Panel (Left 33%) */
+.chat-panel {
+  width: 33%;
+  min-width: 360px;
+  max-width: 440px;
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
+}
+
+.chat-header {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chat-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--primary-from), var(--primary-to));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+}
+
+.chat-header h1 {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.chat-header-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  transition: all 0.2s;
+}
+
+.icon-btn:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+/* Messages */
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.chat-messages::-webkit-scrollbar { width: 4px; }
+.chat-messages::-webkit-scrollbar-track { background: transparent; }
+.chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.message {
+  display: flex;
+  gap: 10px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.message-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.message-avatar.user {
+  background: linear-gradient(135deg, var(--primary-from), var(--primary-to));
+  color: white;
+}
+
+.message-avatar.ai {
+  background: var(--surface);
+  color: var(--primary-from);
+  border: 1px solid var(--border-light);
+}
+
+.message-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.message-content .name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.message-content .text {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text);
+  white-space: pre-wrap;
+}
+
+.message-content .text .highlight {
+  color: var(--primary-from);
+  font-weight: 500;
+}
+
+.message-content .text .ats-mention {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* AI Suggestion Cards */
+.suggestion-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.suggestion-card:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-light);
+}
+
+.suggestion-card .label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.suggestion-card .preview {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.suggestion-card .action-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--primary-from);
+  margin-top: 6px;
+}
+
+/* Typing indicator */
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  padding: 8px 0;
+}
+
+.typing-indicator span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  animation: typing 1.4s infinite;
+}
+
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing {
+  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-4px); }
+}
+
+/* Chat Input */
+.chat-input-area {
+  padding: 12px 16px 16px;
+  border-top: 1px solid var(--border);
+}
+
+.chat-input-wrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 8px 8px 8px 14px;
+  transition: border-color 0.2s;
+}
+
+.chat-input-wrapper:focus-within {
+  border-color: var(--primary-from);
+}
+
+.chat-input-wrapper textarea {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13.5px;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+  min-height: 20px;
+  max-height: 120px;
+}
+
+.chat-input-wrapper textarea::placeholder {
+  color: var(--text-dim);
+}
+
+.send-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(135deg, var(--primary-from), var(--primary-to));
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+  transition: opacity 0.2s;
+}
+
+.send-btn:hover { opacity: 0.9; }
+
+/* ===== CANVAS PANEL (Right 67%) ===== */
+.canvas-panel {
+  flex: 1;
+  background: var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.canvas-toolbar {
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.canvas-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.canvas-toolbar-left .title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.canvas-toolbar-left .title strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.canvas-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ats-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: var(--accent-bg);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.ats-badge .score {
+  font-size: 14px;
+}
+
+.toolbar-btn {
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font);
+}
+
+.toolbar-btn:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+  border-color: var(--border-light);
+}
+
+/* Resume Canvas */
+.resume-canvas {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow-y: auto;
+  position: relative;
+}
+
+.resume-canvas::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.resume-card {
+  width: 100%;
+  max-width: 640px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 32px 36px;
+  box-shadow: var(--shadow);
+  position: relative;
+  animation: cardSlide 0.5s ease;
+}
+
+@keyframes cardSlide {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.resume-card .name-section {
+  text-align: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.resume-card .name-section h2 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-bottom: 4px;
+}
+
+.resume-card .name-section .title {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.resume-card .name-section .contact {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.resume-section {
+  margin-bottom: 16px;
+}
+
+.resume-section:last-child { margin-bottom: 0; }
+
+.resume-section .section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.resume-section .section-header h3 {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+}
+
+.resume-section .section-header .edit-btn {
+  font-size: 11px;
+  color: var(--primary-from);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.resume-section:hover .section-header .edit-btn {
+  opacity: 1;
+}
+
+.resume-section p {
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.resume-section .skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.skill-tag {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  transition: all 0.3s;
+}
+
+.skill-tag.highlight {
+  background: rgba(99,102,241,0.15);
+  border-color: rgba(99,102,241,0.3);
+  color: var(--primary-from);
+}
+
+.skill-tag.new {
+  animation: tagPop 0.4s ease;
+}
+
+@keyframes tagPop {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ATS Heatmap on resume */
+.ats-heatmap {
+  display: flex;
+  gap: 2px;
+  margin-top: 8px;
+  padding: 8px 0;
+}
+
+.ats-bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  transition: all 0.5s ease;
+}
+
+.ats-bar.filled {
+  background: var(--accent);
+}
+
+.ats-bar.partial {
+  background: linear-gradient(90deg, var(--accent), var(--primary-from));
+}
+
+.ats-bar.low {
+  background: rgba(255,200,50,0.4);
+}
+
+/* ===== ATS SCORE ANIMATION ===== */
+.ats-score-section {
+  padding: 20px;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.ats-score-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.ats-score-header h3 {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+}
+
+.ats-score-header .score-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.ats-progress-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ats-progress-track {
+  flex: 1;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.ats-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--primary-from), var(--accent));
+  width: 0%;
+  transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.ats-progress-fill::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+  border-radius: 3px;
+}
+
+.ats-progress-fill.animate {
+  width: 78%;
+}
+
+.ats-categories {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.ats-category {
+  flex: 1;
+}
+
+.ats-category .cat-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-bottom: 3px;
+}
+
+.ats-category .cat-bar {
+  height: 3px;
+  border-radius: 2px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.ats-category .cat-fill {
+  height: 100%;
+  border-radius: 2px;
+  width: 0%;
+  transition: width 1s ease 0.3s;
+}
+
+.ats-category .cat-fill.animate {
+  width: var(--pct);
+}
+
+/* ===== MOBILE VIEW ===== */
+.mobile-view {
+  display: none;
+  background: var(--bg);
+  min-height: 100vh;
+  position: relative;
+}
+
+.mobile-header {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.mobile-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobile-header-left h1 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.mobile-tabs {
+  display: flex;
+  background: var(--surface);
+  margin: 0 16px;
+  margin-top: 12px;
+  border-radius: var(--radius-md);
+  padding: 3px;
+  position: sticky;
+  top: 56px;
+  z-index: 9;
+}
+
+.mobile-tab {
+  flex: 1;
+  padding: 8px;
+  text-align: center;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+  background: none;
+  font-family: var(--font);
+}
+
+.mobile-tab.active {
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.mobile-tab .tab-icon {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 2px;
+}
+
+.mobile-content {
+  padding: 16px;
+}
+
+.mobile-chat .message {
+  margin-bottom: 12px;
+}
+
+.mobile-resume .resume-card {
+  padding: 20px;
+}
+
+.mobile-ats {
+  display: none;
+}
+
+.mobile-ats .ats-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+
+.mobile-ats .ats-card h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.mobile-ats .ats-ring-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.mobile-ats .ats-ring {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.mobile-ats .ats-ring svg {
+  transform: rotate(-90deg);
+}
+
+.mobile-ats .ats-ring .ring-bg {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 6;
+}
+
+.mobile-ats .ats-ring .ring-fill {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-dasharray: 226.2;
+  stroke-dashoffset: 226.2;
+  transition: stroke-dashoffset 1.5s ease;
+}
+
+.mobile-ats .ats-ring .ring-fill.animate {
+  stroke-dashoffset: 49.8;
+}
+
+.mobile-ats .ats-ring .center-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.mobile-ats .ats-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.mobile-ats .ats-detail-item {
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+}
+
+.mobile-ats .ats-detail-item .label {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-bottom: 2px;
+}
+
+.mobile-ats .ats-detail-item .value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .desktop-view { display: none; }
+  .mobile-view { display: block; }
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ===== ANIMATIONS ===== */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Canvas update flash */
+.canvas-update-flash {
+  animation: flashGreen 0.6s ease;
+}
+
+@keyframes flashGreen {
+  0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.3); }
+  50% { box-shadow: 0 0 0 8px rgba(34,197,94,0); }
+  100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== DESKTOP VIEW ===== -->
+<div class="desktop-view">
+
+  <!-- CHAT PANEL -->
+  <div class="chat-panel">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="logo-icon">CV</div>
+        <h1>CV Assistant</h1>
+      </div>
+      <div class="chat-header-actions">
+        <button class="icon-btn" title="New chat">+</button>
+        <button class="icon-btn" title="History">&#9776;</button>
+      </div>
+    </div>
+
+    <div class="chat-messages">
+      <!-- User message -->
+      <div class="message">
+        <div class="message-avatar user">Y</div>
+        <div class="message-content">
+          <div class="name">You</div>
+          <div class="text">I'm a Senior DevOps Engineer. Help me build a strong resume for FAANG roles.</div>
+        </div>
+      </div>
+
+      <!-- AI response -->
+      <div class="message">
+        <div class="message-avatar ai">AI</div>
+        <div class="message-content">
+          <div class="name">CV Assistant</div>
+          <div class="text">Great! I've analyzed your profile. Your <span class="highlight">current ATS score is 62%</span>. Let's improve it.
+
+I can see you have strong Kubernetes and CI/CD experience. Let me suggest some improvements:
+
+1. <strong>Add quantifiable metrics</strong> to your experience
+2. <strong>Add a Skills section</strong> with relevant keywords
+3. <strong>Improve your Summary</strong> to be more impact-driven
+
+Here's what I'd recommend for your summary:</div>
+          <div class="suggestion-card">
+            <div class="label">Suggested Summary</div>
+            <div class="preview">"Senior DevOps Engineer with 6+ years designing and managing large-scale Kubernetes clusters (500+ nodes) across AWS and GCP..."</div>
+            <div class="action-tag">Apply &rarr;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- User applies suggestion -->
+      <div class="message">
+        <div class="message-avatar user">Y</div>
+        <div class="message-content">
+          <div class="name">You</div>
+          <div class="text">Apply the summary change and add a section about my Kubernetes expertise.</div>
+        </div>
+      </div>
+
+      <!-- AI typing -->
+      <div class="message">
+        <div class="message-avatar ai">AI</div>
+        <div class="message-content">
+          <div class="name">CV Assistant</div>
+          <div class="typing-indicator">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-area">
+      <div class="chat-input-wrapper">
+        <textarea placeholder="Ask AI to improve your resume..." rows="1"></textarea>
+        <button class="send-btn">&#10148;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CANVAS PANEL -->
+  <div class="canvas-panel">
+    <div class="canvas-toolbar">
+      <div class="canvas-toolbar-left">
+        <span class="title"><strong>Alex Volkov</strong> &mdash; Resume</span>
+      </div>
+      <div class="canvas-toolbar-right">
+        <div class="ats-badge">
+          <span>ATS</span>
+          <span class="score" id="atsScoreDisplay">62%</span>
+        </div>
+        <button class="toolbar-btn">Preview</button>
+        <button class="toolbar-btn">Export</button>
+      </div>
+    </div>
+
+    <div class="resume-canvas">
+      <div class="resume-card" id="resumeCard">
+        <div class="name-section">
+          <h2>Alex Volkov</h2>
+          <div class="title">Senior DevOps Engineer</div>
+          <div class="contact">
+            <span>alex@example.com</span>
+            <span>San Francisco, CA</span>
+            <span>linkedin.com/in/alexv</span>
+          </div>
+        </div>
+
+        <div class="resume-section">
+          <div class="section-header">
+            <h3>Professional Summary</h3>
+            <span class="edit-btn">Edit</span>
+          </div>
+          <p id="summaryText">DevOps engineer with experience in cloud infrastructure and CI/CD pipelines. Worked with Docker and Kubernetes. Managed AWS environments.</p>
+        </div>
+
+        <div class="resume-section">
+          <div class="section-header">
+            <h3>Experience</h3>
+            <span class="edit-btn">Edit</span>
+          </div>
+          <p><strong>Senior DevOps Engineer</strong> &mdash; TechCorp Inc.</p>
+          <p style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">2021 &ndash; Present</p>
+          <p>Managed Kubernetes clusters and CI/CD pipelines. Worked on infrastructure automation and monitoring.</p>
+        </div>
+
+        <div class="resume-section">
+          <div class="section-header">
+            <h3>Skills</h3>
+            <span class="edit-btn">Edit</span>
+          </div>
+          <div class="skill-tags" id="skillsContainer">
+            <span class="skill-tag">Docker</span>
+            <span class="skill-tag">Kubernetes</span>
+            <span class="skill-tag">AWS</span>
+            <span class="skill-tag">CI/CD</span>
+            <span class="skill-tag">Terraform</span>
+          </div>
+        </div>
+
+        <!-- ATS Heatmap -->
+        <div class="resume-section">
+          <div class="section-header">
+            <h3>ATS Keyword Coverage</h3>
+          </div>
+          <div class="ats-heatmap" id="atsHeatmap">
+            <div class="ats-bar filled"></div>
+            <div class="ats-bar filled"></div>
+            <div class="ats-bar filled"></div>
+            <div class="ats-bar partial"></div>
+            <div class="ats-bar partial"></div>
+            <div class="ats-bar low"></div>
+            <div class="ats-bar low"></div>
+            <div class="ats-bar filled"></div>
+            <div class="ats-bar partial"></div>
+            <div class="ats-bar filled"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ATS Score Section -->
+    <div class="ats-score-section">
+      <div class="ats-score-header">
+        <h3>ATS Compatibility Score</h3>
+        <span class="score-value" id="atsScoreLarge">62%</span>
+      </div>
+      <div class="ats-progress-container">
+        <div class="ats-progress-track">
+          <div class="ats-progress-fill" id="atsProgressFill"></div>
+        </div>
+      </div>
+      <div class="ats-categories">
+        <div class="ats-category">
+          <div class="cat-label">Keywords</div>
+          <div class="cat-bar"><div class="cat-fill" style="--pct:70%" data-pct="70"></div></div>
+        </div>
+        <div class="ats-category">
+          <div class="cat-label">Format</div>
+          <div class="cat-bar"><div class="cat-fill" style="--pct:85%" data-pct="85"></div></div>
+        </div>
+        <div class="ats-category">
+          <div class="cat-label">Experience</div>
+          <div class="cat-bar"><div class="cat-fill" style="--pct:55%" data-pct="55"></div></div>
+        </div>
+        <div class="ats-category">
+          <div class="cat-label">Education</div>
+          <div class="cat-bar"><div class="cat-fill" style="--pct:90%" data-pct="90"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MOBILE VIEW ===== -->
+<div class="mobile-view">
+  <div class="mobile-header">
+    <div class="mobile-header-left">
+      <div class="logo-icon">CV</div>
+      <h1>CV Assistant</h1>
+    </div>
+    <button class="icon-btn" style="width:36px;height:36px;">&#9776;</button>
+  </div>
+
+  <div class="mobile-tabs">
+    <button class="mobile-tab active" data-tab="chat">
+      <span class="tab-icon">&#128172;</span>
+      Chat
+    </button>
+    <button class="mobile-tab" data-tab="resume">
+      <span class="tab-icon">&#128196;</span>
+      Resume
+    </button>
+    <button class="mobile-tab" data-tab="ats">
+      <span class="tab-icon">&#128200;</span>
+      ATS
+    </button>
+  </div>
+
+  <div class="mobile-content">
+    <!-- Chat Tab -->
+    <div class="mobile-chat" id="mobileChat">
+      <div class="message">
+        <div class="message-avatar user">Y</div>
+        <div class="message-content">
+          <div class="name">You</div>
+          <div class="text">Help me build a strong resume for FAANG roles.</div>
+        </div>
+      </div>
+      <div class="message">
+        <div class="message-avatar ai">AI</div>
+        <div class="message-content">
+          <div class="name">CV Assistant</div>
+          <div class="text">Your current ATS score is <span class="highlight">62%</span>. Let's improve it with better keywords and metrics.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resume Tab -->
+    <div class="mobile-resume" id="mobileResume" style="display:none;">
+      <div class="resume-card" style="padding:20px;">
+        <div class="name-section">
+          <h2>Alex Volkov</h2>
+          <div class="title">Senior DevOps Engineer</div>
+        </div>
+        <div class="resume-section">
+          <div class="section-header"><h3>Summary</h3></div>
+          <p id="mobileSummary">DevOps engineer with experience in cloud infrastructure and CI/CD pipelines.</p>
+        </div>
+        <div class="resume-section">
+          <div class="section-header"><h3>Skills</h3></div>
+          <div class="skill-tags">
+            <span class="skill-tag">Docker</span>
+            <span class="skill-tag">Kubernetes</span>
+            <span class="skill-tag">AWS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ATS Tab -->
+    <div class="mobile-ats" id="mobileAts" style="display:none;">
+      <div class="ats-card">
+        <h3>ATS Score</h3>
+        <div class="ats-ring-container">
+          <div class="ats-ring">
+            <svg width="80" height="80" viewBox="0 0 80 80">
+              <circle class="ring-bg" cx="40" cy="40" r="36"/>
+              <circle class="ring-fill" id="mobileRingFill" cx="40" cy="40" r="36"/>
+            </svg>
+            <div class="center-text">62%</div>
+          </div>
+          <div>
+            <div style="font-size:24px;font-weight:700;color:var(--accent);">62<span style="font-size:14px;font-weight:400;color:var(--text-muted);">/100</span></div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Needs improvement</div>
+          </div>
+        </div>
+        <div class="ats-details">
+          <div class="ats-detail-item">
+            <div class="label">Keywords</div>
+            <div class="value" style="color:var(--accent);">70%</div>
+          </div>
+          <div class="ats-detail-item">
+            <div class="label">Format</div>
+            <div class="value" style="color:var(--accent);">85%</div>
+          </div>
+          <div class="ats-detail-item">
+            <div class="label">Experience</div>
+            <div class="value" style="color:#F59E0B;">55%</div>
+          </div>
+          <div class="ats-detail-item">
+            <div class="label">Education</div>
+            <div class="value" style="color:var(--accent);">90%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Animate ATS progress on load
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    document.getElementById('atsProgressFill').classList.add('animate');
+    document.querySelectorAll('.cat-fill').forEach(el => el.classList.add('animate'));
+    document.getElementById('mobileRingFill').classList.add('animate');
+  }, 300);
+
+  // Mobile tab switching
+  document.querySelectorAll('.mobile-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.mobile-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const target = tab.dataset.tab;
+      document.getElementById('mobileChat').style.display = target === 'chat' ? 'block' : 'none';
+      document.getElementById('mobileResume').style.display = target === 'resume' ? 'block' : 'none';
+      document.getElementById('mobileAts').style.display = target === 'ats' ? 'block' : 'none';
+    });
+  });
+
+  // Simulate AI updating the canvas after 2 seconds
+  setTimeout(() => {
+    const summary = document.getElementById('summaryText');
+    summary.innerHTML = 'Senior DevOps Engineer with <strong>6+ years</strong> designing and managing large-scale Kubernetes clusters (<strong>500+ nodes</strong>) across AWS and GCP. Reduced deployment time by <strong>70%</strong> through automated CI/CD pipelines and infrastructure-as-code practices.';
+    
+    const skills = document.getElementById('skillsContainer');
+    const newSkills = ['Helm', 'ArgoCD', 'Prometheus', 'Istio'];
+    newSkills.forEach((s, i) => {
+      setTimeout(() => {
+        const tag = document.createElement('span');
+        tag.className = 'skill-tag highlight new';
+        tag.textContent = s;
+        skills.appendChild(tag);
+      }, i * 200);
+    });
+
+    // Update ATS score
+    const scoreEls = [document.getElementById('atsScoreDisplay'), document.getElementById('atsScoreLarge')];
+    scoreEls.forEach(el => { if (el) el.textContent = '78%'; });
+    document.querySelectorAll('.ats-progress-fill').forEach(el => {
+      el.style.width = '78%';
+    });
+    document.querySelectorAll('.ats-badge .score').forEach(el => el.textContent = '78%');
+
+    // Flash the card
+    document.getElementById('resumeCard').classList.add('canvas-update-flash');
+    setTimeout(() => document.getElementById('resumeCard').classList.remove('canvas-update-flash'), 600);
+  }, 2000);
+});
+</script>
+
+</body>
+</html>
