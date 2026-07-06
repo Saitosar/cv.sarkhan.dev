@@ -7,11 +7,12 @@ vi.mock('next/server', () => ({
   NextResponse: {
     json: (...args: unknown[]) => {
       mockJson(...args);
+      const status = (args[1] as { status?: number } | undefined)?.status ?? 200;
       return {
         json: () => Promise.resolve(args[0]),
-        status: args[1]?.status || 200,
-        ok: (args[1]?.status || 200) < 400,
-      };
+        status,
+        ok: status < 400,
+      } as unknown as Response;
     },
   },
 }));
@@ -27,7 +28,7 @@ describe('POST /api/jobs/search', () => {
   it('should return jobs for a valid query', async () => {
     const req = {
       json: () => Promise.resolve({ query: 'React frontend', location: '' }),
-    } as Request;
+    } as unknown as Request;
 
     const response = await POST(req);
     const data = await response.json();
@@ -43,7 +44,7 @@ describe('POST /api/jobs/search', () => {
   it('should return 400 when query is missing', async () => {
     const req = {
       json: () => Promise.resolve({ location: '' }),
-    } as Request;
+    } as unknown as Request;
 
     const response = await POST(req);
     const data = await response.json();
@@ -55,7 +56,7 @@ describe('POST /api/jobs/search', () => {
   it('should return 400 when query is empty string', async () => {
     const req = {
       json: () => Promise.resolve({ query: '   ', location: '' }),
-    } as Request;
+    } as unknown as Request;
 
     const response = await POST(req);
     const data = await response.json();
@@ -67,7 +68,7 @@ describe('POST /api/jobs/search', () => {
   it('should return 400 when query is not a string', async () => {
     const req = {
       json: () => Promise.resolve({ query: 123, location: '' }),
-    } as Request;
+    } as unknown as Request;
 
     const response = await POST(req);
     const data = await response.json();
@@ -79,7 +80,7 @@ describe('POST /api/jobs/search', () => {
   it('should return jobs with matchScore between 40 and 98', async () => {
     const req = {
       json: () => Promise.resolve({ query: 'engineer', location: '' }),
-    } as Request;
+    } as unknown as Request;
 
     const response = await POST(req);
     const data = await response.json();
@@ -93,7 +94,7 @@ describe('POST /api/jobs/search', () => {
   it('should return jobs with matchedSkills and missingSkills', async () => {
     const req = {
       json: () => Promise.resolve({ query: 'React TypeScript', location: '' }),
-    } as Request;
+    } as unknown as Request;
 
     const response = await POST(req);
     const data = await response.json();
@@ -107,7 +108,7 @@ describe('POST /api/jobs/search', () => {
   it('should return at most 5 jobs', async () => {
     const req = {
       json: () => Promise.resolve({ query: 'engineer', location: '' }),
-    } as Request;
+    } as unknown as Request;
 
     const response = await POST(req);
     const data = await response.json();
@@ -118,7 +119,7 @@ describe('POST /api/jobs/search', () => {
   it('should handle location parameter', async () => {
     const req = {
       json: () => Promise.resolve({ query: 'engineer', location: 'Berlin' }),
-    } as Request;
+    } as unknown as Request;
 
     const response = await POST(req);
     const data = await response.json();
@@ -131,7 +132,7 @@ describe('POST /api/jobs/search', () => {
       json: () => {
         throw new Error('Unexpected parse error');
       },
-    } as Request;
+    } as unknown as Request;
 
     const response = await POST(req);
     const data = await response.json();

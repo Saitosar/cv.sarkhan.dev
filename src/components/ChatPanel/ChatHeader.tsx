@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import type { ChatHeaderProps, ChatMode } from '@/types/chat';
 import { CHAT_MODES } from '@/types/hr-coach';
 import ModeToggle from './ModeToggle';
+import ProFeatureGate from '../Billing/ProFeatureGate';
 
 export default function ChatHeader({
   agentName,
@@ -73,7 +74,9 @@ export default function ChatHeader({
         </div>
       </div>
       <div className="flex items-center">
-        <ModeToggle mode={mode} onChange={handleModeChange} />
+        <ProFeatureGate featureName="HR Coach">
+          <ModeToggle mode={mode} onChange={handleModeChange} />
+        </ProFeatureGate>
       </div>
     </div>
   );

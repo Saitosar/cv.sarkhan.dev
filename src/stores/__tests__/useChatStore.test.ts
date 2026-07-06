@@ -13,6 +13,7 @@ describe('useChatStore', () => {
         updatedAt: 0,
         focusSection: null,
         status: 'idle',
+        mode: 'aether',
       },
       inputValue: '',
       inputPlaceholder: 'Tell Aether what to improve...',

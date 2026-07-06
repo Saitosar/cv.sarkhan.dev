@@ -43,7 +43,7 @@ describe('ChatSSEService', () => {
     vi.stubGlobal('fetch', mockFetch);
 
     const onDone = vi.fn();
-    await service.send('hi', null, undefined, { onDone });
+    await service.send('hi', null, undefined, undefined, { onDone });
 
     const state = useChatStore.getState();
     const messages = state.session.messages;
@@ -69,7 +69,7 @@ describe('ChatSSEService', () => {
     }));
 
     const onError = vi.fn();
-    await service.send('hi', null, undefined, { onError });
+    await service.send('hi', null, undefined, undefined, { onError });
 
     const state = useChatStore.getState();
     const messages = state.session.messages;

@@ -13,6 +13,11 @@ export default function ClientLayoutWrapper({
 }) {
   const pathname = usePathname();
   const isWorkspace = pathname.startsWith('/workspace');
+  const isTelegram = pathname.startsWith('/telegram');
+
+  if (isTelegram) {
+    return <>{children}</>;
+  }
 
   return (
     <>

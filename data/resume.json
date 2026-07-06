@@ -1,0 +1,182 @@
+{
+  "resume": {
+    "id": "resume-1",
+    "fullName": "Alex Mercer",
+    "jobTitle": "Senior Full Stack Engineer",
+    "location": "San Francisco, CA",
+    "contact": {
+      "email": "alex.mercer@example.com",
+      "phone": "+1 (415) 555-0199",
+      "linkedin": "https://linkedin.com/in/alexmercer"
+    },
+    "github": "https://github.com/alexmercer",
+    "website": "https://alexmercer.dev",
+    "summary": "Results-driven Senior Full Stack Engineer with 8+ years of experience building scalable web applications, design systems, and AI-powered products. Proficient in TypeScript, React, Node.js, and cloud infrastructure. Passionate about clean architecture, developer experience, and delivering user-centric solutions that pass ATS filters.",
+    "experience": [
+      {
+        "id": "exp-1",
+        "company": "Nexus Labs",
+        "position": "Senior Full Stack Engineer",
+        "location": "Remote (US)",
+        "startDate": { "month": "03", "year": "2022" },
+        "endDate": { "month": "", "year": "", "isCurrent": true },
+        "description": "Lead product engineering for a high-growth fintech platform. Own end-to-end feature delivery, mentor junior engineers, and drive architecture decisions across React, Node, and PostgreSQL.",
+        "highlights": [
+          "Reduced page load time by 40% through code splitting and edge caching",
+          "Built a real-time notification system handling 2M+ events per day",
+          "Introduced design-system components adopted by 6 product teams"
+        ]
+      },
+      {
+        "id": "exp-2",
+        "company": "Orbit Systems",
+        "position": "Staff Frontend Developer",
+        "location": "Berlin, Germany",
+        "startDate": { "month": "06", "year": "2019" },
+        "endDate": { "month": "02", "year": "2022", "isCurrent": false },
+        "description": "Designed and built performant, accessible UI components for a developer tooling suite. Deep expertise in TypeScript, React, and design systems.",
+        "highlights": [
+          "Authored the company's first accessible component library in React and TypeScript",
+          "Improved CI/CD pipeline reliability by migrating to GitHub Actions and Playwright",
+          "Collaborated with designers to standardize tokens and theming across products"
+        ]
+      }
+    ],
+    "education": [
+      {
+        "id": "edu-1",
+        "institution": "University of California, Berkeley",
+        "degree": "Bachelor of Science",
+        "field": "Computer Science",
+        "startYear": "2011",
+        "endYear": "2015",
+        "gpa": "3.8"
+      }
+    ],
+    "skills": [
+      { "id": "sk-1", "name": "TypeScript", "category": "Languages", "level": "expert" },
+      { "id": "sk-2", "name": "React", "category": "Frontend", "level": "expert" },
+      { "id": "sk-3", "name": "Next.js", "category": "Frontend", "level": "advanced" },
+      { "id": "sk-4", "name": "Node.js", "category": "Backend", "level": "advanced" },
+      { "id": "sk-5", "name": "PostgreSQL", "category": "Database", "level": "advanced" },
+      { "id": "sk-6", "name": "Tailwind CSS", "category": "Frontend", "level": "advanced" },
+      { "id": "sk-7", "name": "AWS", "category": "Cloud", "level": "intermediate" },
+      { "id": "sk-8", "name": "Docker", "category": "DevOps", "level": "intermediate" }
+    ],
+    "certifications": [
+      {
+        "id": "cert-1",
+        "name": "AWS Certified Solutions Architect – Associate",
+        "issuer": "Amazon Web Services",
+        "date": "2023-08",
+        "url": "https://www.credly.com/badges/aws-saa"
+      }
+    ],
+    "achievements": [
+      { "value": "Speaker at ReactConf 2024 — \"Design Systems at Scale\"" },
+      { "value": "Open-source maintainer of react-ats-hooks (1.2k GitHub stars)" }
+    ],
+    "trainings": [
+      { "value": "Advanced System Design – ByteByteGo" },
+      { "value": "LLM Application Development – DeepLearning.AI" }
+    ],
+    "languages": [
+      { "language": "English", "proficiency": "Native" },
+      { "language": "German", "proficiency": "Professional working proficiency" }
+    ],
+    "projects": [
+      {
+        "id": "proj-1",
+        "name": "AI Resume Optimizer",
+        "description": "A Next.js application that analyzes resumes for ATS compatibility and provides AI-powered improvement suggestions.",
+        "technologies": "TypeScript, React, Next.js, OpenAI, Tailwind CSS",
+        "url": "https://resume-optimizer.example.com"
+      }
+    ],
+    "targetJob": {
+      "title": "Senior Full Stack Engineer",
+      "description": "High-growth fintech platform seeking a senior engineer with React, Node, and PostgreSQL experience."
+    }
+  },
+  "ats": {
+    "overall": 87,
+    "breakdown": {
+      "keywords": 90,
+      "formatting": 85,
+      "completeness": 88,
+      "readability": 84
+    },
+    "sections": [
+      {
+        "section": "summary",
+        "score": 85,
+        "weight": 0.15,
+        "issues": [
+          "Summary is strong but could mention one more measurable outcome"
+        ]
+      },
+      {
+        "section": "experience",
+        "score": 90,
+        "weight": 0.35,
+        "issues": [
+          "Add quantifiable metrics to all bullet points"
+        ]
+      },
+      {
+        "section": "skills",
+        "score": 88,
+        "weight": 0.25,
+        "issues": [
+          "Consider adding more backend/framework keywords matching the target job"
+        ]
+      },
+      {
+        "section": "education",
+        "score": 95,
+        "weight": 0.1,
+        "issues": []
+      },
+      {
+        "section": "certifications",
+        "score": 80,
+        "weight": 0.1,
+        "issues": [
+          "Include certification ID or credential URL for verification"
+        ]
+      },
+      {
+        "section": "general",
+        "score": 82,
+        "weight": 0.05,
+        "issues": [
+          "Ensure no special characters in contact info that ATS parsers may strip"
+        ]
+      }
+    ],
+    "suggestions": [
+      "Add more measurable outcomes to the experience section",
+      "Include certification ID or credential URL",
+      "Expand backend and DevOps keywords to match target job descriptions",
+      "Verify that all contact information uses plain ASCII characters"
+    ],
+    "matchedKeywords": [
+      "TypeScript",
+      "React",
+      "Node.js",
+      "PostgreSQL",
+      "Next.js",
+      "AWS",
+      "Docker",
+      "Full Stack"
+    ],
+    "missingKeywords": [
+      "Kubernetes",
+      "GraphQL",
+      "CI/CD",
+      "Microservices",
+      "Redis"
+    ],
+    "lastAnalyzed": 1720411200000
+  }
+}

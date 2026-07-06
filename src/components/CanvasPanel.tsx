@@ -7,6 +7,7 @@ import type { Suggestion } from '@/types/suggestions';
 import ResumeCanvas from './CanvasPanel/ResumeCanvas';
 import ATSScoreWidget from './CanvasPanel/ATSScoreWidget';
 import SuggestionPanel from './CanvasPanel/SuggestionPanel';
+import ProFeatureGate from './Billing/ProFeatureGate';
 import { useResumeStore } from '@/stores/useResumeStore';
 import { useATSStore } from '@/stores/useATSStore';
 import { useSuggestionStore, buildSuggestion } from '@/stores/useSuggestionStore';
@@ -201,19 +202,21 @@ export default function CanvasPanel({ className }: CanvasPanelProps) {
           onSectionTap={handleSectionTap}
         />
       </div>
-      <SuggestionPanel
-        suggestions={suggestions}
-        isLoading={suggestionLoading}
-        error={suggestionError}
-        activeSection={activeSuggestionSection}
-        onApply={handleApplySuggestion}
-        onDismiss={dismissStoreSuggestion}
-        onRefresh={() => {
-          lastFetchedSectionRef.current = null;
-          setActiveSection(activeSuggestionSection);
-        }}
-        className={activeSection ? 'opacity-100' : 'opacity-0 pointer-events-none'}
-      />
+      <ProFeatureGate featureName="AI Suggestions">
+        <SuggestionPanel
+          suggestions={suggestions}
+          isLoading={suggestionLoading}
+          error={suggestionError}
+          activeSection={activeSuggestionSection}
+          onApply={handleApplySuggestion}
+          onDismiss={dismissStoreSuggestion}
+          onRefresh={() => {
+            lastFetchedSectionRef.current = null;
+            setActiveSection(activeSuggestionSection);
+          }}
+          className={activeSection ? 'opacity-100' : 'opacity-0 pointer-events-none'}
+        />
+      </ProFeatureGate>
     </div>
   );
 }
