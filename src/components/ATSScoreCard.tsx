@@ -3,7 +3,8 @@
 import { useMemo } from 'react';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import { CheckCircle2, AlertCircle, XCircle } from 'lucide-react';
-import { calculateATSScore, type ATSScore } from '@/lib/ats-scorer';
+import { calculateATSScore } from '@/lib/ats-scorer';
+import type { ATSScore } from '@/types/ats';
 import type { ResumeFormData } from '@/lib/validators';
 
 interface ATSScoreCardProps {

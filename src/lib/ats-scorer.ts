@@ -3,20 +3,8 @@
  * Analyzes resume without AI to provide instant feedback
  */
 
-import type { ResumeFormData } from './validators';
-
-export interface ATSScore {
-  overall: number; // 0-100
-  breakdown: {
-    keywords: number;
-    formatting: number;
-    completeness: number;
-    readability: number;
-  };
-  suggestions: string[];
-  matchedKeywords: string[];
-  missingKeywords: string[];
-}
+import { type ATSScore } from '@/types/ats';
+import type { ResumeFormData } from '@/lib/validators';
 
 // Common ATS-friendly action verbs
 const ACTION_VERBS = [
@@ -237,5 +225,6 @@ export function calculateATSScore(
     suggestions: suggestions.slice(0, 5), // Top 5 suggestions
     matchedKeywords: keywordResult.matched,
     missingKeywords: keywordResult.missing.slice(0, 10),
+    lastAnalyzed: Date.now(),
   };
 }

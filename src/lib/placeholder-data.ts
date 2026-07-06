@@ -1,61 +1,16 @@
 // src/lib/placeholder-data.ts
 
-// Явно определяем типы для каждой секции
-type Contact = {
-  email: string;
-  phone: string;
-  linkedin: string;
-};
+import type {
+  ResumeData,
+  Experience,
+  Project,
+  Education,
+  Language,
+} from '@/types/resume';
 
-// ИЗМЕНЕНИЕ ЗДЕСЬ: Добавлено слово 'export'
-export type Experience = {
-  company: string;
-  position: string;
-  description?: string;
-  startDate: { month: string; year: string };
-  endDate?: {
-    month?: string;
-    year?: string;
-    isCurrent?: boolean;
-  };
-};
-
-type Project = {
-  name: string;
-  description?: string;
-  technologies?: string;
-};
-
-type Education = {
-  institution: string;
-  degree: string;
-  years?: string;
-};
-
-type Language = {
-  language: string;
-  proficiency: string;
-};
-
-// --- ГЛАВНОЕ ИЗМЕНЕНИЕ: Явное определение типа ResumeData ---
-export type ResumeData = {
-  fullName: string;
-  jobTitle: string;
-  summary: string;
-  contact: Contact;
-  experience: Experience[];
-  projects: Project[];
-  education: Education[];
-  skills: string[];
-  languages: Language[];
-  achievements: string[];
-  trainings: string[];
-  certifications: string[];
-};
-
-// Улучшенная функция форматирования дат
+export type { ResumeData, Experience, Project, Education, Language };
 export function formatExperienceDate(job: Experience): string {
-  if (!job.startDate.month || !job.startDate.year) return '';
+  if (!job.startDate?.month || !job.startDate?.year) return '';
   
   const start = `${job.startDate.month} ${job.startDate.year}`;
   
@@ -70,7 +25,6 @@ export function formatExperienceDate(job: Experience): string {
   return start;
 }
 
-// Placeholder теперь соответствует строгому типу ResumeData
 export const placeholderResume: ResumeData = {
   fullName: "John Doe",
   jobTitle: "Senior Frontend Developer",
@@ -82,6 +36,7 @@ export const placeholderResume: ResumeData = {
   },
   experience: [
     {
+      id: "exp-1",
       company: "Tech Solutions Inc.",
       position: "Senior Frontend Developer",
       startDate: { month: 'Jan', year: '2020' },
@@ -89,6 +44,7 @@ export const placeholderResume: ResumeData = {
       description: "Led the development of a new e-commerce platform, resulting in a 30% increase in sales. Optimized application performance, reducing page load time by 50%.",
     },
     {
+      id: "exp-2",
       company: "Web Innovators LLC",
       position: "Frontend Developer",
       startDate: { month: 'Jun', year: '2017' },
@@ -98,6 +54,7 @@ export const placeholderResume: ResumeData = {
   ],
   projects: [
     {
+      id: "proj-1",
       name: "Personal Portfolio Website",
       description: "Developed a personal portfolio to showcase my projects, using a modern tech stack and focusing on performance and SEO.",
       technologies: "Next.js, Tailwind CSS, Vercel",
@@ -110,18 +67,24 @@ export const placeholderResume: ResumeData = {
       years: "2013 - 2017",
     },
   ],
-  skills: ["React", "TypeScript", "Next.js", "Tailwind CSS", "GraphQL"],
+  skills: [
+    { value: "React" },
+    { value: "TypeScript" },
+    { value: "Next.js" },
+    { value: "Tailwind CSS" },
+    { value: "GraphQL" },
+  ],
   languages: [
     { language: 'English', proficiency: 'Fluent' },
     { language: 'Russian', proficiency: 'Native' },
   ],
   achievements: [
-    "Winner of the 2021 'Innovation in UI/UX' award.",
+    { value: "Winner of the 2021 'Innovation in UI/UX' award." },
   ],
   trainings: [
-    'Agile & Scrum Fundamentals Workshop (2022)',
+    { value: 'Agile & Scrum Fundamentals Workshop (2022)' },
   ],
   certifications: [
-    'Certified Scrum Master (CSM)',
+    { value: 'Certified Scrum Master (CSM)' },
   ],
 };

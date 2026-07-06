@@ -17,6 +17,7 @@ export const resumeSchema = z.object({
     linkedin: z.string().url("Invalid URL.").optional(),
   }),
   experience: z.array(z.object({
+    id: z.string().optional(),
     company: z.string().min(1, "Company name is required."),
     position: z.string().min(1, "Position is required."),
     description: z.string().optional(),
@@ -32,9 +33,11 @@ export const resumeSchema = z.object({
     }).optional(),
   })).optional(),
   projects: z.array(z.object({
+    id: z.string().optional(),
     name: z.string().min(1, "Project name is required."),
     description: z.string().optional(),
     technologies: z.string().optional(),
+    url: z.string().url().optional(),
   })).optional(),
   education: z.array(z.object({
     institution: z.string().min(1, "Institution is required."),

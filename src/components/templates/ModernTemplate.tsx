@@ -39,8 +39,8 @@ export function ModernTemplate({ resume, accentColor }: { resume: ResumeData, ac
           <Section title="Skills">
             <div className="flex flex-wrap gap-2">
                 {resume.skills.map(skill => (
-                  <span key={skill} className="bg-cyan-50 text-cyan-800 text-xs font-medium px-3 py-1 rounded-full">
-                    {skill}
+                  <span key={skill.value} className="bg-cyan-50 text-cyan-800 text-xs font-medium px-3 py-1 rounded-full">
+                    {skill.value}
                   </span>
                 ))}
             </div>
@@ -66,7 +66,7 @@ export function ModernTemplate({ resume, accentColor }: { resume: ResumeData, ac
         {/* ... (остальная часть файла без изменений) ... */}
         {hasContent(resume.projects) && (
           <Section title="Projects">
-            {resume.projects.map((project, index) => (
+            {resume.projects!.map((project, index) => (
               <div key={index}>
                 <h3 className="text-lg font-bold text-gray-800">{project.name}</h3>
                 {project.technologies && <p className="text-sm font-semibold text-gray-500 -mt-1">{project.technologies}</p>}
@@ -90,27 +90,27 @@ export function ModernTemplate({ resume, accentColor }: { resume: ResumeData, ac
         )}
         {hasContent(resume.languages) && (
           <Section title="Languages">
-            <p className="text-sm">{resume.languages.map(lang => `${lang.language} (${lang.proficiency})`).join(', ')}</p>
+            <p className="text-sm">{resume.languages!.map(lang => `${lang.language} (${lang.proficiency})`).join(', ')}</p>
           </Section>
         )}
         {hasContent(resume.achievements) && (
           <Section title="Achievements">
             <ul className="list-disc pl-5 space-y-1 text-sm">
-              {resume.achievements.map((ach, index) => <li key={index}>{ach}</li>)}
+              {resume.achievements!.map((ach, index) => <li key={index}>{ach.value}</li>)}
             </ul>
           </Section>
         )}
         {hasContent(resume.certifications) && (
           <Section title="Certifications">
             <ul className="list-disc pl-5 space-y-1 text-sm">
-              {resume.certifications.map((cert, index) => <li key={index}>{cert}</li>)}
+              {resume.certifications!.map((cert, index) => <li key={index}>{cert.value}</li>)}
             </ul>
           </Section>
         )}
         {hasContent(resume.trainings) && (
           <Section title="Trainings">
             <ul className="list-disc pl-5 space-y-1 text-sm">
-              {resume.trainings.map((train, index) => <li key={index}>{train}</li>)}
+              {resume.trainings!.map((train, index) => <li key={index}>{train.value}</li>)}
             </ul>
           </Section>
         )}

@@ -60,7 +60,7 @@ export function CreativeTemplate({ resume, accentColor, theme }: { resume: Resum
         {hasContent(resume.projects) && (
           <Section title=">> Projects">
             <div className="space-y-4">
-              {resume.projects.map((project, index) => (
+              {resume.projects!.map((project, index) => (
                 <div key={index}>
                   <p className="font-bold">{project.name}</p>
                   {project.technologies && <p className={`text-xs ${subTextColor}`}>{project.technologies}</p>}
@@ -72,7 +72,7 @@ export function CreativeTemplate({ resume, accentColor, theme }: { resume: Resum
         )}
         {hasContent(resume.skills) && (
           <Section title=">> Skills">
-            <p>{resume.skills.join(' | ')}</p>
+            <p>{resume.skills.map(s => s.value).join(' | ')}</p>
           </Section>
         )}
         {hasContent(resume.education) && (
@@ -87,13 +87,13 @@ export function CreativeTemplate({ resume, accentColor, theme }: { resume: Resum
         )}
         {hasContent(resume.languages) && (
           <Section title=">> Languages">
-            <p>{resume.languages.map(lang => `${lang.language} (${lang.proficiency})`).join('; ')}</p>
+            <p>{resume.languages!.map(lang => `${lang.language} (${lang.proficiency})`).join('; ')}</p>
           </Section>
         )}
         {hasContent(resume.achievements) && (
           <Section title=">> Achievements">
             <ul className="list-disc list-inside space-y-1">
-              {resume.achievements.map((ach, index) => <li key={index}>{ach}</li>)}
+              {resume.achievements!.map((ach, index) => <li key={index}>{ach.value}</li>)}
             </ul>
           </Section>
         )}

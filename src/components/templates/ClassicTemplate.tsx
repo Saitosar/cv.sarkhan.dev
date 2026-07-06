@@ -52,7 +52,7 @@ export function ClassicTemplate({ resume, accentColor }: { resume: ResumeData, a
       {/* ... (остальная часть файла без изменений) ... */}
       {hasContent(resume.projects) && (
         <Section title="Projects">
-          {resume.projects.map((project, index) => (
+          {resume.projects!.map((project, index) => (
             <div key={index}>
               <h3 className="text-lg font-bold">{project.name}</h3>
               {project.technologies && <p className="text-sm font-semibold text-gray-600">{project.technologies}</p>}
@@ -76,32 +76,32 @@ export function ClassicTemplate({ resume, accentColor }: { resume: ResumeData, a
       )}
       {hasContent(resume.skills) && (
         <Section title="Skills">
-          <p>{resume.skills.join(', ')}</p>
+          <p>{resume.skills.map(s => s.value).join(', ')}</p>
         </Section>
       )}
       {hasContent(resume.languages) && (
         <Section title="Languages">
-          <p>{resume.languages.map(lang => `${lang.language} (${lang.proficiency})`).join(', ')}</p>
+          <p>{resume.languages!.map(lang => `${lang.language} (${lang.proficiency})`).join(', ')}</p>
         </Section>
       )}
       {hasContent(resume.achievements) && (
         <Section title="Achievements">
           <ul className="list-disc pl-5 space-y-1">
-            {resume.achievements.map((ach, index) => <li key={index}>{ach}</li>)}
+            {resume.achievements!.map((ach, index) => <li key={index}>{ach.value}</li>)}
           </ul>
         </Section>
       )}
       {hasContent(resume.certifications) && (
         <Section title="Certifications">
           <ul className="list-disc pl-5 space-y-1">
-            {resume.certifications.map((cert, index) => <li key={index}>{cert}</li>)}
+            {resume.certifications!.map((cert, index) => <li key={index}>{cert.value}</li>)}
           </ul>
         </Section>
       )}
       {hasContent(resume.trainings) && (
         <Section title="Trainings">
           <ul className="list-disc pl-5 space-y-1">
-            {resume.trainings.map((train, index) => <li key={index}>{train}</li>)}
+            {resume.trainings!.map((train, index) => <li key={index}>{train.value}</li>)}
           </ul>
         </Section>
       )}

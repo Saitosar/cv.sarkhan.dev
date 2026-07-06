@@ -47,10 +47,10 @@ export function LivePreview({ data, template, accentColor, theme }: LivePreviewP
       projects: data.projects?.map(proj => ({ ...proj, description: proj.description || '', technologies: proj.technologies || '' })) || [],
       education: data.education?.map(edu => ({ ...edu, years: edu.years || '' })) || [],
       languages: data.languages || [],
-      skills: data.skills?.map(item => item.value).filter(Boolean) || [],
-      achievements: data.achievements?.map(item => item.value).filter(Boolean) || [],
-      certifications: data.certifications?.map(item => item.value).filter(Boolean) || [],
-      trainings: data.trainings?.map(item => item.value).filter(Boolean) || [],
+      skills: data.skills?.filter(item => item.value) || [],
+      achievements: data.achievements?.filter(item => item.value) || [],
+      certifications: data.certifications?.filter(item => item.value) || [],
+      trainings: data.trainings?.filter(item => item.value) || [],
     };
   } else if (data && 'result' in data) {
     // Если это простые данные со страниц update/import, используем placeholder и меняем только summary

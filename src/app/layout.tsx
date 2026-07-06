@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, Geist } from 'next/font/google';
 import './globals.css';
-import BackgroundFX from '@/components/BackgroundFX';
-import { Header } from '@/components/Header';
-import { MobileNav } from '@/components/MobileNav';
+import ClientLayoutWrapper from '@/components/ClientLayoutWrapper';
 
 // Body font - Inter for excellent readability
 const inter = Inter({
@@ -75,15 +73,7 @@ export default function RootLayout({
       </head>
       {/* Применяем переменные шрифтов к телу документа */}
       <body className={`${inter.variable} ${geist.variable} ${interTight.variable} font-sans pb-20 md:pb-0`}>
-        {/* Компоненты, которые будут на всех страницах */}
-        <BackgroundFX />
-        <Header />
-
-        {/* Основной контент страницы */}
-        <main>{children}</main>
-
-        {/* Мобильная навигация внизу */}
-        <MobileNav />
+        <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
       </body>
     </html>
   );

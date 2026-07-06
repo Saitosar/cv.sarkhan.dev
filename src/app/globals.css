@@ -83,6 +83,97 @@ h1, h2, h3, h4, h5, h6,
   padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
+/* ── Core UI glass utilities (Phase 2) ── */
+.glass-panel {
+  background: rgba(20, 19, 19, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.chat-glow {
+  box-shadow: 0 0 20px rgba(96, 1, 209, 0.15);
+  border: 1px solid rgba(96, 1, 209, 0.3);
+}
+
+.ats-glow {
+  box-shadow:
+    0 0 30px rgba(79, 70, 229, 0.25),
+    inset 0 0 20px rgba(79, 70, 229, 0.1);
+}
+
+/* ── Phase 2 animations ── */
+@keyframes typing {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+.typing-dot {
+  animation: typing 1.4s infinite ease-in-out both;
+}
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+.typing-dot:nth-child(3) { animation-delay: 0s; }
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.8);
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+  }
+  100% {
+    transform: scale(0.8);
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+  }
+}
+
+.pulse-ring {
+  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+@keyframes message-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-message-in {
+  animation: message-fade-in 0.3s ease-out;
+}
+
+@keyframes tab-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-tab-fade {
+  animation: tab-fade-in 0.2s ease-out;
+}
+
+@keyframes tab-slide-in {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.animate-tab-slide {
+  animation: tab-slide-in 0.25s ease-out;
+}
+
+@keyframes ats-score-arc {
+  from { stroke-dashoffset: 282.7; }
+}
+
+.ats-score-arc {
+  transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile tab content transitions */
+.tab-content-enter {
+  animation: tab-fade-in 0.2s ease-out, tab-slide-in 0.25s ease-out;
+}
+
 .pl-safe {
   padding-left: env(safe-area-inset-left, 0);
 }
