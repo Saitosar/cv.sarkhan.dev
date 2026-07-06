@@ -2,7 +2,7 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { nanoid } from 'nanoid';
-import type { ChatMessage, ChatSession, SectionType } from '@/types/chat';
+import type { ChatMessage, ChatSession, SectionType, ChatMode } from '@/types/chat';
 
 interface ChatState {
   session: ChatSession;
@@ -18,6 +18,7 @@ interface ChatState {
   setFocusSection: (section: SectionType | null) => void;
   setStatus: (status: ChatSession['status']) => void;
   setIsStreaming: (streaming: boolean) => void;
+  setMode: (mode: ChatMode) => void;
   clearSession: () => void;
 }
 
@@ -28,6 +29,7 @@ const defaultSession: ChatSession = {
   updatedAt: Date.now(),
   focusSection: null,
   status: 'idle',
+  mode: 'aether',
 };
 
 export const useChatStore = create<ChatState>()(
@@ -47,6 +49,7 @@ export const useChatStore = create<ChatState>()(
             content,
             timestamp: Date.now(),
             section,
+            source: session.mode,
           };
           set({
             session: {
@@ -76,6 +79,17 @@ export const useChatStore = create<ChatState>()(
         setStatus: (status) =>
           set({ session: { ...get().session, status } }),
         setIsStreaming: (streaming) => set({ isStreaming: streaming }),
+        setMode: (mode) => {
+          const { session } = get();
+          const placeholders: Record<ChatMode, string> = {
+            aether: 'Tell Aether what to improve...',
+            'hr-coach': 'Ask HR Coach about interviews or hiring...',
+          };
+          set({
+            session: { ...session, mode },
+            inputPlaceholder: placeholders[mode],
+          });
+        },
         clearSession: () =>
           set({
             session: { ...defaultSession, id: nanoid() },
@@ -85,7 +99,7 @@ export const useChatStore = create<ChatState>()(
       }),
       {
         name: 'chat-store',
-        version: 1,
+        version: 2,
         partialize: (state) => ({
           session: state.session,
         }),

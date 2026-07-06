@@ -5,6 +5,8 @@ import { buildGeneratePrompt, type GeneratePromptInput } from './generate';
 import { buildTailorPrompt, type TailorPromptInput } from './tailor';
 import { buildAnalyzePrompt, type AnalyzePromptInput } from './analyze';
 import { buildSuggestPrompt, type SuggestPromptInput } from './suggest';
+import { buildSuggestionsPrompt, type SuggestionsPromptInput } from './suggestions';
+import { buildSearchPrompt, type SearchPromptInput } from './search';
 
 export interface GenericPromptInput {
   message?: string;
@@ -12,6 +14,7 @@ export interface GenericPromptInput {
   jobDescription?: string;
   history?: Array<{ role: 'user' | 'assistant'; content: string }>;
   section?: string;
+  sectionContent?: string;
   targetRole?: string;
   jobTitle?: string;
 }
@@ -30,6 +33,10 @@ export function buildPrompt(task: TaskType, input: GenericPromptInput): string {
       return buildAnalyzePrompt(input as unknown as AnalyzePromptInput);
     case 'suggest':
       return buildSuggestPrompt(input as unknown as SuggestPromptInput);
+    case 'suggestions':
+      return buildSuggestionsPrompt(input as unknown as SuggestionsPromptInput);
+    case 'search':
+      return buildSearchPrompt(input as unknown as SearchPromptInput);
     default:
       throw new Error(`Unknown task type: ${task}`);
   }

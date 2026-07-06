@@ -9,12 +9,14 @@ const ALLOWED_TASKS: TaskType[] = [
   'tailor',
   'analyze',
   'suggest',
+  'suggestions',
+  'search',
 ];
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { task, message, resumeData, jobDescription, history } = body;
+    const { task, message, resumeData, jobDescription, history, mode } = body;
 
     if (!task || !ALLOWED_TASKS.includes(task)) {
       return new Response(
@@ -31,6 +33,7 @@ export async function POST(req: Request) {
       resumeData,
       jobDescription,
       history,
+      mode,
     });
 
     return new Response(JSON.stringify(result), {

@@ -4,7 +4,9 @@ export type TaskType =
   | 'generate'
   | 'tailor'
   | 'analyze'
-  | 'suggest';
+  | 'suggest'
+  | 'suggestions'
+  | 'search';
 
 export interface FallbackConfig {
   model: string;
@@ -21,6 +23,8 @@ export interface ModelConfig {
   topP: number;
   maxOutputTokens: number;
   systemPrompt: string;
+  /** Optional alternate system prompt (e.g. HR Coach mode). */
+  alternateSystemPrompt?: string;
   fallbacks: FallbackConfig[];
 }
 
@@ -32,6 +36,7 @@ export const MODEL_CONFIGS: Record<TaskType, ModelConfig> = {
     topP: 0.9,
     maxOutputTokens: 4096,
     systemPrompt: `You are Aether, an AI Career Coach. You help users improve their resumes, provide career advice, and guide them through the job search process. Be supportive, professional, and actionable. Use markdown for formatting. When suggesting resume changes, be specific and provide before/after examples.`,
+    alternateSystemPrompt: `You are an HR Coach, a strict hiring expert with 15+ years of experience in talent acquisition. Your role is to provide realistic, sometimes uncomfortable feedback that prepares the candidate for real interviews. Be direct and critical — sugar-coating doesn't help in real interviews. Focus on: interview preparation, behavioral questions (STAR method), resume gaps, and what recruiters actually look for. Use a professional but firm tone. When evaluating answers, provide specific scores and actionable improvement steps.`,
     fallbacks: [
       {
         model: 'deepseek-v4-flash',
@@ -129,6 +134,42 @@ export const MODEL_CONFIGS: Record<TaskType, ModelConfig> = {
         topP: 0.9,
         maxOutputTokens: 1024,
         systemPrompt: `You are a quick resume assistant. Keep suggestions brief and actionable.`,
+      },
+    ],
+  },
+
+  suggestions: {
+    task: 'suggestions',
+    model: 'deepseek-v4-flash',
+    temperature: 0.3,
+    topP: 0.8,
+    maxOutputTokens: 2048,
+    systemPrompt: `You are a resume improvement analyst. Given a specific section of a resume, analyze it and return structured suggestions. Focus on: missing keywords, weak action verbs, formatting issues, content gaps, and missing metrics. Return ONLY valid JSON matching the SuggestionsRouterResponse interface. Each suggestion must have a clear, actionable description.`,
+    fallbacks: [
+      {
+        model: 'deepseek-v4-flash',
+        temperature: 0.3,
+        topP: 0.8,
+        maxOutputTokens: 2048,
+        systemPrompt: `You are a resume analyst. Return JSON only with suggestions array.`,
+      },
+    ],
+  },
+
+  search: {
+    task: 'search',
+    model: 'deepseek-v4-flash',
+    temperature: 0.2,
+    topP: 0.8,
+    maxOutputTokens: 1024,
+    systemPrompt: `You are a job match scoring engine. Given a job listing and a candidate's resume, calculate a match score (0-100). Consider: skills overlap, years of experience, industry relevance, and location. Return ONLY valid JSON matching the JobScoreResult interface.`,
+    fallbacks: [
+      {
+        model: 'deepseek-v4-flash',
+        temperature: 0.2,
+        topP: 0.8,
+        maxOutputTokens: 1024,
+        systemPrompt: `You are a job match scorer. Return JSON only.`,
       },
     ],
   },

@@ -13,7 +13,7 @@ const SSE_HEADERS = {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { message, sessionId, resumeData, jobDescription, history } = body;
+    const { message, sessionId, resumeData, jobDescription, history, mode } = body;
 
     if (!message || typeof message !== 'string') {
       return new Response(
@@ -37,6 +37,7 @@ export async function POST(req: Request) {
             jobDescription,
             history,
             sessionId,
+            mode,
             signal: abortController.signal,
           });
 

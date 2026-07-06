@@ -4,6 +4,7 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 import type { SplitScreenProps } from '@/types/split-screen';
 import MobileTabBar from '@/components/MobileTabBar';
+import type { MobileTab } from '@/types/split-screen';
 
 const MOBILE_BREAKPOINT = 768;
 
@@ -20,7 +21,7 @@ export default function SplitScreen({
   const [leftRatio, setLeftRatio] = React.useState(defaultLeftRatio);
   const [isDragging, setIsDragging] = React.useState(false);
   const [isMobile, setIsMobile] = React.useState(false);
-  const [activeTab, setActiveTab] = React.useState<'chat' | 'resume' | 'score'>('chat');
+  const [activeTab, setActiveTab] = React.useState<MobileTab>('chat');
   const containerRef = React.useRef<HTMLDivElement>(null);
   const currentOrientation = orientation ?? (isMobile ? 'vertical' : 'horizontal');
 
@@ -117,6 +118,13 @@ export default function SplitScreen({
         <div className="flex-1 overflow-hidden animate-tab-fade">
           {activeTab === 'chat' && left}
           {activeTab === 'resume' && right}
+          {activeTab === 'jobs' && (
+            <div className="flex h-full items-center justify-center p-6">
+              <div className="text-center text-[#c4c7c7]">
+                Job Search panel placeholder
+              </div>
+            </div>
+          )}
           {activeTab === 'score' && (
             <div className="flex h-full items-center justify-center p-6">
               <div className="text-center text-[#c4c7c7]">

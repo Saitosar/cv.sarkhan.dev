@@ -12,6 +12,8 @@ export type SectionType =
   | 'projects'
   | 'general';
 
+export type ChatMode = 'aether' | 'hr-coach';
+
 export interface ChatMessage {
   id: string;
   role: MessageRole;
@@ -23,6 +25,8 @@ export interface ChatMessage {
   hasActions?: boolean;
   /** Whether this message is currently being streamed */
   isStreaming?: boolean;
+  /** Which chat mode produced this message */
+  source?: ChatMode;
 }
 
 export interface ChatSession {
@@ -32,6 +36,8 @@ export interface ChatSession {
   updatedAt: number;
   focusSection: SectionType | null;
   status: 'idle' | 'loading' | 'ready' | 'chatting' | 'suggesting';
+  /** Current chat mode */
+  mode: ChatMode;
 }
 
 export interface ChatPanelProps {
@@ -45,6 +51,10 @@ export interface ChatHeaderProps {
   agentName: string;        // "Aether Coach"
   isOnline: boolean;
   avatarIcon?: string;      // Material icon name, default "smart_toy"
+  /** Current chat mode */
+  mode?: ChatMode;
+  /** Called when mode toggle is clicked */
+  onModeToggle?: () => void;
 }
 
 export interface SessionBadgeProps {

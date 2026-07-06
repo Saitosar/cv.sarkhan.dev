@@ -552,6 +552,68 @@ html {
   body {
     @apply bg-background text-foreground; } }
 
+/* Suggestion panel entrance animations */
+@keyframes panel-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes suggestion-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-panel-in {
+  animation: panel-in 0.25s ease-out both;
+}
+
+.animate-suggestion-in {
+  animation: suggestion-in 0.2s ease-out both;
+  opacity: 0;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-panel-in,
+  .animate-suggestion-in,
+  .animate-fade-in {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* Voice button listening pulse */
+@keyframes voice-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(248, 113, 113, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(248, 113, 113, 0);
+  }
+}
+
+.voice-pulse {
+  animation: voice-pulse 1.4s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  border-radius: 9999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voice-pulse {
+    animation: none;
+  }
+}
+
 /* Styles for Circular Progressbar */
 .CircularProgressbar {
     width: 100%;

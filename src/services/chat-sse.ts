@@ -1,5 +1,6 @@
 import { useChatStore } from '@/stores/useChatStore';
 import type { ResumeStoreData } from '@/types/resume';
+import type { ChatMode } from '@/types/chat';
 
 interface ChatSSEOptions {
   onToken?: (token: string) => void;
@@ -17,6 +18,7 @@ export class ChatSSEService {
     message: string,
     resumeData: ResumeStoreData | null,
     jobDescription?: string,
+    mode?: ChatMode,
     options?: ChatSSEOptions
   ): Promise<void> {
     const store = useChatStore.getState();
@@ -40,6 +42,7 @@ export class ChatSSEService {
           sessionId: store.session.id,
           resumeData,
           jobDescription,
+          mode: mode ?? store.session.mode,
           history: store.session.messages
             .slice(-20)
             .map((m) => ({ role: m.role, content: m.content })),
@@ -100,6 +103,7 @@ export class ChatSSEService {
                     messages[messages.length - 1] = {
                       ...lastMessage,
                       hasActions: true,
+                      source: mode ?? store.session.mode,
                     };
                     useChatStore.setState({
                       session: { ...storeNow.session, messages },

@@ -4,6 +4,7 @@ import * as React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { cn } from '@/lib/utils';
 import type { AgentMessageProps } from '@/types/chat';
+import { CHAT_MODES } from '@/types/hr-coach';
 import SuggestionChips from './SuggestionChips';
 
 export default function AgentMessage({
@@ -16,25 +17,51 @@ export default function AgentMessage({
     else if (action === 'details') onDetails?.(message.id);
   };
 
+  const source = message.source ?? 'aether';
+  const config = CHAT_MODES[source];
+
   return (
     <div className="flex gap-4 max-w-[90%]">
       <div
         className={cn(
-          'w-8 h-8 rounded-full bg-[#6001d1] flex-shrink-0 flex items-center justify-center',
-          'shadow-[0_0_15px_rgba(96,1,209,0.4)]'
+          'w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center',
+          'shadow-[0_0_15px_rgba(0,0,0,0.3)]'
         )}
+        style={{
+          backgroundColor: config.color,
+          boxShadow: `0 0 15px ${config.borderColor}`,
+        }}
       >
         <span className="material-symbols-outlined text-white text-sm">
-          psychology
+          {config.avatarIcon}
         </span>
       </div>
       <div className="flex flex-col gap-2">
-        <span className="text-[10px] text-[#d2bbff] ml-1">Aether AI</span>
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] ml-1" style={{ color: config.color }}>
+            {config.agentName}
+          </span>
+          {message.source && (
+            <span
+              className="text-[9px] px-1.5 py-0.5 rounded-full border"
+              style={{
+                color: config.color,
+                borderColor: config.borderColor,
+                backgroundColor: config.bgColor,
+              }}
+            >
+              {config.label}
+            </span>
+          )}
+        </div>
         <div
           className={cn(
-            'bg-[#2b2a2a]/80 chat-glow rounded-2xl rounded-tl-none',
+            'bg-[#2b2a2a]/80 rounded-2xl rounded-tl-none',
             'p-4 text-[15px] text-[#e5e2e1]'
           )}
+          style={{
+            borderLeft: `2px solid ${config.color}`,
+          }}
         >
           <div className="[&_a]:text-[#d2bbff] [&_a]:underline [&_p]:mb-2 [&_p:last-child]:mb-0">
             <ReactMarkdown

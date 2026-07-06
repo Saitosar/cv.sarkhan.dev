@@ -1,10 +1,11 @@
 import type { TaskType } from './config';
-import { MODEL_CONFIGS, type ModelConfig, CACHEABLE_TASKS } from './config';
+import { MODEL_CONFIGS, type ModelConfig, type FallbackConfig, CACHEABLE_TASKS } from './config';
 import { buildPrompt } from './prompts';
 import { AICache } from './cache';
 import { getGemini } from '@/lib/gemini';
 import { withRetry } from './retry';
 import { classifyError, AIRouterError } from './errors';
+import type { ChatMode } from '@/types/chat';
 
 export type { TaskType } from './config';
 
@@ -16,6 +17,8 @@ export interface RouterRequest {
   history?: Array<{ role: 'user' | 'assistant'; content: string }>;
   sessionId?: string;
   signal?: AbortSignal;
+  /** Chat mode for system prompt selection */
+  mode?: ChatMode;
 }
 
 export interface RouterResponse {
@@ -48,6 +51,13 @@ export class AIRouter {
   constructor(cache?: AICache, logger?: RouterLogger) {
     this.cache = cache ?? new AICache({ ttlMs: 5 * 60 * 1000 });
     this.logger = logger ?? new RouterLogger();
+  }
+
+  private selectSystemPrompt(config: ModelConfig | FallbackConfig, mode?: ChatMode): string {
+    if (mode === 'hr-coach' && 'alternateSystemPrompt' in config && config.alternateSystemPrompt) {
+      return config.alternateSystemPrompt;
+    }
+    return config.systemPrompt;
   }
 
   /**
@@ -94,7 +104,7 @@ export class AIRouter {
     let result: CacheValue;
     try {
       result = await withRetry(
-        () => this.executeWithFallback(config, prompt, request.signal),
+        () => this.executeWithFallback(config, prompt, request.signal, request.mode),
         { maxAttempts: 3, baseDelayMs: 1000, maxDelayMs: 10000 }
       );
     } catch (error) {
@@ -138,7 +148,7 @@ export class AIRouter {
       const openai = getGemini();
 
       const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
-        { role: 'system', content: config.systemPrompt },
+        { role: 'system', content: this.selectSystemPrompt(config, request.mode) },
       ];
 
       if (request.history) {
@@ -212,9 +222,10 @@ export class AIRouter {
   private async executeWithFallback(
     config: ModelConfig,
     prompt: string,
-    signal?: AbortSignal
+    signal?: AbortSignal,
+    mode?: ChatMode
   ): Promise<CacheValue> {
-    const models = [config, ...config.fallbacks];
+    const models: Array<ModelConfig | FallbackConfig> = [config, ...config.fallbacks];
     let lastError: Error | null = null;
 
     for (let i = 0; i < models.length; i++) {
@@ -229,7 +240,7 @@ export class AIRouter {
         const completion = await openai.chat.completions.create({
           model: modelConfig.model,
           messages: [
-            { role: 'system', content: modelConfig.systemPrompt },
+            { role: 'system', content: this.selectSystemPrompt(modelConfig, mode) },
             { role: 'user', content: prompt },
           ],
           temperature: modelConfig.temperature,

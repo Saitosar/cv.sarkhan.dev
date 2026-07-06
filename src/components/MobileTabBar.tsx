@@ -2,13 +2,14 @@
 
 import * as React from 'react';
 import { cn } from '@/lib/utils';
-import { MessageSquare, FileText, BarChart3 } from 'lucide-react';
+import { MessageSquare, FileText, BarChart3, Briefcase } from 'lucide-react';
 import type { MobileTab, MobileTabBarProps } from '@/types/split-screen';
 
 const tabs: { id: MobileTab; label: string; icon: typeof MessageSquare }[] = [
   { id: 'chat', label: 'Chat', icon: MessageSquare },
   { id: 'resume', label: 'Resume', icon: FileText },
   { id: 'score', label: 'Score', icon: BarChart3 },
+  { id: 'jobs', label: 'Jobs', icon: Briefcase },
 ];
 
 export default function MobileTabBar({ activeTab, onTabChange }: MobileTabBarProps) {
