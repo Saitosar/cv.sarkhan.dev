@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import ReactMarkdown from 'react-markdown';
 import { cn } from '@/lib/utils';
 import type { AgentMessageProps } from '@/types/chat';
 import SuggestionChips from './SuggestionChips';
@@ -35,7 +36,43 @@ export default function AgentMessage({
             'p-4 text-[15px] text-[#e5e2e1]'
           )}
         >
-          {message.content}
+          <div className="[&_a]:text-[#d2bbff] [&_a]:underline [&_p]:mb-2 [&_p:last-child]:mb-0">
+            <ReactMarkdown
+              components={{
+                a: ({ ...props }) => (
+                  <a {...props} target="_blank" rel="noopener noreferrer" />
+                ),
+                code: ({ className, children, ...props }) => {
+                  const isInline = !className;
+                  return (
+                    <code
+                      {...props}
+                      className={cn(
+                        isInline
+                          ? 'bg-[#2b2a2a] px-1 rounded text-[#e5e2e1]'
+                          : 'block bg-[#1a1a2e] p-3 rounded-lg font-mono text-[#e5e2e1] overflow-x-auto',
+                        className
+                      )}
+                    >
+                      {children}
+                    </code>
+                  );
+                },
+                ul: ({ ...props }) => (
+                  <ul {...props} className="list-disc pl-5 my-2 space-y-1" />
+                ),
+                ol: ({ ...props }) => (
+                  <ol {...props} className="list-decimal pl-5 my-2 space-y-1" />
+                ),
+                li: ({ ...props }) => <li {...props} className="text-[#e5e2e1]" />,
+                strong: ({ ...props }) => (
+                  <strong {...props} className="font-bold text-white" />
+                ),
+              }}
+            >
+              {message.content}
+            </ReactMarkdown>
+          </div>
         </div>
         {message.hasActions && (
           <SuggestionChips

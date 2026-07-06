@@ -80,7 +80,7 @@ describe('useATSStore', () => {
       useATSStore.getState().addSuggestion(createMockSuggestion({ id: 'sug-1' }));
       useATSStore.getState().applySuggestion('sug-1');
       const state = useATSStore.getState();
-      const sug = state.score!.suggestions[0] as ATSSuggestion;
+      const sug = state.score!.suggestions[0] as unknown as ATSSuggestion;
       expect(sug.applied).toBe(true);
     });
 
@@ -94,7 +94,7 @@ describe('useATSStore', () => {
       useATSStore.getState().addSuggestion(createMockSuggestion({ id: 'sug-1' }));
       useATSStore.getState().applySuggestion('non-existent');
       const state = useATSStore.getState();
-      const sug = state.score!.suggestions[0] as ATSSuggestion;
+      const sug = state.score!.suggestions[0] as unknown as ATSSuggestion;
       expect(sug.applied).toBe(false);
     });
   });
@@ -106,7 +106,7 @@ describe('useATSStore', () => {
       useATSStore.getState().addSuggestion(createMockSuggestion({ id: 'sug-2' }));
       useATSStore.getState().dismissSuggestion('sug-1');
       const state = useATSStore.getState();
-      const suggestions = state.score!.suggestions as ATSSuggestion[];
+      const suggestions = state.score!.suggestions as unknown as ATSSuggestion[];
       expect(suggestions).toHaveLength(1);
       expect(suggestions[0].id).toBe('sug-2');
     });

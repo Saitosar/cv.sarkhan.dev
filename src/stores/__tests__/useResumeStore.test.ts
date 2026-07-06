@@ -112,7 +112,7 @@ describe('useResumeStore', () => {
     it('should remove an experience by id', () => {
       useResumeStore.getState().addExperience();
       const expId = useResumeStore.getState().resume.experience[0].id;
-      useResumeStore.getState().removeExperience(expId);
+      useResumeStore.getState().removeExperience(expId!);
       const state = useResumeStore.getState();
       expect(state.resume.experience).toHaveLength(0);
     });
@@ -132,7 +132,7 @@ describe('useResumeStore', () => {
     it('should push history on remove', () => {
       useResumeStore.getState().addExperience();
       const expId = useResumeStore.getState().resume.experience[0].id;
-      useResumeStore.getState().removeExperience(expId);
+      useResumeStore.getState().removeExperience(expId!);
       expect(useResumeStore.getState().historyIndex).toBe(2);
     });
   });
@@ -141,7 +141,7 @@ describe('useResumeStore', () => {
     it('should update specific fields of an experience', () => {
       useResumeStore.getState().addExperience();
       const expId = useResumeStore.getState().resume.experience[0].id;
-      useResumeStore.getState().updateExperience(expId, {
+      useResumeStore.getState().updateExperience(expId!, {
         company: 'Acme Corp',
         position: 'Developer',
       });
@@ -278,7 +278,7 @@ describe('useResumeStore', () => {
 
   describe('_pushHistory privacy', () => {
     it('should not expose _pushHistory on the store interface', () => {
-      const state = useResumeStore.getState() as Record<string, unknown>;
+      const state = useResumeStore.getState() as unknown as Record<string, unknown>;
       expect(state._pushHistory).toBeUndefined();
     });
   });
@@ -313,11 +313,11 @@ describe('useResumeStore', () => {
       useResumeStore.getState().addExperience();
       useResumeStore.getState().addExperience();
       useResumeStore.getState().updateExperience(
-        useResumeStore.getState().resume.experience[0].id,
+        useResumeStore.getState().resume.experience[0].id!,
         { company: 'First' }
       );
       useResumeStore.getState().updateExperience(
-        useResumeStore.getState().resume.experience[1].id,
+        useResumeStore.getState().resume.experience[1].id!,
         { company: 'Second' }
       );
       useResumeStore.getState().reorderExperience(0, 1);

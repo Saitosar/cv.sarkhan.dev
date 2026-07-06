@@ -9,41 +9,36 @@ import MessageList from './ChatPanel/MessageList';
 import ChatInput from './ChatPanel/ChatInput';
 import TypingIndicator from './ChatPanel/TypingIndicator';
 import { useChatStore } from '@/stores/useChatStore';
+import { useResumeStore } from '@/stores/useResumeStore';
+import { chatSSE } from '@/services/chat-sse';
 
 export default function ChatPanel({ className }: ChatPanelProps) {
   const messages = useChatStore((s) => s.session.messages);
   const inputValue = useChatStore((s) => s.inputValue);
   const inputPlaceholder = useChatStore((s) => s.inputPlaceholder);
   const isStreaming = useChatStore((s) => s.isStreaming);
-  const addMessage = useChatStore((s) => s.addMessage);
   const setInputValue = useChatStore((s) => s.setInputValue);
-  const setIsStreaming = useChatStore((s) => s.setIsStreaming);
-  const updateLastMessage = useChatStore((s) => s.updateLastMessage);
+  const resume = useResumeStore((s) => s.resume);
 
   const handleSend = React.useCallback(
-    (value: string) => {
+    async (value: string) => {
       const trimmed = value.trim();
       if (!trimmed || isStreaming) return;
-      addMessage('user', trimmed);
       setInputValue('');
-      setIsStreaming(true);
-      addMessage('assistant', '', 'general');
-
-      // Simulate streaming (remove when real API is wired)
-      let step = 0;
-      const text =
-        'I reviewed your request. Let me improve the resume section based on what you shared.';
-      const interval = setInterval(() => {
-        step += 1;
-        updateLastMessage(text.slice(0, Math.min(step * 2, text.length)));
-        if (step * 2 >= text.length) {
-          clearInterval(interval);
-          setIsStreaming(false);
-        }
-      }, 30);
+      await chatSSE.send(trimmed, resume, resume.targetJob?.description);
     },
-    [isStreaming, addMessage, setInputValue, setIsStreaming, updateLastMessage]
+    [isStreaming, setInputValue, resume]
   );
+
+  const handleCancel = React.useCallback(() => {
+    chatSSE.cancel();
+  }, []);
+
+  const showTyping =
+    isStreaming &&
+    messages.length > 0 &&
+    messages[messages.length - 1].role === 'assistant' &&
+    messages[messages.length - 1].content === '';
 
   return (
     <div
@@ -58,7 +53,7 @@ export default function ChatPanel({ className }: ChatPanelProps) {
           <SessionBadge label="Session Started • Focus: Senior DevOps" />
         </div>
         <MessageList messages={messages} />
-        {isStreaming && messages.length > 0 && messages[messages.length - 1].role === 'assistant' && messages[messages.length - 1].content === '' && (
+        {showTyping && (
           <div className="px-6 py-2">
             <TypingIndicator visible={true} />
           </div>
@@ -69,8 +64,8 @@ export default function ChatPanel({ className }: ChatPanelProps) {
           value={inputValue}
           placeholder={inputPlaceholder}
           onChange={setInputValue}
-          onSend={handleSend}
-          disabled={isStreaming}
+          onSend={isStreaming ? handleCancel : handleSend}
+          disabled={false}
         />
       </div>
     </div>
