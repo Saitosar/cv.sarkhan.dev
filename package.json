@@ -21,6 +21,7 @@
     "lucide-react": "^0.544.0",
     "nanoid": "^5.1.16",
     "next": "^16.1.6",
+    "openai": "^6.45.0",
     "react": "^19.2.4",
     "react-circular-progressbar": "^2.2.0",
     "react-dom": "^19.2.4",

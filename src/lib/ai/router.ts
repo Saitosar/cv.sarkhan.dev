@@ -135,29 +135,37 @@ export class AIRouter {
     });
 
     try {
-      const genAI = getGemini();
-      const model = genAI.getGenerativeModel({
-        model: config.model,
-        systemInstruction: config.systemPrompt,
-        generationConfig: {
-          temperature: config.temperature,
-          topP: config.topP,
-          maxOutputTokens: config.maxOutputTokens,
-        },
-      });
+      const openai = getGemini();
 
-      const result = await model.generateContentStream({
-        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
+        { role: 'system', content: config.systemPrompt },
+      ];
+
+      if (request.history) {
+        for (const msg of request.history) {
+          messages.push({ role: msg.role, content: msg.content });
+        }
+      }
+
+      messages.push({ role: 'user', content: prompt });
+
+      const stream = await openai.chat.completions.create({
+        model: config.model,
+        messages,
+        temperature: config.temperature,
+        top_p: config.topP,
+        max_tokens: config.maxOutputTokens,
+        stream: true,
       });
 
       let fullContent = '';
 
-      for await (const chunk of result.stream) {
+      for await (const chunk of stream) {
         if (request.signal?.aborted) {
           throw new DOMException('Aborted', 'AbortError');
         }
 
-        const text = chunk.text();
+        const text = chunk.choices?.[0]?.delta?.content ?? '';
         if (text) {
           fullContent += text;
           yield { type: 'token', data: text };
@@ -186,7 +194,6 @@ export class AIRouter {
       const classified = classifyError(error, request.task, config.model);
 
       if (classified.code === 'ABORTED') {
-        // Stream ended by client — no need to emit an error event
         return;
       }
 
@@ -217,30 +224,27 @@ export class AIRouter {
           throw new DOMException('Aborted', 'AbortError');
         }
 
-        const genAI = getGemini();
-        const model = genAI.getGenerativeModel({
+        const openai = getGemini();
+
+        const completion = await openai.chat.completions.create({
           model: modelConfig.model,
-          systemInstruction: modelConfig.systemPrompt,
-          generationConfig: {
-            temperature: modelConfig.temperature,
-            topP: modelConfig.topP,
-            maxOutputTokens: modelConfig.maxOutputTokens,
-          },
+          messages: [
+            { role: 'system', content: modelConfig.systemPrompt },
+            { role: 'user', content: prompt },
+          ],
+          temperature: modelConfig.temperature,
+          top_p: modelConfig.topP,
+          max_tokens: modelConfig.maxOutputTokens,
         });
 
-        const result = await model.generateContent({
-          contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        });
-
-        const response = result.response;
-        const content = response.text();
+        const content = completion.choices[0]?.message?.content ?? '';
 
         return {
           content,
           model: modelConfig.model,
           tokens: {
-            input: response.usageMetadata?.promptTokenCount ?? 0,
-            output: response.usageMetadata?.candidatesTokenCount ?? 0,
+            input: completion.usage?.prompt_tokens ?? 0,
+            output: completion.usage?.completion_tokens ?? 0,
           },
         };
       } catch (error) {
