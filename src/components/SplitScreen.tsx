@@ -159,7 +159,7 @@ export default function SplitScreen({
           aria-valuemin={Math.round(minLeftRatio * 100)}
           aria-valuemax={Math.round(maxLeftRatio * 100)}
           className={cn(
-            'relative h-1.5 cursor-row-resize flex-shrink-0 group transition-colors duration-200',
+            'relative h-4 cursor-row-resize flex-shrink-0 group transition-colors duration-200 z-10',
             'hover:bg-purple-500/20',
             isDragging && 'bg-purple-500/20'
           )}
@@ -169,11 +169,14 @@ export default function SplitScreen({
         >
           <div
             className={cn(
-              'absolute left-0 top-1/2 w-full h-[2px] -translate-y-1/2',
-              'bg-white/10 group-hover:bg-purple-500/60 transition-colors duration-200',
+              'absolute left-0 top-1/2 w-full h-[4px] -translate-y-1/2 rounded-full',
+              'bg-white/20 group-hover:bg-white/40 transition-colors duration-200',
               isDragging && 'bg-purple-500 shadow-[0_0_8px_rgba(96,1,209,0.6)]'
             )}
           />
+          <span className="material-symbols-outlined absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[#e5e2e1]/40 group-hover:text-[#e5e2e1]/70 text-lg pointer-events-none transition-colors duration-200">
+            drag_handle
+          </span>
         </div>
         <div className="flex-1 overflow-hidden">{right}</div>
       </div>
@@ -200,7 +203,7 @@ export default function SplitScreen({
         aria-valuemin={Math.round(minLeftRatio * 100)}
         aria-valuemax={Math.round(maxLeftRatio * 100)}
         className={cn(
-          'relative w-1.5 cursor-col-resize flex-shrink-0 group transition-colors duration-200',
+          'relative w-4 cursor-col-resize flex-shrink-0 group transition-colors duration-200 z-10',
           'hover:bg-purple-500/20',
           isDragging && 'bg-purple-500/20'
         )}
@@ -210,11 +213,14 @@ export default function SplitScreen({
       >
         <div
           className={cn(
-            'absolute left-1/2 top-0 h-full w-[2px] -translate-x-1/2',
-            'bg-white/10 group-hover:bg-purple-500/60 transition-colors duration-200',
+            'absolute left-1/2 top-0 h-full w-[4px] -translate-x-1/2 rounded-full',
+            'bg-white/20 group-hover:bg-white/40 transition-colors duration-200',
             isDragging && 'bg-purple-500 shadow-[0_0_8px_rgba(96,1,209,0.6)]'
           )}
         />
+        <span className="material-symbols-outlined absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[#e5e2e1]/40 group-hover:text-[#e5e2e1]/70 text-lg pointer-events-none transition-colors duration-200">
+          drag_handle
+        </span>
       </div>
       <div className="flex-1 overflow-hidden">{right}</div>
     </div>

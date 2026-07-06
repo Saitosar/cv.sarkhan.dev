@@ -32,16 +32,17 @@ export default function ChatPanel({ className }: ChatPanelProps) {
 
   const handleSend = React.useCallback(
     async (value: string) => {
-      const trimmed = value.trim();
+      const store = useChatStore.getState();
+      const trimmed = message.trim();
       if (!trimmed || isStreaming) return;
       setInputValue('');
       try {
         await chatSSE.send(trimmed, resume, resume.targetJob?.description, mode);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Failed to send message';
-        addMessage(
-          'assistant',
-          `⚠️ **Error:** ${errorMessage}\n\nPlease try again or check your connection.`
+        addErrorMessage(
+          `⚠️ **Error:** ${errorMessage}\n\nPlease try again or check your connection.`,
+          trimmed
         );
       }
     },

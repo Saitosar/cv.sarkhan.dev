@@ -27,6 +27,10 @@ export interface ChatMessage {
   isStreaming?: boolean;
   /** Which chat mode produced this message */
   source?: ChatMode;
+  /** Whether this message represents an error and may offer retry */
+  isError?: boolean;
+  /** Original user input preserved for retry after an error */
+  retryInput?: string;
 }
 
 export interface ChatSession {

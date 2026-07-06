@@ -12,6 +12,7 @@ interface ChatState {
 
   // Actions
   addMessage: (role: ChatMessage['role'], content: string, section?: SectionType) => void;
+  addErrorMessage: (content: string, retryInput?: string) => void;
   updateLastMessage: (content: string) => void;
   setInputValue: (value: string) => void;
   setInputPlaceholder: (placeholder: string) => void;
@@ -49,6 +50,26 @@ export const useChatStore = create<ChatState>()(
             content,
             timestamp: Date.now(),
             section,
+            source: session.mode,
+          };
+          set({
+            session: {
+              ...session,
+              messages: [...session.messages, message],
+              updatedAt: Date.now(),
+            },
+          });
+        },
+
+        addErrorMessage: (content: string, retryInput?: string) => {
+          const { session } = get();
+          const message: ChatMessage = {
+            id: nanoid(),
+            role: 'assistant',
+            content,
+            timestamp: Date.now(),
+            isError: true,
+            retryInput,
             source: session.mode,
           };
           set({

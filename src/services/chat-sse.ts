@@ -51,12 +51,14 @@ export class ChatSSEService {
       });
 
       if (!response.ok) {
-        let errorText = `HTTP ${response.status}`;
+        let errorText: string;
         try {
           const errorData = await response.json();
-          errorText = errorData.error || errorText;
+          errorText = errorData.error || `Server error (${response.status})`;
         } catch {
-          // Non-JSON error response
+          errorText = response.status === 500
+            ? 'The AI service is temporarily unavailable. Please try again.'
+            : `Request failed (${response.status})`;
         }
         throw new Error(errorText);
       }
@@ -118,8 +120,9 @@ export class ChatSSEService {
                   const storeNow = useChatStore.getState();
                   storeNow.setIsStreaming(false);
                   storeNow.setStatus('ready');
-                  storeNow.updateLastMessage(
-                    `⚠️ **Error:** ${event.error}\n\nPlease try again or check your connection.`
+                  storeNow.addErrorMessage(
+                    `⚠️ **Error:** ${event.error}\n\nPlease try again or check your connection.`,
+                    message
                   );
                   options?.onError?.(event.error);
                   break;
@@ -142,8 +145,9 @@ export class ChatSSEService {
       }
 
       const errorMessage = error instanceof Error ? error.message : 'Connection failed';
-      store.updateLastMessage(
-        `⚠️ **Error:** ${errorMessage}\n\nPlease try again or check your connection.`
+      store.addErrorMessage(
+        `⚠️ **Error:** ${errorMessage}\n\nPlease try again or check your connection.`,
+        message
       );
       options?.onError?.(errorMessage);
     } finally {
