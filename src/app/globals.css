@@ -5,44 +5,44 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* базовый light-тон (замена oklch на hex) */
+/* базовый dark-тон (приложение тёмное) */
 :root { 
   color-scheme: dark; 
   --radius: 0.625rem; 
-  --background: #ffffff; 
-  --foreground: #252525; 
-  --card: #ffffff; 
-  --card-foreground: #252525; 
-  --popover: #ffffff; 
-  --popover-foreground: #252525; 
-  --primary: #343434; 
-  --primary-foreground: #fafafa; 
-  --secondary: #f7f7f7; 
-  --secondary-foreground: #343434; 
-  --muted: #f7f7f7; 
+  --background: #0b0f19; 
+  --foreground: #fafafa; 
+  --card: #141313; 
+  --card-foreground: #fafafa; 
+  --popover: #141313; 
+  --popover-foreground: #fafafa; 
+  --primary: #ebebeb; 
+  --primary-foreground: #343434; 
+  --secondary: #252525; 
+  --secondary-foreground: #fafafa; 
+  --muted: #1c1b1b; 
   --muted-foreground: #8e8e8e; 
-  --accent: #f7f7f7; 
-  --accent-foreground: #343434; 
+  --accent: #6001d1; 
+  --accent-foreground: #fafafa; 
   --destructive: #ef5350; 
-  --border: #ebebeb; 
-  --input: #ebebeb; 
-  --ring: #b5b5b5; 
-  --chart-1: #c67a39; 
-  --chart-2: #0093a3; 
-  --chart-3: #5c5c9a; 
-  --chart-4: #a4cc3b; 
-  --chart-5: #e1b12c; 
-  --sidebar: #fafafa; 
-  --sidebar-foreground: #252525; 
-  --sidebar-primary: #343434; 
+  --border: rgba(255, 255, 255, 0.1); 
+  --input: rgba(255, 255, 255, 0.15); 
+  --ring: #8e8e8e; 
+  --chart-1: #8a4ecf; 
+  --chart-2: #29b6f6; 
+  --chart-3: #e1b12c; 
+  --chart-4: #d81b60; 
+  --chart-5: #f4511e; 
+  --sidebar: #141313; 
+  --sidebar-foreground: #fafafa; 
+  --sidebar-primary: #8a4ecf; 
   --sidebar-primary-foreground: #fafafa; 
-  --sidebar-accent: #f7f7f7; 
-  --sidebar-accent-foreground: #343434; 
-  --sidebar-border: #ebebeb; 
-  --sidebar-ring: #b5b5b5; 
+  --sidebar-accent: #252525; 
+  --sidebar-accent-foreground: #fafafa; 
+  --sidebar-border: rgba(255, 255, 255, 0.1); 
+  --sidebar-ring: #8e8e8e; 
 }
 
-html, body { height: 100%; }
+html, body { min-height: 100dvh; }
 body {
   color: white;
   background-color: #0b0f19;
@@ -54,15 +54,30 @@ body {
   -webkit-text-size-adjust: 100%;
   /* Use Inter for body text */
   font-family: var(--font-inter), sans-serif;
+  min-height: 100dvh;
 }
 
-/* Typography system - Premium fonts for commercial product */
-h1, h2, h3, h4, h5, h6,
-.font-display {
-  font-family: var(--font-display), var(--font-inter), sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
+/* Mobile viewport root wrapper to keep fixed bottom nav stable when inputs focus */
+#__next {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  min-height: 100dvh;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Ensure fixed bottom nav container does not collapse with virtual keyboard */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Touch-action containment for mobile scrollers */
+.no-bounce {
+  overscroll-behavior: none;
+  touch-action: pan-y;
 }
 
 .font-body {
@@ -72,6 +87,15 @@ h1, h2, h3, h4, h5, h6,
 
 .font-geist {
   font-family: var(--font-geist), sans-serif;
+}
+
+/* Typography system - Premium fonts for commercial product */
+h1, h2, h3, h4, h5, h6,
+.font-display {
+  font-family: var(--font-display), var(--font-inter), sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 /* Safe area support for notched devices */
@@ -167,6 +191,13 @@ h1, h2, h3, h4, h5, h6,
 
 .ats-score-arc {
   transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Keyboard-avoidance guard: reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .ats-score-arc {
+    transition: none;
+  }
 }
 
 /* Mobile tab content transitions */

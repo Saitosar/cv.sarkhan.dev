@@ -12,12 +12,15 @@ import { useChatStore } from '@/stores/useChatStore';
 import { useResumeStore } from '@/stores/useResumeStore';
 import { chatSSE } from '@/services/chat-sse';
 
+const AGENT_NAME = 'Aether Coach';
+
 export default function ChatPanel({ className }: ChatPanelProps) {
   const messages = useChatStore((s) => s.session.messages);
   const inputValue = useChatStore((s) => s.inputValue);
   const inputPlaceholder = useChatStore((s) => s.inputPlaceholder);
   const isStreaming = useChatStore((s) => s.isStreaming);
   const setInputValue = useChatStore((s) => s.setInputValue);
+  const addMessage = useChatStore((s) => s.addMessage);
   const resume = useResumeStore((s) => s.resume);
 
   const handleSend = React.useCallback(
@@ -25,20 +28,24 @@ export default function ChatPanel({ className }: ChatPanelProps) {
       const trimmed = value.trim();
       if (!trimmed || isStreaming) return;
       setInputValue('');
-      await chatSSE.send(trimmed, resume, resume.targetJob?.description);
+      try {
+        await chatSSE.send(trimmed, resume, resume.targetJob?.description);
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Failed to send message';
+        addMessage(
+          'assistant',
+          `⚠️ **Error:** ${errorMessage}\n\nPlease try again or check your connection.`
+        );
+      }
     },
-    [isStreaming, setInputValue, resume]
+    [isStreaming, setInputValue, resume, addMessage]
   );
 
   const handleCancel = React.useCallback(() => {
     chatSSE.cancel();
   }, []);
 
-  const showTyping =
-    isStreaming &&
-    messages.length > 0 &&
-    messages[messages.length - 1].role === 'assistant' &&
-    messages[messages.length - 1].content === '';
+  const showTyping = isStreaming;
 
   return (
     <div
@@ -47,10 +54,10 @@ export default function ChatPanel({ className }: ChatPanelProps) {
         className
       )}
     >
-      <ChatHeader agentName="Aether Coach" isOnline={true} />
+      <ChatHeader agentName={AGENT_NAME} isOnline={true} />
       <div className="flex-1 overflow-hidden flex flex-col">
         <div className="px-6 pt-4 pb-2">
-          <SessionBadge label="Session Started • Focus: Senior DevOps" />
+          <SessionBadge label="Session Started" />
         </div>
         <MessageList messages={messages} />
         {showTyping && (
@@ -65,7 +72,7 @@ export default function ChatPanel({ className }: ChatPanelProps) {
           placeholder={inputPlaceholder}
           onChange={setInputValue}
           onSend={isStreaming ? handleCancel : handleSend}
-          disabled={false}
+          disabled={isStreaming}
         />
       </div>
     </div>

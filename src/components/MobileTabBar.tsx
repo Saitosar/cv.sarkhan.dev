@@ -15,21 +15,27 @@ export default function MobileTabBar({ activeTab, onTabChange }: MobileTabBarPro
   return (
     <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 pb-safe">
       <div className="glass-card mx-2 mb-2 rounded-2xl bg-[rgba(20,19,19,0.85)] backdrop-blur-[16px]">
-        <div className="flex items-center justify-around py-2">
+        <div
+          role="tablist"
+          aria-label="Mobile navigation"
+          className="flex items-center justify-around py-2"
+        >
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             const Icon = tab.icon;
             return (
               <button
                 key={tab.id}
+                id={`mobile-tab-${tab.id}`}
+                role="tab"
+                aria-selected={isActive}
+                aria-controls={`mobile-tabpanel-${tab.id}`}
                 onClick={() => onTabChange(tab.id)}
                 aria-label={`${tab.label} tab`}
-                aria-selected={isActive}
-                role="tab"
                 className={cn(
                   'flex flex-col items-center justify-center gap-1',
                   'px-4 py-2 rounded-xl transition-all duration-200',
-                  'min-w-[64px] min-h-[56px]',
+                  'min-w-[64px] min-h-[56px] active:scale-95 active:opacity-80',
                   isActive
                     ? 'bg-[#6001d1]/20 text-[#d2bbff]'
                     : 'text-[#c4c7c7] active:bg-white/5'
