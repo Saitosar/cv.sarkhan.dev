@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import BackgroundFX from '@/components/BackgroundFX';
 import { Header } from '@/components/Header';
 import { MobileNav } from '@/components/MobileNav';
+import { SideNav } from '@/components/SideNav';
 
 export default function ClientLayoutWrapper({
   children,
@@ -12,7 +13,6 @@ export default function ClientLayoutWrapper({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const isWorkspace = pathname.startsWith('/workspace');
   const isTelegram = pathname.startsWith('/telegram');
 
   if (isTelegram) {
@@ -22,11 +22,11 @@ export default function ClientLayoutWrapper({
   return (
     <>
       <BackgroundFX />
-      {!isWorkspace && <Header />}
-      <main className={isWorkspace ? 'h-screen overflow-hidden' : undefined}>
+      <SideNav />
+      <main className="ml-0 md:ml-64">
         {children}
       </main>
-      {!isWorkspace && <MobileNav />}
+      <MobileNav />
     </>
   );
 }

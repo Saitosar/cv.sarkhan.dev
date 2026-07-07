@@ -71,7 +71,7 @@ export default function ChatPanel({ className }: ChatPanelProps) {
       />
       <div className="flex-1 overflow-hidden flex flex-col">
         <div className="px-6 pt-4 pb-2">
-          <SessionBadge label="Session Started" />
+          <SessionBadge focus={resume.targetJob?.title} />
         </div>
         <MessageList messages={messages} />
         {showTyping && (
@@ -81,14 +81,41 @@ export default function ChatPanel({ className }: ChatPanelProps) {
         )}
       </div>
       <div className="p-4 border-t border-[rgba(255,255,255,0.08)] bg-[#141313]/30">
+        <div className="flex flex-wrap gap-2 mb-3">
+          <QuickActionButton icon="linkedin">Import LinkedIn</QuickActionButton>
+          <QuickActionButton icon="work">Tailor for Job</QuickActionButton>
+          <QuickActionButton icon="analytics">Improve ATS</QuickActionButton>
+        </div>
         <ChatInput
           value={inputValue}
-          placeholder={inputPlaceholder}
+          placeholder="Tell Aether what to improve..."
           onChange={setInputValue}
           onSend={isStreaming ? handleCancel : handleSend}
           disabled={isStreaming}
         />
       </div>
     </div>
+  );
+}
+
+function QuickActionButton({
+  children,
+  icon,
+}: {
+  children: React.ReactNode;
+  icon: string;
+}) {
+  return (
+    <button
+      type="button"
+      className={cn(
+        'text-xs px-3 py-1.5 rounded-lg border glass-panel',
+        'text-[#c4c7c7] hover:text-[#e5e2e1] hover:border-[#d2bbff]/30',
+        'transition-colors flex items-center gap-1.5'
+      )}
+    >
+      <span className="material-symbols-outlined text-xs">{icon}</span>
+      {children}
+    </button>
   );
 }

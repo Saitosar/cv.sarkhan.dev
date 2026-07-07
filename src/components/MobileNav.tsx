@@ -2,15 +2,15 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, PenLine, FolderUp } from 'lucide-react';
+import { Home, Briefcase, Sparkles } from 'lucide-react';
 
 export function MobileNav() {
   const pathname = usePathname();
 
   const navItems = [
     { href: '/', label: 'Home', icon: Home },
-    { href: '/create', label: 'Create', icon: PenLine },
-    { href: '/update', label: 'Update', icon: FolderUp },
+    { href: '/workspace', label: 'Workspace', icon: Sparkles },
+    { href: '/pricing', label: 'Pricing', icon: Briefcase },
   ];
 
   return (

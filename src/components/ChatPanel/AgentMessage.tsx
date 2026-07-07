@@ -57,6 +57,7 @@ export default function AgentMessage({
         <div
           className={cn(
             'bg-[#2b2a2a]/80 rounded-2xl rounded-tl-none',
+            'chat-glow',
             'p-4 text-[15px] text-[#e5e2e1]'
           )}
           style={{

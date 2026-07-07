@@ -62,7 +62,8 @@ export interface ChatHeaderProps {
 }
 
 export interface SessionBadgeProps {
-  label: string;            // "Session Started • Focus: Senior DevOps"
+  label?: string;           // "Session Started"
+  focus?: string;           // e.g. "Senior DevOps"
 }
 
 export interface AgentMessageProps {

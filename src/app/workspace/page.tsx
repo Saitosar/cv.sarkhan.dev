@@ -9,11 +9,6 @@ import { cn } from '@/lib/utils';
 import { Briefcase, FileText } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
-const SubscriptionBadgeComponent = dynamic(
-  () => import('@/components/Billing/SubscriptionBadge'),
-  { ssr: false, loading: () => null }
-);
-
 const ProFeatureGateComponent = dynamic(
   () => import('@/components/Billing/ProFeatureGate'),
   { ssr: false, loading: () => (
@@ -28,10 +23,6 @@ export default function WorkspacePage() {
 
   return (
     <div className="h-[calc(100vh-48px)] md:h-screen flex flex-col">
-      <div className="px-4 md:px-6 pt-3 md:pt-4 pb-2 flex items-center justify-between">
-        <h1 className="text-sm md:text-base font-semibold text-[#e5e2e1]">Workspace</h1>
-        <SubscriptionBadgeComponent />
-      </div>
       <div className="flex-1 p-4 md:p-6 pt-0">
         <SplitScreen
           left={<ChatPanel />}
