@@ -89,6 +89,7 @@ export default function PricingPage() {
               plan={plan}
               isCurrent={tier === plan.tier}
               onSubscribe={() => handleSubscribe(plan)}
+              showATSPreview={plan.tier === 'pro'}
             />
           ))}
         </div>

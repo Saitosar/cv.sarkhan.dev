@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ShieldCheck, Bot, Rocket } from "lucide-react";
 
 function Feature({
   title,
@@ -8,12 +7,19 @@ function Feature({
 }: {
   title: string;
   description: string;
-  icon: React.ReactNode;
+  icon: string;
 }) {
   return (
     <div className="gradient-border relative">
       <div className="glass-panel relative h-full p-6 flex flex-col gap-4">
-        <div className="text-[#d2bbff]">{icon}</div>
+        <div className="text-[#d2bbff]">
+          <span
+            className="material-symbols-outlined text-3xl text-[#6001d1]"
+            style={{ fontVariationSettings: "'FILL' 1" }}
+          >
+            {icon}
+          </span>
+        </div>
         <h3 className="font-display text-lg text-[#e5e2e1]">{title}</h3>
         <p className="text-sm text-[#e0e0e0] leading-relaxed">{description}</p>
       </div>
@@ -50,17 +56,17 @@ export default function Home() {
           <Feature
             title="ATS-Compatible Builder"
             description="Clean, parser-friendly sections that get your resume past automated screening and into human hands."
-            icon={<ShieldCheck size={32} strokeWidth={1.5} className="text-[#6001d1]" />}
+            icon="verified"
           />
           <Feature
             title="AI Career Assistant"
             description="Get section-by-section suggestions, rewrites, and career advice tailored to your target role."
-            icon={<Bot size={32} strokeWidth={1.5} className="text-[#6001d1]" />}
+            icon="smart_toy"
           />
           <Feature
             title="Launch Faster"
             description="Go from idea to polished PDF in minutes. Export, share, and iterate as your career evolves."
-            icon={<Rocket size={32} strokeWidth={1.5} className="text-[#6001d1]" />}
+            icon="rocket_launch"
           />
         </div>
       </section>

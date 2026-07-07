@@ -9,12 +9,14 @@ export interface PricingCardProps {
   plan: SubscriptionPlan;
   isCurrent: boolean;
   onSubscribe: () => void;
+  showATSPreview?: boolean;
 }
 
 export default function PricingCard({
   plan,
   isCurrent,
   onSubscribe,
+  showATSPreview,
 }: PricingCardProps) {
   const isPro = plan.tier === 'pro';
 
@@ -56,6 +58,30 @@ export default function PricingCard({
           </li>
         ))}
       </ul>
+
+      {showATSPreview && isPro && (
+        <div className="mb-6 p-4 rounded-xl bg-[#6001d1]/10 border border-[#d2bbff]/20">
+          <div className="flex items-center gap-4">
+            <div className="relative w-16 h-16 flex items-center justify-center flex-shrink-0">
+              <svg className="absolute inset-0 w-full h-full rotate-[-90deg]" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" fill="none" r="45" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
+                <circle cx="50" cy="50" fill="none" r="45" stroke="url(#atsGrad)" strokeDasharray="282.7" strokeDashoffset="56.5" strokeLinecap="round" strokeWidth="8" />
+                <defs>
+                  <linearGradient id="atsGrad" x1="0%" x2="100%" y1="0%" y2="0%">
+                    <stop offset="0%" stopColor="#4F46E5" />
+                    <stop offset="100%" stopColor="#d2bbff" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <span className="text-xl text-[#e5e2e1] relative z-10 font-bold">80<span className="text-xs">%</span></span>
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-[#e5e2e1]">AI-Powered ATS Scoring</p>
+              <p className="text-xs text-[#c4c7c7] mt-1">Real-time analysis against any job description</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <button
         type="button"

@@ -73,6 +73,35 @@ function TelegramContent() {
         }}
       />
 
+      {/* ATS Score mini-widget */}
+      <div className="px-4 py-2">
+        <div className="glass-panel rounded-xl p-3 flex items-center gap-3 border border-[#4F46E5]/20">
+          <div className="relative w-10 h-10 flex items-center justify-center flex-shrink-0">
+            <svg className="absolute inset-0 w-full h-full rotate-[-90deg]" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" fill="none" r="45" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
+              <circle cx="50" cy="50" fill="none" r="45" stroke="url(#tgAtsGrad)" strokeDasharray="282.7" strokeDashoffset="56.5" strokeLinecap="round" strokeWidth="8" />
+              <defs>
+                <linearGradient id="tgAtsGrad" x1="0%" x2="100%" y1="0%" y2="0%">
+                  <stop offset="0%" stopColor="#4F46E5" />
+                  <stop offset="100%" stopColor="#d2bbff" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <span className="text-xs text-[#e5e2e1] relative z-10 font-bold">80<span className="text-[8px]">%</span></span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-semibold text-[#e5e2e1]">ATS Match</p>
+            <p className="text-[10px] text-[#c4c7c7] truncate">Target: Senior DevOps Engineer</p>
+          </div>
+          <button
+            type="button"
+            className="text-[10px] px-2.5 py-1 rounded-lg bg-[#6001d1]/20 text-[#d2bbff] border border-[#d2bbff]/30 hover:bg-[#6001d1]/30 transition-colors flex-shrink-0"
+          >
+            Improve
+          </button>
+        </div>
+      </div>
+
       <div className="flex-1 overflow-hidden">
         <ChatPanel className="h-full rounded-none border-0 bg-transparent shadow-none" />
       </div>
