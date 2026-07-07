@@ -8,3 +8,5 @@ export * from './voice';
 export * from './hr-coach';
 export * from './job-search';
 export * from './billing';
+export * from './monitoring';
+export * from './rate-limit';

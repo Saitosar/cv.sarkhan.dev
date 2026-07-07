@@ -7,6 +7,20 @@ import { calculateATSScore } from '@/lib/ats-scorer';
 import type { ATSScore } from '@/types/ats';
 import type { ResumeFormData } from '@/lib/validators';
 
+function isResumeEmpty(data: ResumeFormData): boolean {
+  const hasText = (value?: string) => typeof value === 'string' && value.trim().length > 0;
+  const hasArray = (value?: unknown[]) => Array.isArray(value) && value.length > 0;
+  return !(
+    hasText(data.fullName) ||
+    hasText(data.jobTitle) ||
+    hasText(data.summary) ||
+    hasText(data.contact?.email) ||
+    hasArray(data.experience) ||
+    hasArray(data.skills) ||
+    hasArray(data.education)
+  );
+}
+
 interface ATSScoreCardProps {
   resumeData: ResumeFormData | null;
   targetJobDescription?: string;
@@ -14,7 +28,7 @@ interface ATSScoreCardProps {
 
 export function ATSScoreCard({ resumeData, targetJobDescription }: ATSScoreCardProps) {
   const score: ATSScore | null = useMemo(() => {
-    if (!resumeData) return null;
+    if (!resumeData || isResumeEmpty(resumeData)) return null;
     return calculateATSScore(resumeData, targetJobDescription);
   }, [resumeData, targetJobDescription]);
 
@@ -22,9 +36,12 @@ export function ATSScoreCard({ resumeData, targetJobDescription }: ATSScoreCardP
     return (
       <div className="glass-card p-6 rounded-2xl">
         <h3 className="text-lg font-display mb-4">ATS Score</h3>
-        <p className="text-sm text-white/60">
-          Fill out your resume to see your ATS compatibility score
-        </p>
+        <div className="flex flex-col items-center justify-center gap-3 py-6 text-center">
+          <span className="material-symbols-outlined text-3xl text-[#d2bbff]">chat</span>
+          <p className="text-sm text-white/60">
+            Start a conversation with Aether to build your resume. Once you add your details, we’ll calculate your ATS compatibility score.
+          </p>
+        </div>
       </div>
     );
   }

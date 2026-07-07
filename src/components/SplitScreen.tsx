@@ -159,14 +159,14 @@ export default function SplitScreen({
           aria-valuemin={Math.round(minLeftRatio * 100)}
           aria-valuemax={Math.round(maxLeftRatio * 100)}
           className={cn(
-            'relative h-4 cursor-row-resize flex-shrink-0 group transition-colors duration-200 z-10',
+            'relative h-5 cursor-row-resize flex-shrink-0 group transition-colors duration-200 z-10',
             'hover:bg-purple-500/20',
             isDragging && 'bg-purple-500/20'
           )}
           onMouseDown={startDrag}
           onTouchStart={startDrag}
           onKeyDown={splitterKeyDown}
-        >
+          >
           <div
             className={cn(
               'absolute left-0 top-1/2 w-full h-[4px] -translate-y-1/2 rounded-full',
@@ -175,9 +175,9 @@ export default function SplitScreen({
             )}
           />
           <span className="material-symbols-outlined absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[#e5e2e1]/40 group-hover:text-[#e5e2e1]/70 text-lg pointer-events-none transition-colors duration-200">
-            drag_handle
+            drag_indicator
           </span>
-        </div>
+          </div>
         <div className="flex-1 overflow-hidden">{right}</div>
       </div>
     );
@@ -203,7 +203,7 @@ export default function SplitScreen({
         aria-valuemin={Math.round(minLeftRatio * 100)}
         aria-valuemax={Math.round(maxLeftRatio * 100)}
         className={cn(
-          'relative w-4 cursor-col-resize flex-shrink-0 group transition-colors duration-200 z-10',
+          'relative w-5 cursor-col-resize flex-shrink-0 group transition-colors duration-200 z-10',
           'hover:bg-purple-500/20',
           isDragging && 'bg-purple-500/20'
         )}
@@ -219,7 +219,7 @@ export default function SplitScreen({
           )}
         />
         <span className="material-symbols-outlined absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[#e5e2e1]/40 group-hover:text-[#e5e2e1]/70 text-lg pointer-events-none transition-colors duration-200">
-          drag_handle
+          drag_indicator
         </span>
       </div>
       <div className="flex-1 overflow-hidden">{right}</div>

@@ -70,7 +70,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="196x196" href="/favicon-196.png" />
         <link rel="icon" type="image/png" sizes="192x192" href="/manifest-icon-192.maskable.png" />
         <link rel="icon" type="image/png" sizes="512x512" href="/manifest-icon-512.maskable.png" />
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
       </head>
       {/* Применяем переменные шрифтов к телу документа */}
       <body className={`${inter.variable} ${geist.variable} ${interTight.variable} font-sans pb-20 md:pb-0`}>
