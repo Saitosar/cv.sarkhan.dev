@@ -55,9 +55,6 @@ export function SideNav() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-[#e5e2e1]">Career AI</h1>
-            <span className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[#d2bbff]">
-              Expert Mode
-            </span>
           </div>
         </div>
         <button
