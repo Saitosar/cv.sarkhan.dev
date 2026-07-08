@@ -91,6 +91,7 @@ export default function ChatPanel({ className }: ChatPanelProps) {
         <MessageList
           messages={messages}
           bottomOffset={bottomOffset}
+          className="pb-[160px] md:pb-6"
         />
         {showTyping && (
           <div className="px-6 py-2 shrink-0">

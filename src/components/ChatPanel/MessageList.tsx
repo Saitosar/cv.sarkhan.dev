@@ -12,7 +12,7 @@ export interface MessageListProps {
   className?: string;
 }
 
-export default function MessageList({ messages, bottomOffset = 0 }: MessageListProps) {
+export default function MessageList({ messages, bottomOffset = 0, className }: MessageListProps) {
   const listRef = React.useRef<HTMLDivElement>(null);
 
   const lastContent = messages.length > 0 ? messages[messages.length - 1].content : undefined;
@@ -35,7 +35,10 @@ export default function MessageList({ messages, bottomOffset = 0 }: MessageListP
       <div
         ref={listRef}
         style={{ scrollPaddingBottom: scrollPaddingBottomSafe, paddingBottom: scrollPaddingBottomSafe }}
-        className="flex-1 p-6 overflow-y-auto flex flex-col items-center justify-center text-center"
+        className={cn(
+          "flex-1 p-6 overflow-y-auto flex flex-col items-center justify-center text-center",
+          className
+        )}
       >
         <p className="text-sm text-[#c4c7c7]">
           Send a LinkedIn link, resume, or describe your experience — Aether will read it and build your resume.
@@ -48,7 +51,10 @@ export default function MessageList({ messages, bottomOffset = 0 }: MessageListP
     <div
       ref={listRef}
       style={{ scrollPaddingBottom }}
-      className="flex-1 p-6 overflow-y-auto flex flex-col gap-6"
+      className={cn(
+        "flex-1 p-6 overflow-y-auto flex flex-col gap-6",
+        className
+      )}
       aria-live="polite"
       aria-atomic="false"
     >

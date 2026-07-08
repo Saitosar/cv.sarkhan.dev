@@ -1,7 +1,17 @@
 import Link from "next/link";
-import { Sparkles, MessageSquareText, Bot, ShieldCheck, Rocket, Eye, Wrench, Lock, Smartphone, DollarSign } from "lucide-react";
+import {
+  Sparkles,
+  Bot,
+  Check,
+  Send,
+  ScanLine,
+  FileCheck,
+  GraduationCap,
+  Target,
+  Lightbulb,
+} from "lucide-react";
 
-function Feature({
+function Step({
   title,
   description,
   icon: Icon,
@@ -11,14 +21,23 @@ function Feature({
   icon: React.ComponentType<{ className?: string }>;
 }) {
   return (
-    <div className="gradient-border relative group">
-      <div className="glass-panel relative h-full p-6 flex flex-col gap-4 transition-all duration-300 hover:bg-white/[0.03]">
-        <div className="text-[#d2bbff]">
-          <Icon className="w-7 h-7" />
-        </div>
-        <h3 className="font-display text-lg text-[#e5e2e1]">{title}</h3>
-        <p className="text-sm text-[#e0e0e0] leading-relaxed">{description}</p>
+    <div className="glass-panel p-6 rounded-2xl text-center">
+      <div className="w-12 h-12 rounded-full bg-[#d2bbff]/20 flex items-center justify-center mx-auto mb-4">
+        <Icon className="w-5 h-5 text-[#d2bbff]" />
       </div>
+      <h3 className="font-display text-lg text-[#e5e2e1] mb-2">{title}</h3>
+      <p className="text-sm text-[#e0e0e0] leading-relaxed">{description}</p>
+    </div>
+  );
+}
+
+function Benefit({ text }: { text: string }) {
+  return (
+    <div className="flex items-start gap-3">
+      <div className="mt-0.5 shrink-0 w-5 h-5 rounded-full bg-[#d2bbff]/20 flex items-center justify-center">
+        <Check className="w-3 h-3 text-[#d2bbff]" />
+      </div>
+      <span className="text-[#e0e0e0]">{text}</span>
     </div>
   );
 }
@@ -35,126 +54,121 @@ export default function Home() {
           </span>
         </div>
         <h1 className="font-display text-4xl md:text-6xl lg:text-7xl text-white mb-6 leading-tight">
-          Your resume, built by conversation
+          Резюме, которое проходит ATS
         </h1>
         <p className="text-lg md:text-xl text-[#e0e0e0] mb-8 max-w-2xl mx-auto leading-relaxed">
-          This is not a classic form-filling app. It is an AI career expert — trained on thousands of winning resumes. You don't need to write perfect prompts. Just share your LinkedIn or old resume, and Aether does the rest: builds, tailors, and optimizes for ATS and recruiters.
+          Aether анализирует твои сильные стороны и подстраивает резюме под
+          требования вакансии. Твой шанс пройти первый этап.
         </p>
         <Link
           href="/workspace"
           className="shimmer-bg inline-flex items-center gap-3 rounded-lg px-8 py-4 text-white font-semibold tap-feedback"
         >
           <Bot className="w-5 h-5" />
-          Start with AI
+          Начать
         </Link>
       </section>
 
       {/* How It Works */}
       <section className="max-w-4xl w-full mt-16 md:mt-24">
         <h2 className="font-display text-2xl md:text-3xl text-white text-center mb-8 md:mb-10">
-          How It Works
+          Как это работает
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-          <div className="glass-panel p-6 rounded-2xl text-center">
-            <div className="w-12 h-12 rounded-full bg-[#d2bbff]/20 flex items-center justify-center mx-auto mb-4">
-              <span className="text-xl font-bold text-[#d2bbff]">1</span>
-            </div>
-            <h3 className="font-display text-lg text-[#e5e2e1] mb-2">Send a link or resume</h3>
-            <p className="text-sm text-[#e0e0e0] leading-relaxed">
-              Just paste your LinkedIn URL, upload an old resume, or describe your background. No forms to fill, no prompts to craft — Aether already knows what to ask.
-            </p>
-          </div>
-          <div className="glass-panel p-6 rounded-2xl text-center">
-            <div className="w-12 h-12 rounded-full bg-[#d2bbff]/20 flex items-center justify-center mx-auto mb-4">
-              <span className="text-xl font-bold text-[#d2bbff]">2</span>
-            </div>
-            <h3 className="font-display text-lg text-[#e5e2e1] mb-2">Aether analyzes & improves</h3>
-            <p className="text-sm text-[#e0e0e0] leading-relaxed">
-              Aether analyzes your background against proven resume patterns, extracts key information, and suggests expert-level, ATS-optimized improvements.
-            </p>
-          </div>
-          <div className="glass-panel p-6 rounded-2xl text-center">
-            <div className="w-12 h-12 rounded-full bg-[#d2bbff]/20 flex items-center justify-center mx-auto mb-4">
-              <span className="text-xl font-bold text-[#d2bbff]">3</span>
-            </div>
-            <h3 className="font-display text-lg text-[#e5e2e1] mb-2">Ready resume in minutes</h3>
-            <p className="text-sm text-[#e0e0e0] leading-relaxed">
-              Get a polished, interview-ready resume. Iterate by simply chatting with your agent.
-            </p>
+          <Step
+            title="Отправь что есть"
+            description="Ссылку на LinkedIn, старое резюме или просто напиши о себе произвольным текстом"
+            icon={Send}
+          />
+          <Step
+            title="Aether проанализирует"
+            description="Выделит сильные стороны под твою вакансию"
+            icon={ScanLine}
+          />
+          <Step
+            title="Готовое резюме"
+            description="ATS-оптимизированное, под конкретную должность"
+            icon={FileCheck}
+          />
+        </div>
+      </section>
+
+      {/* Benefits + ChatGPT quote */}
+      <section className="max-w-3xl w-full mt-16 md:mt-24">
+        <div className="text-center mb-8 md:mb-10">
+          <p className="text-lg md:text-xl text-[#e0e0e0] italic">
+            ChatGPT — швейцарский нож. Aether — скальпель для твоего резюме.
+          </p>
+        </div>
+        <div className="glass-panel rounded-2xl p-6 md:p-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <Benefit text="Никаких форм — просто отправь что есть" />
+            <Benefit text="Не нужно всё вспоминать — напиши произвольным текстом" />
+            <Benefit text="Не нужно собирать с нуля — Aether сделает всё сам" />
+            <Benefit text="Быстро, качественно, удобно" />
           </div>
         </div>
       </section>
 
-      {/* Comparison section */}
-      <section className="max-w-5xl w-full mt-16 md:mt-24">
-        <h2 className="font-display text-2xl md:text-3xl text-white text-center mb-3">
-          Why Aether beats ChatGPT & Claude
+      {/* More conversion section */}
+      <section className="max-w-3xl w-full mt-16 md:mt-24 text-center">
+        <h2 className="font-display text-2xl md:text-3xl text-white mb-4">
+          Хочешь больше?
         </h2>
-        <p className="text-center text-[#e0e0e0] mb-8 md:mb-10 max-w-2xl mx-auto">
-          ChatGPT/Claude is a Swiss Army knife. Aether is a scalpel for your resume.
+        <p className="text-lg text-[#e0e0e0] mb-8 md:mb-10">
+          Базовая версия уже готовит твоё резюме. А Pro версия даёт тебе
+          суперсилы:
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          <Feature
-            title="ATS-Optimized"
-            description="ChatGPT doesn't know ATS parsers. Aether is trained on thousands of resumes and knows which keywords actually pass screening."
-            icon={ShieldCheck}
-          />
-          <Feature
-            title="Visual Editor"
-            description="ChatGPT gives text only. Aether has a Split-Screen: chat on the left, live Canvas with resume, ATS Score, PulseRing on the right. Real-time visual feedback."
-            icon={Eye}
-          />
-          <Feature
-            title="Specialized Tools"
-            description="AI Suggestions, HR Coach, Job Search, Voice Input. Not just a chat — a full career center."
-            icon={Wrench}
-          />
-          <Feature
-            title="Privacy-First"
-            description="Guest data stays in LocalStorage, never leaves your browser. ChatGPT uses your data for training."
-            icon={Lock}
-          />
-          <Feature
-            title="Telegram Mini App"
-            description="Work directly from Telegram, no installation needed."
-            icon={Smartphone}
-          />
-          <Feature
-            title="Price"
-            description="$3/mo Pro vs $20/mo ChatGPT Plus."
-            icon={DollarSign}
-          />
-        </div>
-      </section>
-
-      {/* Feature grid */}
-      <section className="max-w-5xl w-full mt-16 md:mt-24">
-        <h2 className="font-display text-2xl md:text-3xl text-white text-center mb-8 md:mb-10">
-          Everything you need to land interviews
-        </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-          <Feature
-            title="Chat, Don't Type Forms"
-            description="Just tell Aether about your experience. It structures everything into a polished, ATS-friendly resume."
-            icon={MessageSquareText}
-          />
-          <Feature
-            title="ATS-Optimized Output"
-            description="Clean, parser-friendly sections designed to pass automated screening and reach human recruiters."
-            icon={ShieldCheck}
-          />
-          <Feature
-            title="Launch Faster"
-            description="Go from first message to interview-ready PDF in minutes. Iterate by simply talking to your agent."
-            icon={Rocket}
-          />
+          <div className="glass-panel rounded-2xl p-6">
+            <div className="w-12 h-12 rounded-full bg-[#d2bbff]/20 flex items-center justify-center mx-auto mb-4">
+              <GraduationCap className="w-5 h-5 text-[#d2bbff]" />
+            </div>
+            <h3 className="font-display text-lg text-[#e5e2e1] mb-2">
+              HR Coach
+            </h3>
+            <p className="text-sm text-[#e0e0e0] leading-relaxed">
+              AI-коуч подготовит к собеседованию, напишет советы и рекомендации
+            </p>
+          </div>
+          <div className="glass-panel rounded-2xl p-6">
+            <div className="w-12 h-12 rounded-full bg-[#d2bbff]/20 flex items-center justify-center mx-auto mb-4">
+              <Target className="w-5 h-5 text-[#d2bbff]" />
+            </div>
+            <h3 className="font-display text-lg text-[#e5e2e1] mb-2">
+              ATS Score
+            </h3>
+            <p className="text-sm text-[#e0e0e0] leading-relaxed">
+              агент проверит и оценит твоё резюме, покажет score
+            </p>
+          </div>
+          <div className="glass-panel rounded-2xl p-6">
+            <div className="w-12 h-12 rounded-full bg-[#d2bbff]/20 flex items-center justify-center mx-auto mb-4">
+              <Lightbulb className="w-5 h-5 text-[#d2bbff]" />
+            </div>
+            <h3 className="font-display text-lg text-[#e5e2e1] mb-2">
+              AI Suggestions
+            </h3>
+            <p className="text-sm text-[#e0e0e0] leading-relaxed">
+              персональные рекомендации по улучшению каждого раздела
+            </p>
+          </div>
         </div>
+        <Link
+          href="/pricing"
+          className="shimmer-bg inline-flex items-center gap-3 rounded-lg px-8 py-4 text-white font-semibold tap-feedback mt-8 md:mt-10"
+        >
+          Получить больше
+        </Link>
       </section>
 
       {/* Footer */}
       <footer className="mt-auto pt-16 md:pt-24 pb-8 w-full max-w-5xl text-center border-t border-white/10">
         <nav className="flex items-center justify-center gap-6 md:gap-8 mb-4">
-          <Link href="/pricing" className="text-sm text-[#e0e0e0] hover:text-white transition-colors">
+          <Link
+            href="/pricing"
+            className="text-sm text-[#e0e0e0] hover:text-white transition-colors"
+          >
             Pricing
           </Link>
           <a
@@ -165,7 +179,10 @@ export default function Home() {
           >
             Telegram
           </a>
-          <Link href="/workspace" className="text-sm text-[#e0e0e0] hover:text-white transition-colors">
+          <Link
+            href="/workspace"
+            className="text-sm text-[#e0e0e0] hover:text-white transition-colors"
+          >
             Workspace
           </Link>
         </nav>

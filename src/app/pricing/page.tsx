@@ -5,14 +5,15 @@ import { cn } from '@/lib/utils';
 import { useSubscriptionStore } from '@/stores/useSubscriptionStore';
 import PricingCard from '@/components/Billing/PricingCard';
 import PricingToggle from '@/components/Billing/PricingToggle';
-import type { SubscriptionPlan } from '@/types/billing';
+import type { BillingCycle, SubscriptionPlan } from '@/types/billing';
 
 const PLANS: SubscriptionPlan[] = [
   {
     id: 'free',
     name: 'Free',
     tier: 'free',
-    price: 0,
+    priceMonthly: 0,
+    priceYearly: 0,
     highlighted: false,
     cta: 'Get Started',
     features: [
@@ -26,7 +27,8 @@ const PLANS: SubscriptionPlan[] = [
     id: 'pro',
     name: 'Pro',
     tier: 'pro',
-    price: 3,
+    priceMonthly: 9.99,
+    priceYearly: 99,
     highlighted: true,
     cta: 'Subscribe',
     features: [
@@ -61,6 +63,7 @@ const FAQS = [
 export default function PricingPage() {
   const tier = useSubscriptionStore((s) => s.tier);
   const subscribe = useSubscriptionStore((s) => s.subscribe);
+  const [cycle, setCycle] = React.useState<BillingCycle>('monthly');
 
   const handleSubscribe = React.useCallback((plan: SubscriptionPlan) => {
     subscribe(plan.tier);
@@ -79,7 +82,7 @@ export default function PricingPage() {
         </div>
 
         <div className="flex justify-center mb-12">
-          <PricingToggle />
+          <PricingToggle value={cycle} onChange={setCycle} />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-20">
@@ -87,6 +90,7 @@ export default function PricingPage() {
             <PricingCard
               key={plan.id}
               plan={plan}
+              cycle={cycle}
               isCurrent={tier === plan.tier}
               onSubscribe={() => handleSubscribe(plan)}
               showATSPreview={plan.tier === 'pro'}

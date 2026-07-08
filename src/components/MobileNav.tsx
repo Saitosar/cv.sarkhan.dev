@@ -19,7 +19,7 @@ export function MobileNav() {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 pb-safe">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 pb-safe">
       <div className="glass-card mx-2 mb-2 rounded-2xl">
         <div className="flex items-center justify-around py-2">
           {navItems.map((item) => {

@@ -3,10 +3,11 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 import { Check } from 'lucide-react';
-import type { SubscriptionPlan } from '@/types/billing';
+import type { BillingCycle, SubscriptionPlan } from '@/types/billing';
 
 export interface PricingCardProps {
   plan: SubscriptionPlan;
+  cycle?: BillingCycle;
   isCurrent: boolean;
   onSubscribe: () => void;
   showATSPreview?: boolean;
@@ -14,11 +15,16 @@ export interface PricingCardProps {
 
 const PricingCard = React.memo(function PricingCard({
   plan,
+  cycle = 'monthly',
   isCurrent,
   onSubscribe,
   showATSPreview,
 }: PricingCardProps) {
   const isPro = plan.tier === 'pro';
+  const isYearly = cycle === 'yearly';
+  const price = isYearly ? plan.priceYearly : plan.priceMonthly;
+  const periodLabel = isYearly ? '/year' : '/month';
+  const subLabel = isYearly ? 'per year' : 'per month';
 
   return (
     <div
@@ -37,12 +43,19 @@ const PricingCard = React.memo(function PricingCard({
         </span>
       )}
 
+      {isPro && isYearly && (
+        <span className="absolute -top-3 right-4 md:right-8 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#4ae176]/20 text-[#4ae176] border border-[#4ae176]/30">
+          Save 20%
+        </span>
+      )}
+
       <div className="mb-6">
         <h3 className="text-xl font-semibold text-[#e5e2e1]">{plan.name}</h3>
         <div className="mt-3 flex items-baseline gap-1">
-          <span className="text-4xl font-bold text-white">${plan.price}</span>
-          <span className="text-sm text-[#c4c7c7]">/month</span>
+          <span className="text-4xl font-bold text-white">${price}</span>
+          <span className="text-sm text-[#c4c7c7]">{periodLabel}</span>
         </div>
+        <p className="mt-1 text-xs text-[#8e8e8e]">{subLabel}</p>
         <p className="mt-2 text-sm text-[#8e8e8e]">
           {isPro ? 'Unlock AI superpowers for your job search' : 'Perfect for getting started'}
         </p>
