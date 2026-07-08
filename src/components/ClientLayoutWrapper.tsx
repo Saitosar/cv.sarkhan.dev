@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { usePathname } from 'next/navigation';
 import BackgroundFX from '@/components/BackgroundFX';
-import { Header } from '@/components/Header';
 import { MobileNav } from '@/components/MobileNav';
 import { SideNav } from '@/components/SideNav';
 
