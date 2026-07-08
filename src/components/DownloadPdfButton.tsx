@@ -10,7 +10,7 @@ import type { ResumeFormData } from '@/lib/validators';
 import { Loader2 } from 'lucide-react';
 import { type TemplateName, TEMPLATE_NAMES } from './TemplateSelector';
 import type { ColorScheme } from '@/lib/palettes';
-import type { Theme } from './ThemeToggle';
+type Theme = 'dark' | 'light';
 
 interface DownloadPdfButtonProps {
     data: ResumeFormData | null;

@@ -9,7 +9,7 @@ import { resumeSchema } from '@/lib/validators';
 import { placeholderResume, type ResumeData as ResumeDataForTemplate } from '@/lib/placeholder-data';
 import type { z } from 'zod';
 import type { ColorScheme } from '@/lib/palettes';
-import type { Theme } from './ThemeToggle';
+type Theme = 'dark' | 'light';
 
 // Тип данных, приходящих с основной формы создания
 type ResumeDataFromForm = z.infer<typeof resumeSchema>;

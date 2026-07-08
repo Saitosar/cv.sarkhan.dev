@@ -1,6 +1,6 @@
 // src/components/templates/CreativeTemplate.tsx
 import type { ColorScheme } from "@/lib/palettes";
-import type { Theme } from "@/components/ThemeToggle";
+type Theme = 'dark' | 'light';
 import { type ResumeData, formatExperienceDate } from "@/lib/placeholder-data";
 
 export function CreativeTemplate({ resume, accentColor, theme }: { resume: ResumeData, accentColor: ColorScheme, theme: Theme }) {

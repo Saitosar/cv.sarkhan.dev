@@ -3,7 +3,7 @@ import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import type { ResumeFormData } from '@/lib/validators';
 import { formatExperienceDate, type Experience } from '@/lib/placeholder-data';
 import type { ColorScheme } from '@/lib/palettes';
-import type { Theme } from '../ThemeToggle';
+type Theme = 'dark' | 'light';
 
 const createStyles = (accentColor: ColorScheme, theme: Theme) => {
   const isDark = theme === 'dark';
