@@ -27,8 +27,8 @@ const PLANS: SubscriptionPlan[] = [
     id: 'pro',
     name: 'Pro',
     tier: 'pro',
-    priceMonthly: 9.99,
-    priceYearly: 99,
+    priceMonthly: 2.99,
+    priceYearly: 29.99,
     highlighted: true,
     cta: 'Subscribe',
     features: [

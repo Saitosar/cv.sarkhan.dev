@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { X, Menu, LayoutDashboard, FileText, Briefcase, BarChart3 } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 
 type NavItem = {
   label: string;
@@ -100,8 +102,12 @@ export function SideNav() {
             <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-[rgba(255,255,255,0.08)] bg-gradient-to-br from-[#6001d1] to-[#4F46E5]">
               <span className="text-lg font-bold text-white">AI</span>
             </div>
-            <div>
+            <div className="flex-1 min-w-0">
               <h1 className="text-2xl font-bold tracking-tight text-[#e5e2e1]">Career AI</h1>
+            </div>
+            <div className="hidden md:flex items-center gap-2">
+              <ThemeToggle />
+              <LanguageSwitcher />
             </div>
           </div>
           {/* New Resume button hidden for now */}

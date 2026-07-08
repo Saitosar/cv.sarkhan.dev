@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, Geist } from 'next/font/google';
 import './globals.css';
 import ClientLayoutWrapper from '@/components/ClientLayoutWrapper';
+import { ThemeProvider } from '@/components/ThemeProvider';
 
 // Body font - Inter for excellent readability
 const inter = Inter({
@@ -61,7 +62,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -74,7 +75,14 @@ export default function RootLayout({
       </head>
       {/* Применяем переменные шрифтов к телу документа */}
       <body className={`${inter.variable} ${geist.variable} ${interTight.variable} font-sans pb-20 md:pb-0`}>
-        <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+          storageKey="cv-theme"
+        >
+          <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
+        </ThemeProvider>
       </body>
     </html>
   );
