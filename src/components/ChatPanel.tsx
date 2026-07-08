@@ -82,9 +82,7 @@ export default function ChatPanel({ className }: ChatPanelProps) {
       </div>
       <div className="p-4 border-t border-[rgba(255,255,255,0.08)] bg-[#141313]/30">
         <div className="flex flex-wrap gap-2 mb-3">
-          <QuickActionButton icon="linkedin">Import LinkedIn</QuickActionButton>
-          <QuickActionButton icon="work">Tailor for Job</QuickActionButton>
-          <QuickActionButton icon="analytics">Improve ATS</QuickActionButton>
+          {/* Quick actions hidden for now */}
         </div>
         <ChatInput
           value={inputValue}
@@ -98,24 +96,3 @@ export default function ChatPanel({ className }: ChatPanelProps) {
   );
 }
 
-function QuickActionButton({
-  children,
-  icon,
-}: {
-  children: React.ReactNode;
-  icon: string;
-}) {
-  return (
-    <button
-      type="button"
-      className={cn(
-        'text-xs px-3 py-1.5 rounded-lg border glass-panel',
-        'text-[#c4c7c7] hover:text-[#e5e2e1] hover:border-[#d2bbff]/30',
-        'transition-colors flex items-center gap-1.5'
-      )}
-    >
-      <span className="material-symbols-outlined text-xs">{icon}</span>
-      {children}
-    </button>
-  );
-}
