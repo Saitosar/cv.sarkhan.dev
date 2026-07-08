@@ -29,7 +29,7 @@ const defaultSession: ChatSession = {
     {
       id: nanoid(),
       role: 'assistant',
-      content: "👋 Hi! I'm **Aether**, your AI career assistant. I can help you craft a standout resume, tailor it for specific jobs, and optimize it for ATS systems. What would you like to work on today?",
+      content: "Hello! I'm Aether — your AI career assistant. How can I help you today?",
       timestamp: Date.now(),
       source: 'aether',
     },
@@ -123,6 +123,7 @@ export const useChatStore = create<ChatState>()(
           set({
             session: { ...defaultSession, id: nanoid() },
             inputValue: '',
+            inputPlaceholder: 'Tell Aether what to improve...',
             isStreaming: false,
           }),
       }),

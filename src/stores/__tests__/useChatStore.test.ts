@@ -4,7 +4,7 @@ import { useChatStore } from '../useChatStore';
 
 describe('useChatStore', () => {
   beforeEach(() => {
-    // Reset store state
+    // Reset store state to an empty session (without default welcome message)
     useChatStore.setState({
       session: {
         id: 'test-session',

@@ -43,6 +43,7 @@ describe('ChatSSEService', () => {
     vi.stubGlobal('fetch', mockFetch);
 
     const onDone = vi.fn();
+    useChatStore.getState().clearSession();
     await service.send('hi', null, undefined, undefined, { onDone });
 
     const state = useChatStore.getState();
