@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles, MessageSquareText, Bot, ShieldCheck, Rocket } from "lucide-react";
+import { Sparkles, MessageSquareText, Bot, ShieldCheck, Rocket, Eye, Wrench, Lock, Smartphone, DollarSign } from "lucide-react";
 
 function Feature({
   title,
@@ -38,8 +38,7 @@ export default function Home() {
           Your resume, built by conversation
         </h1>
         <p className="text-lg md:text-xl text-[#e0e0e0] mb-8 max-w-2xl mx-auto leading-relaxed">
-          This is not a classic form-filling app. It is an AI agent — you chat with it, and it does
-          the work: builds, tailors, and optimizes your resume for ATS and recruiters.
+          This is not a classic form-filling app. It is an AI career expert — trained on thousands of winning resumes. You don't need to write perfect prompts. Just share your LinkedIn or old resume, and Aether does the rest: builds, tailors, and optimizes for ATS and recruiters.
         </p>
         <Link
           href="/workspace"
@@ -48,6 +47,84 @@ export default function Home() {
           <Bot className="w-5 h-5" />
           Start with AI
         </Link>
+      </section>
+
+      {/* How It Works */}
+      <section className="max-w-4xl w-full mt-16 md:mt-24">
+        <h2 className="font-display text-2xl md:text-3xl text-white text-center mb-8 md:mb-10">
+          How It Works
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+          <div className="glass-panel p-6 rounded-2xl text-center">
+            <div className="w-12 h-12 rounded-full bg-[#d2bbff]/20 flex items-center justify-center mx-auto mb-4">
+              <span className="text-xl font-bold text-[#d2bbff]">1</span>
+            </div>
+            <h3 className="font-display text-lg text-[#e5e2e1] mb-2">Send a link or resume</h3>
+            <p className="text-sm text-[#e0e0e0] leading-relaxed">
+              Just paste your LinkedIn URL, upload an old resume, or describe your background. No forms to fill, no prompts to craft — Aether already knows what to ask.
+            </p>
+          </div>
+          <div className="glass-panel p-6 rounded-2xl text-center">
+            <div className="w-12 h-12 rounded-full bg-[#d2bbff]/20 flex items-center justify-center mx-auto mb-4">
+              <span className="text-xl font-bold text-[#d2bbff]">2</span>
+            </div>
+            <h3 className="font-display text-lg text-[#e5e2e1] mb-2">Aether analyzes & improves</h3>
+            <p className="text-sm text-[#e0e0e0] leading-relaxed">
+              Aether analyzes your background against proven resume patterns, extracts key information, and suggests expert-level, ATS-optimized improvements.
+            </p>
+          </div>
+          <div className="glass-panel p-6 rounded-2xl text-center">
+            <div className="w-12 h-12 rounded-full bg-[#d2bbff]/20 flex items-center justify-center mx-auto mb-4">
+              <span className="text-xl font-bold text-[#d2bbff]">3</span>
+            </div>
+            <h3 className="font-display text-lg text-[#e5e2e1] mb-2">Ready resume in minutes</h3>
+            <p className="text-sm text-[#e0e0e0] leading-relaxed">
+              Get a polished, interview-ready resume. Iterate by simply chatting with your agent.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison section */}
+      <section className="max-w-5xl w-full mt-16 md:mt-24">
+        <h2 className="font-display text-2xl md:text-3xl text-white text-center mb-3">
+          Why Aether beats ChatGPT & Claude
+        </h2>
+        <p className="text-center text-[#e0e0e0] mb-8 md:mb-10 max-w-2xl mx-auto">
+          ChatGPT/Claude is a Swiss Army knife. Aether is a scalpel for your resume.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          <Feature
+            title="ATS-Optimized"
+            description="ChatGPT doesn't know ATS parsers. Aether is trained on thousands of resumes and knows which keywords actually pass screening."
+            icon={ShieldCheck}
+          />
+          <Feature
+            title="Visual Editor"
+            description="ChatGPT gives text only. Aether has a Split-Screen: chat on the left, live Canvas with resume, ATS Score, PulseRing on the right. Real-time visual feedback."
+            icon={Eye}
+          />
+          <Feature
+            title="Specialized Tools"
+            description="AI Suggestions, HR Coach, Job Search, Voice Input. Not just a chat — a full career center."
+            icon={Wrench}
+          />
+          <Feature
+            title="Privacy-First"
+            description="Guest data stays in LocalStorage, never leaves your browser. ChatGPT uses your data for training."
+            icon={Lock}
+          />
+          <Feature
+            title="Telegram Mini App"
+            description="Work directly from Telegram, no installation needed."
+            icon={Smartphone}
+          />
+          <Feature
+            title="Price"
+            description="$3/mo Pro vs $20/mo ChatGPT Plus."
+            icon={DollarSign}
+          />
+        </div>
       </section>
 
       {/* Feature grid */}

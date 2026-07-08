@@ -176,9 +176,12 @@ export class AIRouter {
         }
 
         const text = chunk.choices?.[0]?.delta?.content ?? '';
-        if (text) {
-          fullContent += text;
-          yield { type: 'token', data: text };
+        // DeepSeek models may return content in the 'reasoning' field
+        const delta = chunk.choices?.[0]?.delta as unknown as { reasoning?: string };
+        const textContent = text || delta.reasoning || '';
+        if (textContent) {
+          fullContent += textContent;
+          yield { type: 'token', data: textContent };
         }
       }
 
@@ -249,9 +252,12 @@ export class AIRouter {
         });
 
         const content = completion.choices[0]?.message?.content ?? '';
+        // DeepSeek models may return content in the 'reasoning' field
+        const msg = completion.choices[0]?.message as unknown as { reasoning?: string };
+        const finalContent = content || msg.reasoning || '';
 
         return {
-          content,
+          content: finalContent,
           model: modelConfig.model,
           tokens: {
             input: completion.usage?.prompt_tokens ?? 0,

@@ -14,14 +14,10 @@ export default function PricingToggle({
   value = 'monthly',
   onChange,
 }: PricingToggleProps) {
-  const [cycle, setCycle] = React.useState<BillingCycle>(value);
-
-  React.useEffect(() => {
-    setCycle(value);
-  }, [value]);
+  // Use prop as source of truth; internal state only for uncontrolled mode
+  const cycle = value;
 
   const handleChange = (next: BillingCycle) => {
-    setCycle(next);
     onChange?.(next);
   };
 

@@ -19,6 +19,7 @@ interface ChatState {
   setFocusSection: (section: SectionType | null) => void;
   setStatus: (status: ChatSession['status']) => void;
   setIsStreaming: (streaming: boolean) => void;
+  resetModeOnError: () => void;
   setMode: (mode: ChatMode) => void;
   clearSession: () => void;
 }
@@ -29,7 +30,8 @@ const defaultSession: ChatSession = {
     {
       id: nanoid(),
       role: 'assistant',
-      content: "Hello! I'm Aether — your AI career assistant. How can I help you today?",
+      content:
+        "Hello! I'm Aether — your specialized AI career expert. Unlike general chatbots, I'm built specifically for resumes: I know ATS parsers, optimize for real recruiters, and show you live visual feedback. No prompt engineering needed — just send me a LinkedIn link, an old resume, or describe your experience. I'll read it, analyze it, and craft something ATS-optimized. No forms, no fuss.",
       timestamp: Date.now(),
       source: 'aether',
     },
@@ -47,7 +49,7 @@ export const useChatStore = create<ChatState>()(
       (set, get) => ({
         session: defaultSession,
         inputValue: '',
-        inputPlaceholder: 'Tell Aether what to improve...',
+        inputPlaceholder: 'Send a LinkedIn link, resume, or describe your experience...',
         isStreaming: false,
 
         addMessage: (role, content, section) => {
@@ -108,10 +110,20 @@ export const useChatStore = create<ChatState>()(
         setStatus: (status) =>
           set({ session: { ...get().session, status } }),
         setIsStreaming: (streaming) => set({ isStreaming: streaming }),
+        /** Reset mode to 'aether' on error (e.g. HR Coach failure) */
+        resetModeOnError: () => {
+          const { session } = get();
+          if (session.mode === 'hr-coach') {
+            set({
+              session: { ...session, mode: 'aether' },
+              inputPlaceholder: 'Send a LinkedIn link, resume, or describe your experience...',
+            });
+          }
+        },
         setMode: (mode) => {
           const { session } = get();
           const placeholders: Record<ChatMode, string> = {
-            aether: 'Tell Aether what to improve...',
+            aether: 'Send a LinkedIn link, resume, or describe your experience...',
             'hr-coach': 'Ask HR Coach about interviews or hiring...',
           };
           set({
@@ -123,7 +135,7 @@ export const useChatStore = create<ChatState>()(
           set({
             session: { ...defaultSession, id: nanoid() },
             inputValue: '',
-            inputPlaceholder: 'Tell Aether what to improve...',
+            inputPlaceholder: 'Send a LinkedIn link, resume, or describe your experience...',
             isStreaming: false,
           }),
       }),

@@ -51,7 +51,7 @@ export default function ChatInput({
   };
 
   return (
-    <div className="relative flex items-center gap-2">
+    <div className="relative flex items-center gap-2 md:sticky md:bottom-0">
       <textarea
         ref={textareaRef}
         rows={1}

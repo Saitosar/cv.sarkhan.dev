@@ -7,6 +7,11 @@ import { Home, Briefcase, Sparkles } from 'lucide-react';
 export function MobileNav() {
   const pathname = usePathname();
 
+  // Workspace has its own MobileTabBar inside SplitScreen; avoid double bottom bars.
+  if (pathname.startsWith('/workspace')) {
+    return null;
+  }
+
   const navItems = [
     { href: '/', label: 'Home', icon: Home },
     { href: '/workspace', label: 'Workspace', icon: Sparkles },

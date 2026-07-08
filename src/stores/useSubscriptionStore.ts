@@ -32,11 +32,8 @@ export const useSubscriptionStore = create<SubscriptionState>()(
         error: null,
 
         subscribe: (tier: SubscriptionTier) => {
-          set({ status: 'loading' });
-
           if (tier === 'pro') {
             showToast('Coming Soon');
-            set({ status: 'free', error: null });
             return;
           }
 

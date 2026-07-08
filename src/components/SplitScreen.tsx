@@ -115,7 +115,7 @@ export default function SplitScreen({
   if (isMobile) {
     return (
       <div className={cn('flex flex-col h-full', className)}>
-        <div className="flex-1 overflow-hidden animate-tab-fade">
+        <div className="flex-1 overflow-hidden animate-tab-fade pb-[calc(72px+env(safe-area-inset-bottom))]">
           {activeTab === 'chat' && left}
           {activeTab === 'resume' && right}
           {activeTab === 'jobs' && (

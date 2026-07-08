@@ -1,15 +1,18 @@
 'use client';
 
 import * as React from 'react';
+import { cn } from '@/lib/utils';
 import type { ChatMessage } from '@/types/chat';
 import AgentMessage from './AgentMessage';
 import UserMessage from './UserMessage';
 
 export interface MessageListProps {
   messages: ChatMessage[];
+  bottomOffset?: number;
+  className?: string;
 }
 
-export default function MessageList({ messages }: MessageListProps) {
+export default function MessageList({ messages, bottomOffset = 0 }: MessageListProps) {
   const listRef = React.useRef<HTMLDivElement>(null);
 
   const lastContent = messages.length > 0 ? messages[messages.length - 1].content : undefined;
@@ -17,17 +20,25 @@ export default function MessageList({ messages }: MessageListProps) {
   React.useEffect(() => {
     const el = listRef.current;
     if (!el) return;
-    el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
-  }, [messages.length, lastContent]);
+    const maxScroll = el.scrollHeight - el.clientHeight;
+    if (maxScroll > 0) {
+      el.scrollTo({ top: maxScroll, behavior: 'smooth' });
+    }
+  }, [messages.length, lastContent, bottomOffset]);
+
+  const safeBottom = bottomOffset > 0 ? bottomOffset + 8 : 128;
+  const scrollPaddingBottom = `${safeBottom}px`;
+  const scrollPaddingBottomSafe = `calc(${safeBottom}px + env(safe-area-inset-bottom, 0px))`;
 
   if (messages.length === 0) {
     return (
       <div
         ref={listRef}
+        style={{ scrollPaddingBottom: scrollPaddingBottomSafe, paddingBottom: scrollPaddingBottomSafe }}
         className="flex-1 p-6 overflow-y-auto flex flex-col items-center justify-center text-center"
       >
         <p className="text-sm text-[#c4c7c7]">
-          Start a conversation with Aether to build or improve your resume.
+          Send a LinkedIn link, resume, or describe your experience — Aether will read it and build your resume.
         </p>
       </div>
     );
@@ -36,6 +47,7 @@ export default function MessageList({ messages }: MessageListProps) {
   return (
     <div
       ref={listRef}
+      style={{ scrollPaddingBottom }}
       className="flex-1 p-6 overflow-y-auto flex flex-col gap-6"
       aria-live="polite"
       aria-atomic="false"

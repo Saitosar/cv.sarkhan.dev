@@ -62,9 +62,9 @@ export default function PricingPage() {
   const tier = useSubscriptionStore((s) => s.tier);
   const subscribe = useSubscriptionStore((s) => s.subscribe);
 
-  const handleSubscribe = (plan: SubscriptionPlan) => {
+  const handleSubscribe = React.useCallback((plan: SubscriptionPlan) => {
     subscribe(plan.tier);
-  };
+  }, [subscribe]);
 
   return (
     <div className="min-h-screen py-12 px-4 md:px-8">

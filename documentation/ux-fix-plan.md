@@ -229,6 +229,66 @@
 
 ---
 
+## NEW BUGS — User Report (Mobile Testing)
+
+---
+
+### UX-016 | Chat overflow — окно чата прикрывает панель ввода и нижнее меню
+
+| Field | Value |
+|-------|-------|
+| **Priority** | **P0 — CRITICAL** |
+| **Severity** | App-breaking на мобильных — после одного ответа Aether невозможно писать, поле ввода скрыто |
+| **Files** | `src/components/ChatPanel.tsx`, `src/components/ChatPanel/ChatInput.tsx`, `src/components/MobileNav.tsx`, `src/app/workspace/page.tsx` |
+| **Description** | Когда Aether отвечает, окно чата наползает на панель ввода сообщения и нижнее меню. После одной переписки поле ввода полностью скрыто. Пользователь не может отправить новое сообщение. |
+| **Root Cause** | Вероятно, контейнер чата не учитывает высоту ChatInput и MobileNav при расчёте `overflow` / `max-height`. На мобильных fixed-элементы (ChatInput, MobileNav) перекрываются контентом чата из-за неправильного `padding-bottom` или `scroll-container` height. |
+| **Fix** | 1. **Добавить `padding-bottom`** на контейнер сообщений, равный суммарной высоте ChatInput + MobileNav (или использовать `safe-area-inset-bottom`). 2. **Убедиться, что scroll container** имеет `flex-1` и `overflow-y-auto` с правильным `max-h`. 3. **Проверить z-index** ChatInput и MobileNav — они должны быть выше контента чата. 4. **Использовать `position: sticky`** для ChatInput внизу экрана. 5. **Добавить CSS `scroll-padding-bottom`** для автоматического скролла к последнему сообщению без перекрытия. 6. **Протестировать на реальных мобильных размерах** (375px, 390px, 414px). |
+| **Acceptance Criteria** | 1. После ответа Aether поле ввода видимо и доступно. 2. ChatInput не перекрывается контентом чата. 3. MobileNav не перекрывается контентом чата. 4. Скролл к последнему сообщению не скрывает поле ввода. 5. Работает на всех мобильных размерах экрана. |
+
+---
+
+### UX-017 | ChatInput — нет кнопки attachment
+
+| Field | Value |
+|-------|-------|
+| **Priority** | P1 |
+| **Severity** | Medium — пользователь не может прикрепить файл (резюме, изображение) |
+| **Files** | `src/components/ChatPanel/ChatInput.tsx` |
+| **Description** | В ChatInput отсутствует кнопка прикрепления файлов. Пользователь не может загрузить резюме (PDF/DOCX) или изображение для анализа AI. |
+| **Root Cause** | Attachment functionality не была реализована. |
+| **Fix** | 1. **Добавить attachment button** (скрепка 📎 или Lucide `Paperclip`) слева от поля ввода. 2. **Добавить file input** (`<input type="file" accept=".pdf,.docx,.doc,.txt,.png,.jpg,.jpeg" hidden />`). 3. **Добавить обработчик** — при выборе файла показывать превью/название файла над полем ввода. 4. **Добавить кнопку отправки файла** — прикрепить файл к сообщению и отправить AI. 5. **Добавить drag-and-drop** зону (опционально, P2). |
+| **Acceptance Criteria** | 1. Кнопка attachment видна в ChatInput. 2. Клик открывает file picker. 3. После выбора файла показывается превью/название. 4. Файл отправляется вместе с сообщением. 5. Поддерживаются PDF, DOCX, TXT, PNG, JPG. |
+
+---
+
+### UX-018 | Pricing — годовая подписка без цены
+
+| Field | Value |
+|-------|-------|
+| **Priority** | P2 |
+| **Severity** | Medium — пользователь не может принять решение о годовой подписке |
+| **Files** | `src/app/pricing/page.tsx`, `src/components/Billing/PricingCard.tsx`, `src/components/Billing/PricingToggle.tsx` |
+| **Description** | На странице Pricing есть переключатель Monthly/Yearly, но годовая подписка не имеет цены. Пользователь видит пустое поле цены или "—" при выборе Yearly. |
+| **Root Cause** | Yearly pricing data не заполнена в компоненте PricingCard или в данных тарифов. |
+| **Fix** | 1. **Добавить годовую цену** для каждого плана (Free: $0/yr, Pro: $99/yr или аналогично с 20% скидкой от monthly). 2. **Добавить бейдж "Save 20%"** при выборе Yearly. 3. **Проверить переключение** Monthly/Yearly — цена должна обновляться корректно. 4. **Добавить "per year" / "per month"** подпись под ценой. |
+| **Acceptance Criteria** | 1. При выборе Yearly отображается корректная цена. 2. Есть визуальный индикатор экономии (скидка). 3. Переключение между Monthly/Yearly работает без багов. 4. Цена форматирована корректно. |
+
+---
+
+### UX-019 | Landing page — нет HR Coach, онбординга, CTA регистрации
+
+| Field | Value |
+|-------|-------|
+| **Priority** | P2 |
+| **Severity** | Medium — слабая конверсия, пользователь не знает о HR Coach |
+| **Files** | `src/app/page.tsx` |
+| **Description** | На landing page отсутствует: (1) информация о HR Coach функциональности, (2) краткий онбординг (как работает сервис), (3) CTA для регистрации / Pro подписки. Пользователь не понимает полный функционал продукта. |
+| **Root Cause** | Landing page не обновлялась после добавления HR Coach и других фич. |
+| **Fix** | 1. **Добавить секцию "HR Coach"** — описание функционала: AI-коуч для собеседований, практика вопросов, фидбек. 2. **Добавить краткий онбординг** — 3-шаговое объяснение: "Chat with AI → Build your resume → Ace interviews". 3. **Добавить CTA для регистрации** — кнопка "Get Started Free" / "Upgrade to Pro". 4. **Добавить pricing teaser** — ссылка на /pricing с указанием цен. 5. **Добавить feature comparison** — Free vs Pro возможности. |
+| **Acceptance Criteria** | 1. Landing page содержит секцию HR Coach. 2. Есть краткий онбординг (3 шага). 3. Есть CTA для регистрации. 4. Есть pricing teaser. 5. Страница не выглядит "under construction". |
+
+---
+
 ## Implementation Order
 
 ```
@@ -236,13 +296,15 @@ Phase 1 (P0 — must ship first)
 ├── UX-002 AI Backend (fix 500 error)
 ├── UX-001 HR Coach (fix freeze)
 ├── UX-003 SideNav (add toggle + overlay)
-└── UX-004 Pricing (fix re-render loop)
+├── UX-004 Pricing (fix re-render loop)
+└── UX-016 Chat overflow (fix input hidden on mobile) ← NEW P0
 
 Phase 2 (P1 — high impact)
 ├── UX-005 ATS Score (add skeleton)
 ├── UX-006 VoiceButton (hide)
 ├── UX-007 Onboarding (add guided tour)
-└── UX-008 Material Symbols (fix icons)
+├── UX-008 Material Symbols (fix icons)
+└── UX-017 Attachment button (add to ChatInput) ← NEW P1
 
 Phase 3 (P2 — polish)
 ├── UX-009 SplitScreen (improve handle)
@@ -251,7 +313,9 @@ Phase 3 (P2 — polish)
 ├── UX-012 Error handling (add Retry)
 ├── UX-013 Accessibility (contrast)
 ├── UX-014 Performance (debounce)
-└── UX-015 Landing page (improve)
+├── UX-015 Landing page (improve)
+├── UX-018 Yearly pricing (add price) ← NEW P2
+└── UX-019 Landing page (HR Coach, onboarding, CTA) ← NEW P2
 ```
 
 ## Verification Checklist

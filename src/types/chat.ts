@@ -84,7 +84,7 @@ export interface ChatInputProps {
   value: string;
   placeholder: string;
   onChange: (value: string) => void;
-  onSend: (value: string) => void;
+  onSend: (value: string, attachment?: File) => void;
   disabled?: boolean;
 }
 

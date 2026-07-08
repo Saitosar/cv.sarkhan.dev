@@ -8,10 +8,14 @@ import SessionBadge from './ChatPanel/SessionBadge';
 import MessageList from './ChatPanel/MessageList';
 import ChatInput from './ChatPanel/ChatInput';
 import TypingIndicator from './ChatPanel/TypingIndicator';
+import SuggestionChips from './ChatPanel/SuggestionChips';
 import { useChatStore } from '@/stores/useChatStore';
 import { useResumeStore } from '@/stores/useResumeStore';
 import { chatSSE } from '@/services/chat-sse';
 import { CHAT_MODES } from '@/types/hr-coach';
+import { useElementHeight } from '@/hooks/useElementHeight';
+
+const MOBILE_NAV_HEIGHT = 72;
 
 export default function ChatPanel({ className }: ChatPanelProps) {
   const messages = useChatStore((s) => s.session.messages);
@@ -25,6 +29,8 @@ export default function ChatPanel({ className }: ChatPanelProps) {
   const resume = useResumeStore((s) => s.resume);
 
   const modeConfig = CHAT_MODES[mode];
+
+  const { ref: inputRef, height: inputHeight } = useElementHeight<HTMLDivElement>();
 
   const handleModeToggle = React.useCallback(() => {
     setMode(mode === 'aether' ? 'hr-coach' : 'aether');
@@ -53,7 +59,16 @@ export default function ChatPanel({ className }: ChatPanelProps) {
     chatSSE.cancel();
   }, []);
 
+  const handleChipAction = React.useCallback(
+    (_messageId: string, action: string) => {
+      setInputValue(action);
+    },
+    [setInputValue]
+  );
+
   const showTyping = isStreaming;
+
+  const bottomOffset = inputHeight + MOBILE_NAV_HEIGHT;
 
   return (
     <div
@@ -69,24 +84,39 @@ export default function ChatPanel({ className }: ChatPanelProps) {
         mode={mode}
         onModeToggle={handleModeToggle}
       />
-      <div className="flex-1 overflow-hidden flex flex-col">
-        <div className="px-6 pt-4 pb-2">
+      <div className="flex-1 overflow-hidden flex flex-col min-h-0">
+        <div className="px-6 pt-4 pb-2 shrink-0">
           <SessionBadge focus={resume.targetJob?.title} />
         </div>
-        <MessageList messages={messages} />
+        <MessageList
+          messages={messages}
+          bottomOffset={bottomOffset}
+        />
         {showTyping && (
-          <div className="px-6 py-2">
+          <div className="px-6 py-2 shrink-0">
             <TypingIndicator visible={true} />
           </div>
         )}
       </div>
-      <div className="p-4 border-t border-[rgba(255,255,255,0.08)] bg-[#141313]/30">
+      <div
+        ref={inputRef}
+        className="sticky bottom-0 z-50 shrink-0 p-4 border-t border-[rgba(255,255,255,0.08)] bg-[#141313]/80 backdrop-blur-md"
+      >
         <div className="flex flex-wrap gap-2 mb-3">
-          {/* Quick actions hidden for now */}
+          <SuggestionChips
+            messageId="chat-input-suggestions"
+            chips={[
+              { id: 'attach', label: '📎 Attach Resume', action: '📎 I have a resume to upload', variant: 'secondary' },
+              { id: 'linkedin', label: '🔗 Send LinkedIn', action: '🔗 Here is my LinkedIn profile: ', variant: 'secondary' },
+              { id: 'experience', label: '📝 Describe Experience', action: '📝 I have experience in ', variant: 'secondary' },
+              { id: 'target', label: '🎯 Target a Job', action: '🎯 I am targeting a role as ', variant: 'secondary' },
+            ]}
+            onAction={handleChipAction}
+          />
         </div>
         <ChatInput
           value={inputValue}
-          placeholder="Tell Aether what to improve..."
+          placeholder="Describe your experience or paste a link..."
           onChange={setInputValue}
           onSend={isStreaming ? handleCancel : handleSend}
           disabled={isStreaming}
@@ -95,4 +125,3 @@ export default function ChatPanel({ className }: ChatPanelProps) {
     </div>
   );
 }
-

@@ -12,7 +12,7 @@ export interface PricingCardProps {
   showATSPreview?: boolean;
 }
 
-export default function PricingCard({
+const PricingCard = React.memo(function PricingCard({
   plan,
   isCurrent,
   onSubscribe,
@@ -100,4 +100,6 @@ export default function PricingCard({
       </button>
     </div>
   );
-}
+});
+
+export default PricingCard;
