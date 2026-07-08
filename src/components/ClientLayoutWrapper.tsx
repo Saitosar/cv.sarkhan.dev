@@ -23,7 +23,7 @@ export default function ClientLayoutWrapper({
     <>
       <BackgroundFX />
       <SideNav />
-      <main className="ml-0 md:ml-64">
+      <main className="ml-0 md:ml-72">
         {children}
       </main>
       <MobileNav />

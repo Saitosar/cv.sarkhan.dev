@@ -22,8 +22,8 @@ export default function WorkspacePage() {
   const [showJobs, setShowJobs] = React.useState(false);
 
   return (
-    <div className="h-[calc(100vh-48px)] md:h-screen flex flex-col">
-      <div className="flex-1 p-4 md:p-6 pt-0">
+    <div className="h-[calc(100vh-48px)] md:h-[calc(100vh-64px)] flex flex-col">
+      <div className="flex-1 p-4 pl-4 md:pl-6 pr-0 pt-2 md:pt-3">
         <SplitScreen
           left={<ChatPanel />}
           right={

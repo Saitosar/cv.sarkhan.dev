@@ -45,7 +45,7 @@ export function SideNav() {
 
   return (
     <nav
-      className="fixed left-0 top-0 z-50 hidden h-screen w-64 flex-col gap-4 border-r border-[rgba(255,255,255,0.08)] bg-[#1c1b1b] py-8 shadow-2xl backdrop-blur-xl md:flex"
+      className="fixed left-0 top-0 z-50 hidden h-screen w-72 flex-col gap-4 border-r border-[rgba(255,255,255,0.08)] bg-[#1c1b1b] py-8 shadow-2xl backdrop-blur-xl md:flex"
       aria-label="Main navigation"
     >
       <div className="mb-8 px-6">

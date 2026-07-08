@@ -1,24 +1,20 @@
 import Link from "next/link";
+import { Sparkles, MessageSquareText, Bot, ShieldCheck, Rocket } from "lucide-react";
 
 function Feature({
   title,
   description,
-  icon,
+  icon: Icon,
 }: {
   title: string;
   description: string;
-  icon: string;
+  icon: React.ComponentType<{ className?: string }>;
 }) {
   return (
-    <div className="gradient-border relative">
-      <div className="glass-panel relative h-full p-6 flex flex-col gap-4">
+    <div className="gradient-border relative group">
+      <div className="glass-panel relative h-full p-6 flex flex-col gap-4 transition-all duration-300 hover:bg-white/[0.03]">
         <div className="text-[#d2bbff]">
-          <span
-            className="material-symbols-outlined text-3xl text-[#6001d1]"
-            style={{ fontVariationSettings: "'FILL' 1" }}
-          >
-            {icon}
-          </span>
+          <Icon className="w-7 h-7" />
         </div>
         <h3 className="font-display text-lg text-[#e5e2e1]">{title}</h3>
         <p className="text-sm text-[#e0e0e0] leading-relaxed">{description}</p>
@@ -32,18 +28,25 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center p-4 md:p-8 lg:p-24 pt-16 md:pt-24">
       {/* Hero */}
       <section className="text-center max-w-4xl mb-12 md:mb-16">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-[#d2bbff]/20 mb-6">
+          <Sparkles className="w-4 h-4 text-[#d2bbff]" />
+          <span className="text-xs font-semibold uppercase tracking-[0.1em] text-[#d2bbff]">
+            AI Career Agent
+          </span>
+        </div>
         <h1 className="font-display text-4xl md:text-6xl lg:text-7xl text-white mb-6 leading-tight">
-          Build a resume that beats the bots
+          Your resume, built by conversation
         </h1>
         <p className="text-lg md:text-xl text-[#e0e0e0] mb-8 max-w-2xl mx-auto leading-relaxed">
-          AI-powered resume builder for the international job market. ATS-friendly layouts,
-          smart suggestions, and a personal career assistant — all in one workspace.
+          This is not a classic form-filling app. It is an AI agent — you chat with it, and it does
+          the work: builds, tailors, and optimizes your resume for ATS and recruiters.
         </p>
         <Link
           href="/workspace"
-          className="shimmer-bg inline-block rounded-lg px-8 py-4 text-white font-semibold tap-feedback"
+          className="shimmer-bg inline-flex items-center gap-3 rounded-lg px-8 py-4 text-white font-semibold tap-feedback"
         >
-          Open Workspace
+          <Bot className="w-5 h-5" />
+          Start with AI
         </Link>
       </section>
 
@@ -54,19 +57,19 @@ export default function Home() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           <Feature
-            title="ATS-Compatible Builder"
-            description="Clean, parser-friendly sections that get your resume past automated screening and into human hands."
-            icon="verified"
+            title="Chat, Don't Type Forms"
+            description="Just tell Aether about your experience. It structures everything into a polished, ATS-friendly resume."
+            icon={MessageSquareText}
           />
           <Feature
-            title="AI Career Assistant"
-            description="Get section-by-section suggestions, rewrites, and career advice tailored to your target role."
-            icon="smart_toy"
+            title="ATS-Optimized Output"
+            description="Clean, parser-friendly sections designed to pass automated screening and reach human recruiters."
+            icon={ShieldCheck}
           />
           <Feature
             title="Launch Faster"
-            description="Go from idea to polished PDF in minutes. Export, share, and iterate as your career evolves."
-            icon="rocket_launch"
+            description="Go from first message to interview-ready PDF in minutes. Iterate by simply talking to your agent."
+            icon={Rocket}
           />
         </div>
       </section>
