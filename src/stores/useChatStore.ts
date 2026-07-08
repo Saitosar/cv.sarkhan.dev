@@ -25,7 +25,15 @@ interface ChatState {
 
 const defaultSession: ChatSession = {
   id: nanoid(),
-  messages: [],
+  messages: [
+    {
+      id: nanoid(),
+      role: 'assistant',
+      content: "👋 Hi! I'm **Aether**, your AI career assistant. I can help you craft a standout resume, tailor it for specific jobs, and optimize it for ATS systems. What would you like to work on today?",
+      timestamp: Date.now(),
+      source: 'aether',
+    },
+  ],
   createdAt: Date.now(),
   updatedAt: Date.now(),
   focusSection: null,

@@ -91,7 +91,8 @@ describe('useChatStore', () => {
       useChatStore.getState().addMessage('assistant', 'Hi');
       useChatStore.getState().clearSession();
       const state = useChatStore.getState();
-      expect(state.session.messages).toHaveLength(0);
+      expect(state.session.messages).toHaveLength(1);
+      expect(state.session.messages[0].role).toBe('assistant');
     });
 
     it('should reset inputValue and isStreaming', () => {
