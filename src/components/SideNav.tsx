@@ -57,18 +57,7 @@ export function SideNav() {
             <h1 className="text-2xl font-bold tracking-tight text-[#e5e2e1]">Career AI</h1>
           </div>
         </div>
-        <button
-          type="button"
-          className="shimmer-bg flex w-full items-center justify-center gap-2 rounded-lg py-3 font-semibold text-[#e5e2e1] transition-transform active:scale-[0.98]"
-        >
-          <span
-            className="material-symbols-outlined"
-            style={{ fontVariationSettings: "'FILL' 1" }}
-          >
-            add
-          </span>
-          New Resume
-        </button>
+        {/* New Resume button hidden for now */}
       </div>
 
       <div className="flex flex-1 flex-col gap-2 px-2">
