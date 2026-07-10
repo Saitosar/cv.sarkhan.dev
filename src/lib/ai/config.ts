@@ -31,7 +31,7 @@ export interface ModelConfig {
 export const MODEL_CONFIGS: Record<TaskType, ModelConfig> = {
   chat: {
     task: 'chat',
-    model: 'deepseek-v4-flash',
+    model: 'gemma4:cloud',
     temperature: 0.7,
     topP: 0.9,
     maxOutputTokens: 4096,
@@ -47,10 +47,9 @@ export const MODEL_CONFIGS: Record<TaskType, ModelConfig> = {
       },
     ],
   },
-
   'ats-score': {
     task: 'ats-score',
-    model: 'deepseek-v4-flash',
+    model: 'qwen3.5:397b-cloud',
     temperature: 0.2,
     topP: 0.8,
     maxOutputTokens: 2048,
@@ -65,7 +64,6 @@ export const MODEL_CONFIGS: Record<TaskType, ModelConfig> = {
       },
     ],
   },
-
   generate: {
     task: 'generate',
     model: 'deepseek-v4-flash',
@@ -83,7 +81,6 @@ export const MODEL_CONFIGS: Record<TaskType, ModelConfig> = {
       },
     ],
   },
-
   tailor: {
     task: 'tailor',
     model: 'deepseek-v4-flash',
@@ -101,10 +98,9 @@ export const MODEL_CONFIGS: Record<TaskType, ModelConfig> = {
       },
     ],
   },
-
   analyze: {
     task: 'analyze',
-    model: 'deepseek-v4-flash',
+    model: 'qwen3.5:397b-cloud',
     temperature: 0.3,
     topP: 0.8,
     maxOutputTokens: 4096,
@@ -119,7 +115,6 @@ export const MODEL_CONFIGS: Record<TaskType, ModelConfig> = {
       },
     ],
   },
-
   suggest: {
     task: 'suggest',
     model: 'deepseek-v4-flash',
@@ -137,7 +132,6 @@ export const MODEL_CONFIGS: Record<TaskType, ModelConfig> = {
       },
     ],
   },
-
   suggestions: {
     task: 'suggestions',
     model: 'deepseek-v4-flash',
@@ -155,7 +149,6 @@ export const MODEL_CONFIGS: Record<TaskType, ModelConfig> = {
       },
     ],
   },
-
   search: {
     task: 'search',
     model: 'deepseek-v4-flash',

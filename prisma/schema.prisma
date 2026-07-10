@@ -1,223 +1,54 @@
-// prisma/schema.prisma
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
-// ── User ──
 model User {
-  id            BigInt   @id @default(autoincrement())
-  telegramId    BigInt   @unique @map("telegram_id")
-  email         String?  @unique
-  googleId      String?  @unique @map("google_id")
-  appleId       String?  @unique @map("apple_id")
-  authProvider  String   @default("telegram") @map("auth_provider")
-  displayName   String?  @map("display_name")
-  avatarUrl     String?  @map("avatar_url")
-  locale        String   @default("ru")
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
-  deletedAt     DateTime? @map("deleted_at")
-
-  subscriptions  Subscription[]
-  consentLogs    ConsentLog[]
-  resumes        Resume[]
-  resumeVersions ResumeVersion[]
-  chatSessions   ChatSession[]
-  atsScores      ATSScore[]
-  mcpTokens      McpToken[]
-
-  @@index([telegramId])
-  @@index([email])
-  @@index([googleId])
-  @@index([appleId])
-  @@index([deletedAt])
-  @@map("users")
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  resumes       Resume[]
 }
 
-// ── Subscription ──
-enum SubscriptionTier {
-  free
-  basic
-  pro
-  enterprise
-  @map("subscription_tier")
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  restriction       String
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
 }
 
-enum SubscriptionProvider {
-  telegram_stars
-  stripe
-  apple_pay
-  google_pay
-  @map("subscription_provider")
+model Session {
+  sessionToken String   @id @unique
+  userId       String
+  expires      DateTime
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-enum SubscriptionPeriod {
-  monthly
-  yearly
-  lifetime
-  @map("subscription_period")
-}
-
-model Subscription {
-  id        BigInt              @id @default(autoincrement())
-  userId    BigInt              @map("user_id")
-  tier      SubscriptionTier    @default(free)
-  provider  SubscriptionProvider?
-  period    SubscriptionPeriod?
-  startedAt DateTime            @default(now()) @map("started_at")
-  expiresAt DateTime?           @map("expires_at")
-  autoRenew Boolean             @default(true) @map("auto_renew")
-  canceledAt DateTime?          @map("canceled_at")
-  createdAt DateTime            @default(now()) @map("created_at")
-  updatedAt DateTime            @updatedAt @map("updated_at")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@index([tier])
-  @@index([expiresAt])
-  @@map("subscriptions")
-}
-
-// ── Consent Log ──
-enum ConsentType {
-  terms_of_service
-  privacy_policy
-  data_processing
-  marketing
-  analytics
-  third_party_sharing
-  @map("consent_type")
-}
-
-model ConsentLog {
-  id          BigInt      @id @default(autoincrement())
-  userId      BigInt      @map("user_id")
-  consentType ConsentType @map("consent_type")
-  granted     Boolean
-  ipAddress   String?     @map("ip_address")
-  userAgent   String?     @map("user_agent")
-  metadata    Json        @default("{}")
-  createdAt   DateTime    @default(now()) @map("created_at")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@index([consentType])
-  @@index([createdAt])
-  @@index([userId, consentType, createdAt(sort: Desc)])
-  @@map("consent_log")
-}
-
-// ── Resume ──
 model Resume {
-  id          BigInt   @id @default(autoincrement())
-  userId      BigInt   @map("user_id")
-  title       String   @default("My Resume")
-  data        Json
-  version     Int      @default(1)
-  atsScore    Decimal? @map("ats_score")
-  isPublished Boolean  @default(false) @map("is_published")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-
-  user    User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  versions ResumeVersion[]
-  chatSessions ChatSession[]
-  atsScores    ATSScore[]
-
-  @@unique([userId, id])
-  @@index([userId])
-  @@index([userId, isPublished])
-  @@index([atsScore(sort: Desc)])
-  @@map("resumes")
-}
-
-// ── Resume Version ──
-model ResumeVersion {
-  id            BigInt   @id @default(autoincrement())
-  resumeId      BigInt   @map("resume_id")
-  userId        BigInt   @map("user_id")
-  version       Int
-  data          Json
-  atsScore      Decimal? @map("ats_score")
-  changeSummary String?  @map("change_summary")
-  createdAt     DateTime @default(now()) @map("created_at")
-
-  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([resumeId, version])
-  @@index([resumeId])
-  @@index([userId])
-  @@index([createdAt(sort: Desc)])
-  @@map("resume_versions")
-}
-
-// ── Chat Session ──
-model ChatSession {
-  id        BigInt   @id @default(autoincrement())
-  userId    BigInt   @map("user_id")
-  resumeId  BigInt?  @map("resume_id")
-  title     String   @default("New Chat")
-  messages  Json     @default("[]")
-  status    String   @default("idle")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  resume Resume? @relation(fields: [resumeId], references: [id])
-
-  @@index([userId])
-  @@index([resumeId])
-  @@index([updatedAt(sort: Desc)])
-  @@map("chat_sessions")
-}
-
-// ── ATS Score ──
-model ATSScore {
-  id        BigInt   @id @default(autoincrement())
-  userId    BigInt   @map("user_id")
-  resumeId  BigInt?  @map("resume_id")
-  overall   Decimal
-  sections  Json     @default("[]")
-  suggestions Json  @default("[]")
-  matchedKeywords String[] @map("matched_keywords")
-  missingKeywords  String[] @map("missing_keywords")
-  createdAt DateTime @default(now()) @map("created_at")
-
-  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  resume Resume? @relation(fields: [resumeId], references: [id])
-
-  @@index([userId])
-  @@index([resumeId])
-  @@index([overall(sort: Desc)])
-  @@index([createdAt(sort: Desc)])
-  @@map("ats_scores")
-}
-
-// ── MCP Token ──
-model McpToken {
-  id          BigInt    @id @default(autoincrement())
-  userId      BigInt    @map("user_id")
-  tokenHash   String    @unique @map("token_hash")
-  description String?
-  scopes      String[]
-  isActive    Boolean   @default(true) @map("is_active")
-  lastUsedAt  DateTime? @map("last_used_at")
-  expiresAt   DateTime? @map("expires_at")
-  createdAt   DateTime  @default(now()) @map("created_at")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@index([tokenHash])
-  @@index([userId, isActive])
-  @@map("mcp_tokens")
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
