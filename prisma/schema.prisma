@@ -16,9 +16,11 @@ model User {
   telegramId    String?   @unique
   role          String    @default("guest")
   lastLoginAt   DateTime  @default(now())
+  starsSubUntil DateTime?
   accounts      Account[]
   sessions      Session[]
   resumes       Resume[]
+  payments      Payment[]
 }
 
 model Account {
@@ -54,4 +56,18 @@ model Resume {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id            String   @id @default(cuid())
+  userId        String
+  provider      String   // 'telegram_stars' | 'stripe' | 'crypto'
+  providerTxId  String?  // ID транзакции у провайдера
+  amount        Int      // в минимальных единицах (stars / cents / usdc cents)
+  currency      String   // 'XTR' | 'USD' | 'USDC'
+  plan          String   // 'pro_monthly'
+  status        String   // 'completed' | 'refunded'
+  createdAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
 }

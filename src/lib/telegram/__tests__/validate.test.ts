@@ -1,29 +1,46 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { validateTelegramInitData } from '@/lib/telegram/validate';
 
 describe('Telegram initData validation', () => {
   const BOT_TOKEN = 'test_bot_token';
   
   beforeEach(() => {
-    process.env.TELEGRAM_BOT_TOKEN = BOT_TOKEN;
+    vi.stubEnv('TELEGRAM_BOT_TOKEN', BOT_TOKEN);
   });
 
-  it('should return null for empty initData', () => {
-    expect(validateTelegramInitData('')).toBeNull();
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
-  it('should return null for initData without hash', () => {
-    expect(validateTelegramInitData('user=123&auth_date=12345678')).toBeNull();
+  it('should return invalid for empty initData', () => {
+    const result = validateTelegramInitData('');
+    expect(result.valid).toBe(false);
   });
 
-  it('should return null for expired initData (older than 24h)', () => {
+  it('should return invalid for initData without hash', () => {
+    const result = validateTelegramInitData('user=123&auth_date=12345678');
+    expect(result.valid).toBe(false);
+    if (result.valid === false) {
+      expect(result.reason).toBe('missing_hash');
+    }
+  });
+
+  it('should return invalid for expired initData (older than 24h)', () => {
     const oldDate = Math.floor(Date.now() / 1000) - 90000;
     const raw = `auth_date=${oldDate}&hash=somehash`;
-    expect(validateTelegramInitData(raw)).toBeNull();
+    const result = validateTelegramInitData(raw);
+    expect(result.valid).toBe(false);
+    if (result.valid === false) {
+      expect(result.reason).toBe('expired');
+    }
   });
 
-  it('should return null for invalid hash', () => {
+  it('should return invalid for invalid hash', () => {
     const raw = `auth_date=${Math.floor(Date.now() / 1000)}&hash=invalid_hash`;
-    expect(validateTelegramInitData(raw)).toBeNull();
+    const result = validateTelegramInitData(raw);
+    expect(result.valid).toBe(false);
+    if (result.valid === false) {
+      expect(result.reason).toBe('invalid_signature');
+    }
   });
 });

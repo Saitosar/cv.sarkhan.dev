@@ -12,17 +12,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'initData required' }, { status: 400 });
     }
 
-    const validated = validateTelegramInitData(initData);
-    if (!validated) {
-      return NextResponse.json({ error: 'Invalid initData' }, { status: 401 });
+    const validation = validateTelegramInitData(initData);
+    if (!validation.valid) {
+      const status = validation.reason === 'missing_hash' ? 400 : 401;
+      const message = validation.reason === 'expired' ? 'initData expired' : 
+                     validation.reason === 'invalid_signature' ? 'Invalid signature' : 
+                     'Invalid initData';
+      return NextResponse.json({ error: message }, { status });
     }
 
-    const tgUser = validated.user ? JSON.parse(validated.user) : null;
+    const tgUser = validation.data.user ? JSON.parse(validation.data.user) : null;
     if (!tgUser?.id) {
       return NextResponse.json({ error: 'User not found in initData' }, { status: 400 });
     }
 
-    // Find or create user
     let user = await prisma.user.findUnique({
       where: { telegramId: String(tgUser.id) },
     });
@@ -43,7 +46,6 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Session token (JWT)
     const token = await signSessionToken({
       userId: user.id,
       telegramId: user.telegramId!,
@@ -61,6 +63,9 @@ export async function POST(req: NextRequest) {
       } 
     });
   } catch (error) {
+    if (error instanceof SyntaxError) {
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+    }
     console.error('[Telegram Auth Error]', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
