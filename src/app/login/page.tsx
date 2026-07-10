@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import { signIn } from 'next-auth/react'
 
@@ -20,7 +22,7 @@ export default function LoginPage() {
         </button>
       </div>
       <p className="text-sm">
-        Don't have an account? <a href="/register" className="text-blue-500 underline">Register</a>
+        Don&apos;t have an account? <a href="/register" className="text-blue-500 underline">Register</a>
       </p>
     </div>
   )

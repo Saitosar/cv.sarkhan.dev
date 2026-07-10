@@ -1,43 +1,68 @@
-// src/mcp-server/types.ts
-//
-// MCP-specific types implementing a subset of the Model Context Protocol.
-// This is a hand-rolled JSON-RPC 2.0 server with no external SDK dependencies.
+import { z } from 'zod';
 
-// ── JSON-RPC 2.0 envelope ──
+export const RESUME_SCHEMA = z.object({
+  basics: z.object({
+    name: z.string(),
+    email: z.string().email(),
+    phone: z.string().optional(),
+    location: z.string().optional(),
+    url: z.string().url().optional(),
+    summary: z.string().optional(),
+  }).optional(),
+  skills: z.array(z.object({
+    name: z.string(),
+    level: z.enum(['beginner', 'intermediate', 'advanced', 'expert']).optional(),
+    keywords: z.array(z.string()).optional(),
+  })).optional(),
+  experience: z.array(z.object({
+    company: z.string(),
+    position: z.string(),
+    startDate: z.string().regex(/^\d{4}-\d{2}$/).optional(),
+    endDate: z.string().regex(/^\d{4}-\d{2}$/).optional(),
+    current: z.boolean().optional(),
+    summary: z.string().optional(),
+    highlights: z.array(z.string()).optional(),
+  })).optional(),
+  education: z.array(z.object({
+    institution: z.string(),
+    degree: z.string(),
+    field: z.string().optional(),
+    startDate: z.string().regex(/^\d{4}-\d{2}$/).optional(),
+    endDate: z.string().regex(/^\d{4}-\d{2}$/).optional(),
+    gpa: z.string().optional(),
+  })).optional(),
+  projects: z.array(z.object({
+    name: z.string(),
+    description: z.string().optional(),
+    url: z.string().url().optional(),
+    technologies: z.array(z.string()).optional(),
+    highlights: z.array(z.string()).optional(),
+  })).optional(),
+  certificates: z.array(z.object({
+    name: z.string(),
+    issuer: z.string(),
+    date: z.string().regex(/^\d{4}-\d{2}$/).optional(),
+    url: z.string().url().optional(),
+  })).optional(),
+  languages: z.array(z.object({
+    language: z.string(),
+    fluency: z.enum(['native', 'fluent', 'advanced', 'intermediate', 'basic']).optional(),
+  })).optional(),
+});
 
-export type JSONRPCVersion = '2.0';
+export type Resume = z.infer<typeof RESUME_SCHEMA>;
 
-export interface JSONRPCRequest {
-  jsonrpc: JSONRPCVersion;
-  id: string | number | null;
-  method: string;
-  params?: Record<string, unknown>;
+export interface TokenValidationResult {
+  valid: boolean;
+  user?: { id: string; plan: string };
+  error?: 'unauthorized' | 'expired' | 'revoked' | 'rate_limited';
+  retryAfter?: number;
 }
 
-export interface JSONRPCNotification {
-  jsonrpc: JSONRPCVersion;
-  method: string;
-  params?: Record<string, unknown>;
-}
-
-export interface JSONRPCResponse {
-  jsonrpc: JSONRPCVersion;
-  id: string | number | null;
-  result?: unknown;
-  error?: JSONRPCErrorObject;
-}
-
-export interface JSONRPCErrorObject {
-  code: number;
-  message: string;
-  data?: unknown;
-}
-
-// ── MCP capability announcements ──
-
-export interface ServerCapabilities {
-  resources?: Record<string, never>;
-  tools?: Record<string, never>;
+export interface RateLimitResult {
+  allowed: boolean;
+  remaining: number;
+  retryAfter: number;
 }
 
 export interface ServerInfo {
@@ -45,13 +70,10 @@ export interface ServerInfo {
   version: string;
 }
 
-export interface InitializeResult {
-  protocolVersion: string;
-  capabilities: ServerCapabilities;
-  serverInfo: ServerInfo;
+export interface ServerCapabilities {
+  resources: any;
+  tools: any;
 }
-
-// ── MCP resource definitions ──
 
 export interface MCPResource {
   uri: string;
@@ -66,69 +88,8 @@ export interface MCPResourceContent {
   mimeType?: string;
 }
 
-export interface ResourcesListResult {
-  resources: MCPResource[];
-}
-
-export interface ResourcesReadResult {
-  contents: MCPResourceContent[];
-}
-
-// ── MCP tool definitions ──
-
-export interface MCPToolParameter {
-  type: string;
-  description?: string;
-  items?: unknown;
-  properties?: Record<string, unknown>;
-  required?: string[];
-}
-
 export interface MCPTool {
   name: string;
   description: string;
-  inputSchema: {
-    type: 'object';
-    properties: Record<string, MCPToolParameter | unknown>;
-    required?: string[];
-  };
-}
-
-export interface MCPToolResult {
-  content: Array<{ type: 'text'; text: string }>;
-  isError?: boolean;
-}
-
-export interface ToolsListResult {
-  tools: MCPTool[];
-}
-
-export type MCPMethod =
-  | 'initialize'
-  | 'resources/list'
-  | 'resources/read'
-  | 'tools/list'
-  | 'tools/call';
-
-// ── MCP errors (JSON-RPC standard + MCP conventions) ──
-
-export const MCP_ERROR_CODES = {
-  PARSE_ERROR: -32700,
-  INVALID_REQUEST: -32600,
-  METHOD_NOT_FOUND: -32601,
-  INVALID_PARAMS: -32602,
-  INTERNAL_ERROR: -32603,
-  SERVER_NOT_INITIALIZED: -32002,
-} as const;
-
-export class MCPError extends Error {
-  readonly code: number;
-  readonly data?: unknown;
-
-  constructor(code: number, message: string, data?: unknown) {
-    super(message);
-    this.name = 'MCPError';
-    this.code = code;
-    this.data = data;
-  }
+  inputSchema: any;
 }

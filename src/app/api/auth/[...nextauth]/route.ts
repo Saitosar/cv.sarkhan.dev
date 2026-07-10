@@ -1,6 +1,7 @@
+import { NextAuthOptions } from "next-auth"
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import NextAuth, { NextAuthOptions } from "next-auth"
 import { prisma } from "@/lib/db/prisma"
+import NextAuth from "next-auth"
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -10,26 +11,30 @@ export const authOptions: NextAuthOptions = {
       name: "Google",
       type: "oauth",
       authorization: { params: { scope: "openid email profile" } },
-      signIn: async (params) => {
-        // Minimal OAuth flow for Google
-        return "/auth/callback/google"
-      },
-      // Note: Real implementation requires full OAuth config. 
-      // For P0, we implement the structure.
-    },
+      profile: (profile: any) => ({
+        id: profile.sub,
+        name: profile.name,
+        email: profile.email,
+        image: profile.picture,
+      }),
+    } as any,
     {
       id: "linkedin",
       name: "LinkedIn",
       type: "oauth",
       authorization: { params: { scope: "r_liteprofile r_emailaddress" } },
-      signIn: async (params) => {
-        return "/auth/callback/linkedin"
-      },
-    },
+      profile: (profile: any) => ({
+        id: profile.id,
+        name: profile.localizedFirstName + " " + profile.localizedLastName,
+        email: profile.emailAddress,
+        image: profile.picture,
+      }),
+    } as any,
   ],
   callbacks: {
-    session: ({ session, user }) => {
+    session: async ({ session, user }) => {
       if (session.user) {
+        // @ts-ignore - user id is available via PrismaAdapter
         session.user.id = user.id
       }
       return session
@@ -42,4 +47,6 @@ export const authOptions: NextAuthOptions = {
   },
 }
 
-export default NextAuth(authOptions)
+const handler = NextAuth(authOptions)
+
+export { handler as GET, handler as POST }
