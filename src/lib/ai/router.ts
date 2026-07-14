@@ -53,10 +53,7 @@ export class AIRouter {
     this.logger = logger ?? new RouterLogger();
   }
 
-  private selectSystemPrompt(config: ModelConfig | FallbackConfig, mode?: ChatMode): string {
-    if (mode === 'hr-coach' && 'alternateSystemPrompt' in config && config.alternateSystemPrompt) {
-      return config.alternateSystemPrompt;
-    }
+  private selectSystemPrompt(config: ModelConfig | FallbackConfig, _mode?: ChatMode): string {
     return config.systemPrompt;
   }
 

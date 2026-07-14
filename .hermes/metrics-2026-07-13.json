@@ -1,0 +1,19 @@
+{
+  "date": "2026-07-13",
+  "commits_24h": 0,
+  "files_changed": 8,
+  "errors_24h": 1,
+  "tests": {},
+  "build_ok": false,
+  "recent_audits": [],
+  "agents_active": {
+    "cv-orchestrator": "active",
+    "cv-architect": "active",
+    "cv-developer": "active",
+    "cv-designer": "active",
+    "cv-qa": "active",
+    "cv-auditor": "active",
+    "cv-ecosystem": "active",
+    "cv-writer": "active"
+  }
+}
