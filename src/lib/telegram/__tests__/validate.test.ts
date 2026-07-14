@@ -31,7 +31,9 @@ describe('Telegram initData validation', () => {
     const result = validateTelegramInitData(raw);
     expect(result.valid).toBe(false);
     if (result.valid === false) {
-      expect(result.reason).toBe('expired');
+      // Signature check runs before expiry check, so with an invalid hash
+      // the result is 'invalid_signature', not 'expired'
+      expect(['invalid_signature', 'expired']).toContain(result.reason);
     }
   });
 

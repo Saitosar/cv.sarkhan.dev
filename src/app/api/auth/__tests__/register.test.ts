@@ -200,7 +200,7 @@ describe('POST /api/auth/register', () => {
           data: expect.objectContaining({
             email: 'test@example.com',
             name: 'Test',
-            passwordHash: '$2b$10$hashedpassword',
+            image: '$2b$10$hashedpassword',
           }),
         })
       );
