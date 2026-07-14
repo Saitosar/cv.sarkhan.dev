@@ -3,7 +3,7 @@
 // Shared helper to load the resume/ATS data file from disk.
 // Keeps all disk I/O in one place for the standalone MCP server.
 
-import { readFileSync } from 'node:fs';
+import { readFileSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { RESUME_DATA_PATH } from '../config';
 import type { ResumeStoreData } from '@/types/resume';
@@ -34,8 +34,7 @@ export function loadResumeData(): ResumeDataFile {
 
 function readStats(path: string): { mtimeMs: number } {
   try {
-    const fs = require('node:fs');
-    return fs.statSync(path);
+    return statSync(path);
   } catch (error) {
     const err = error instanceof Error ? error.message : String(error);
     throw new Error(`Failed to stat resume data file at ${path}: ${err}`);

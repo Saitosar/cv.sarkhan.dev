@@ -98,7 +98,7 @@ export default function SuggestionPanel({
         {!isLoading && errorMessage && visible.length === 0 && (
           <div className="text-center py-8 px-2">
             <p className="text-sm text-[#c4c7c7]">
-              Fix the issue and tap "Refresh" to try again.
+              Fix the issue and tap &quot;Refresh&quot; to try again.
             </p>
           </div>
         )}

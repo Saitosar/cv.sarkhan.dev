@@ -34,7 +34,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     session: async ({ session, user }) => {
       if (session.user) {
-        // @ts-ignore - user id is available via PrismaAdapter
+      // @ts-expect-error - user id is available via PrismaAdapter
         session.user.id = user.id
       }
       return session
