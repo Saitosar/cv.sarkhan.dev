@@ -485,6 +485,11 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Eliminate 300ms tap delay on mobile for interactive elements */
+@utility touch-manipulation {
+  touch-action: manipulation;
+}
+
 @theme inline { 
   --radius-sm: calc(var(--radius) - 4px); 
   --radius-md: calc(var(--radius) - 2px); 

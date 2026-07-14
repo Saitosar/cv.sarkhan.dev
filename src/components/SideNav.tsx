@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { X, Menu, LayoutDashboard, FileText, Briefcase, BarChart3 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -12,7 +12,7 @@ type NavItem = {
   label: string;
   icon: React.ReactNode;
   href: string;
-  isActive: (pathname: string, searchParams: URLSearchParams) => boolean;
+  isActive: (pathname: string, tab: string | null) => boolean;
 };
 
 const navItems: NavItem[] = [
@@ -26,25 +26,31 @@ const navItems: NavItem[] = [
     label: 'Resumes',
     icon: <FileText size={18} />,
     href: '/workspace',
-    isActive: (pathname, searchParams) => pathname.startsWith('/workspace') && !searchParams.get('tab'),
+    isActive: (pathname, tab) => pathname.startsWith('/workspace') && !tab,
   },
   {
     label: 'Jobs',
     icon: <Briefcase size={18} />,
     href: '/workspace?tab=jobs',
-    isActive: (pathname, searchParams) => pathname.startsWith('/workspace') && searchParams.get('tab') === 'jobs',
+    isActive: (pathname, tab) => pathname.startsWith('/workspace') && tab === 'jobs',
   },
   {
     label: 'Insights',
     icon: <BarChart3 size={18} />,
     href: '/workspace?tab=insights',
-    isActive: (pathname, searchParams) => pathname.startsWith('/workspace') && searchParams.get('tab') === 'insights',
+    isActive: (pathname, tab) => pathname.startsWith('/workspace') && tab === 'insights',
   },
 ];
 
 export function SideNav() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  // Parse search params manually to avoid useSearchParams() Suspense boundary delay
+  const [tab, setTab] = React.useState<string | null>(null);
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setTab(new URLSearchParams(window.location.search).get('tab'));
+    }
+  }, [pathname]);
   const [isOpen, setIsOpen] = React.useState(false);
 
   // Close SideNav on route change (mobile)
@@ -72,7 +78,7 @@ export function SideNav() {
         aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
         aria-expanded={isOpen}
         onClick={() => setIsOpen(!isOpen)}
-        className={cn("fixed top-4 left-4 z-[60] flex md:hidden items-center justify-center w-10 h-10 rounded-xl bg-[#1c1b1b] border border-[rgba(255,255,255,0.08)] text-[#e5e2e1] hover:bg-[#353434] transition-all duration-200 shadow-lg", isOpen && 'opacity-0 pointer-events-none')}
+        className={cn("fixed top-4 left-4 z-[60] flex md:hidden items-center justify-center w-10 h-10 rounded-xl bg-[#1c1b1b] border border-[rgba(255,255,255,0.08)] text-[#e5e2e1] hover:bg-[#353434] transition-all duration-200 shadow-lg touch-manipulation", isOpen && 'opacity-0 pointer-events-none')}
       >
         {<Menu size={20} />}
       </button>
@@ -93,7 +99,7 @@ export function SideNav() {
           // Desktop: always visible
           'md:flex',
           // Mobile: slide in/out
-          isOpen ? 'flex translate-x-0' : 'hidden -translate-x-full md:flex md:translate-x-0'
+          isOpen ? 'flex translate-x-0' : 'invisible pointer-events-none -translate-x-full md:visible md:pointer-events-auto md:flex md:translate-x-0'
         )}
         aria-label="Main navigation"
       >
@@ -118,14 +124,14 @@ export function SideNav() {
           type="button"
           aria-label="Close navigation"
           onClick={() => setIsOpen(false)}
-          className="absolute top-4 right-4 flex md:hidden items-center justify-center w-8 h-8 rounded-lg text-[#c4c7c7] hover:text-[#e5e2e1] hover:bg-[#353434] transition-all"
+          className="absolute top-4 right-4 flex md:hidden items-center justify-center w-8 h-8 rounded-lg text-[#c4c7c7] hover:text-[#e5e2e1] hover:bg-[#353434] transition-all touch-manipulation"
         >
           <X size={18} />
         </button>
 
         <div className="flex flex-1 flex-col gap-2 px-2">
           {navItems.map((item) => {
-            const active = item.isActive(pathname, searchParams);
+            const active = item.isActive(pathname, tab);
             return (
               <Link
                 key={item.label}
