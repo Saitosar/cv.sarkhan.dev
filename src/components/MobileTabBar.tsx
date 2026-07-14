@@ -15,7 +15,7 @@ const tabs: { id: MobileTab; label: string; icon: typeof MessageSquare }[] = [
 export default function MobileTabBar({ activeTab, onTabChange }: MobileTabBarProps) {
   return (
     <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 pb-safe">
-      <div className="glass-card mx-2 mb-2 rounded-2xl bg-[rgba(20,19,19,0.85)] backdrop-blur-[16px]">
+      <div className="glass mx-2 mb-2 glow">
         <div
           role="tablist"
           aria-label="Mobile navigation"
@@ -38,12 +38,12 @@ export default function MobileTabBar({ activeTab, onTabChange }: MobileTabBarPro
                   'px-4 py-2 rounded-xl transition-all duration-200',
                   'min-w-[64px] min-h-[56px] active:scale-95 active:opacity-80',
                   isActive
-                    ? 'bg-[#6001d1]/20 text-[#d2bbff]'
+                    ? 'text-[#8B5CF6] drop-shadow-[0_0_8px_rgba(139,92,246,0.6)]'
                     : 'text-[#c4c7c7] active:bg-white/5'
                 )}
               >
-                <Icon size={24} strokeWidth={1.5} />
-                <span className="text-xs font-medium">{tab.label}</span>
+                <Icon size={24} strokeWidth={isActive ? 2 : 1.5} className={cn(isActive && 'animate-bounce-in')} />
+                <span className={cn("text-xs font-medium transition-colors", isActive ? "text-[#8B5CF6]" : "text-[#c4c7c7]")}>{tab.label}</span>
               </button>
             );
           })}

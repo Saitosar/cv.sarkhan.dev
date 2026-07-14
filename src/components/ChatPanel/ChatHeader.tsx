@@ -2,28 +2,13 @@
 
 import * as React from 'react';
 import { cn } from '@/lib/utils';
-import type { ChatHeaderProps, ChatMode } from '@/types/chat';
-import { CHAT_MODES } from '@/types/hr-coach';
-import ModeToggle from './ModeToggle';
+import { Bot } from 'lucide-react';
+import type { ChatHeaderProps } from '@/types/chat';
 
 export default function ChatHeader({
   agentName,
   isOnline,
-  avatarIcon = 'smart_toy',
-  mode = 'aether',
-  onModeToggle,
 }: ChatHeaderProps) {
-  const config = CHAT_MODES[mode];
-
-  const handleModeChange = React.useCallback(
-    (newMode: ChatMode) => {
-      if (newMode !== mode) {
-        onModeToggle?.();
-      }
-    },
-    [mode, onModeToggle]
-  );
-
   return (
     <div className="p-6 border-b border-[rgba(255,255,255,0.08)] flex justify-between items-center bg-[#141313]/30">
       <div className="flex items-center gap-3">
@@ -31,25 +16,17 @@ export default function ChatHeader({
           className={cn(
             'w-8 h-8 rounded-full',
             'flex items-center justify-center',
-            'border transition-colors duration-200'
+            'border transition-colors duration-200',
+            'bg-[rgba(96,1,209,0.1)] border-[rgba(210,187,255,0.3)]'
           )}
-          style={{
-            backgroundColor: config.bgColor,
-            borderColor: config.borderColor,
-          }}
         >
-          <span
-            className="material-symbols-outlined text-sm"
-            style={{ color: config.color }}
-          >
-            {avatarIcon}
-          </span>
+          <Bot size={16} className="text-[#d2bbff]" />
         </div>
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-lg text-[#e5e2e1]">{agentName}</h2>
-            <span className="text-[10px] px-1.5 py-0.5 rounded-full border" style={{ color: config.color, borderColor: config.borderColor, backgroundColor: config.bgColor }}>
-              {config.label}
+            <span className="text-[10px] px-1.5 py-0.5 rounded-full border text-[#d2bbff] border-[rgba(210,187,255,0.3)] bg-[rgba(96,1,209,0.1)]">
+              Aether
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -71,9 +48,6 @@ export default function ChatHeader({
             </span>
           </div>
         </div>
-      </div>
-      <div className="flex items-center">
-        <ModeToggle mode={mode} onChange={handleModeChange} />
       </div>
     </div>
   );

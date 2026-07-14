@@ -24,14 +24,4 @@ export const CHAT_MODES: Record<ChatMode, ChatModeConfig> = {
     bgColor: 'rgba(96, 1, 209, 0.1)',
     description: 'AI Career Expert — supportive, actionable, ATS-focused',
   },
-  'hr-coach': {
-    id: 'hr-coach',
-    label: 'HR Coach',
-    agentName: 'HR Coach',
-    avatarIcon: 'badge',
-    color: '#f97316',
-    borderColor: 'rgba(249, 115, 22, 0.3)',
-    bgColor: 'rgba(249, 115, 22, 0.1)',
-    description: 'Hiring Expert — strict, interview-focused, realistic feedback',
-  },
 };

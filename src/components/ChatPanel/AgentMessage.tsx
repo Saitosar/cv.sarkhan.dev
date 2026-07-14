@@ -3,6 +3,7 @@
 import * as React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { cn } from '@/lib/utils';
+import { Bot } from 'lucide-react';
 import type { AgentMessageProps } from '@/types/chat';
 import { CHAT_MODES } from '@/types/hr-coach';
 import SuggestionChips from './SuggestionChips';
@@ -32,9 +33,7 @@ export default function AgentMessage({
           boxShadow: `0 0 15px ${config.borderColor}`,
         }}
       >
-        <span className="material-symbols-outlined text-white text-sm">
-          {config.avatarIcon}
-        </span>
+        <Bot size={16} className="text-white" />
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">

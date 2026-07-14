@@ -120,10 +120,6 @@ export class ChatSSEService {
                   const storeNow = useChatStore.getState();
                   storeNow.setIsStreaming(false);
                   storeNow.setStatus('ready');
-                  // If HR Coach fails, auto-fallback to Aether
-                  if (storeNow.session.mode === 'hr-coach') {
-                    storeNow.resetModeOnError();
-                  }
                   storeNow.addErrorMessage(
                     `⚠️ **Error:** ${event.error}\n\nPlease try again or check your connection.`,
                     message

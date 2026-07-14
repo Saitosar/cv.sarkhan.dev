@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Paperclip, X } from 'lucide-react';
+import { Paperclip, X, Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { ChatInputProps } from '@/types/chat';
 import VoiceButton from './VoiceButton';
@@ -170,7 +170,7 @@ export default function ChatInput({
                 : 'opacity-40 cursor-not-allowed'
             )}
           >
-            <span className="material-symbols-outlined">send</span>
+            <Send size={20} strokeWidth={2} />
           </button>
         </div>
       </div>

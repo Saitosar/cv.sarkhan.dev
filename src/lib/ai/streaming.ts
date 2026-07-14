@@ -9,26 +9,28 @@ const SSE_HEADERS = {
 
 /**
  * Server-side: writes a single SSE event to the response stream.
+ * Uses ReadableStreamDefaultController.enqueue() — the correct API
+ * for pushing data into a ReadableStream.
  */
 export function writeSSEEvent(
-  writer: WritableStreamDefaultWriter,
+  controller: ReadableStreamDefaultController<Uint8Array>,
   event: RouterStreamEvent
 ): void {
   const encoder = new TextEncoder();
 
   switch (event.type) {
     case 'token':
-      writer.write(
+      controller.enqueue(
         encoder.encode(`data: ${JSON.stringify({ type: 'token', content: event.data })}\n\n`)
       );
       break;
     case 'done':
-      writer.write(
+      controller.enqueue(
         encoder.encode(`data: ${JSON.stringify({ type: 'done', ...(event.data as object) })}\n\n`)
       );
       break;
     case 'error':
-      writer.write(
+      controller.enqueue(
         encoder.encode(`data: ${JSON.stringify({ type: 'error', ...(event.data as object) })}\n\n`)
       );
       break;

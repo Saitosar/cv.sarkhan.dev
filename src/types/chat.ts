@@ -12,7 +12,7 @@ export type SectionType =
   | 'projects'
   | 'general';
 
-export type ChatMode = 'aether' | 'hr-coach';
+export type ChatMode = 'aether';
 
 export interface ChatMessage {
   id: string;
@@ -54,11 +54,6 @@ export interface ChatPanelProps {
 export interface ChatHeaderProps {
   agentName: string;        // "Aether Coach"
   isOnline: boolean;
-  avatarIcon?: string;      // Material icon name, default "smart_toy"
-  /** Current chat mode */
-  mode?: ChatMode;
-  /** Called when mode toggle is clicked */
-  onModeToggle?: () => void;
 }
 
 export interface SessionBadgeProps {

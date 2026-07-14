@@ -74,7 +74,7 @@ export function SideNav() {
         onClick={() => setIsOpen(!isOpen)}
         className="fixed top-4 left-4 z-[60] flex md:hidden items-center justify-center w-10 h-10 rounded-xl bg-[#1c1b1b] border border-[rgba(255,255,255,0.08)] text-[#e5e2e1] hover:bg-[#353434] transition-all duration-200 shadow-lg"
       >
-        {isOpen ? <X size={20} /> : <Menu size={20} />}
+        {<Menu size={20} />}
       </button>
 
       {/* Overlay backdrop — visible on mobile when SideNav is open */}

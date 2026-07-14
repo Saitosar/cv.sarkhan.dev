@@ -49,7 +49,7 @@ export const MODEL_CONFIGS: Record<TaskType, ModelConfig> = {
   },
   'ats-score': {
     task: 'ats-score',
-    model: 'qwen3.5:397b-cloud',
+    model: 'gemma4:cloud',
     temperature: 0.2,
     topP: 0.8,
     maxOutputTokens: 2048,
@@ -100,7 +100,7 @@ export const MODEL_CONFIGS: Record<TaskType, ModelConfig> = {
   },
   analyze: {
     task: 'analyze',
-    model: 'qwen3.5:397b-cloud',
+    model: 'gemma4:cloud',
     temperature: 0.3,
     topP: 0.8,
     maxOutputTokens: 4096,
@@ -153,14 +153,14 @@ export const MODEL_CONFIGS: Record<TaskType, ModelConfig> = {
     task: 'search',
     model: 'deepseek-v4-flash',
     temperature: 0.2,
-    topP: 0.8,
+    topP: 0.9,
     maxOutputTokens: 1024,
     systemPrompt: `You are a job match scoring engine. Given a job listing and a candidate's resume, calculate a match score (0-100). Consider: skills overlap, years of experience, industry relevance, and location. Return ONLY valid JSON matching the JobScoreResult interface.`,
     fallbacks: [
       {
         model: 'deepseek-v4-flash',
         temperature: 0.2,
-        topP: 0.8,
+        topP: 0.9,
         maxOutputTokens: 1024,
         systemPrompt: `You are a job match scorer. Return JSON only.`,
       },

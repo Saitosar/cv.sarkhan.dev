@@ -6,7 +6,10 @@ export async function signSessionToken(payload: {
   telegramId: string;
   role: string;
 }): Promise<string> {
-  const secret = process.env.SESSION_SECRET || 'fallback-secret-do-not-use-in-prod';
+  const secret = process.env.NEXTAUTH_SECRET;
+  if (!secret) {
+    throw new Error('NEXTAUTH_SECRET is not defined in environment variables');
+  }
   
   // Create a simple token for now since the project doesn't have a full JWT library 
   // implementation yet, but the documentation expects a token.
@@ -32,7 +35,10 @@ export async function verifySessionToken(token: string) {
     throw new Error('Invalid token format');
   }
   
-  const secret = process.env.SESSION_SECRET || 'fallback-secret-do-not-use-in-prod';
+  const secret = process.env.NEXTAUTH_SECRET;
+  if (!secret) {
+    throw new Error('NEXTAUTH_SECRET is not defined in environment variables');
+  }
   const expectedSignature = crypto
     .createHmac('sha256', secret)
     .update(`${headerB64}.${dataB64}`)

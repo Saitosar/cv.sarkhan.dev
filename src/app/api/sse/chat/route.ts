@@ -27,8 +27,6 @@ export async function POST(req: Request) {
 
     const stream = new ReadableStream({
       async start(controller) {
-        const writer = controller as unknown as WritableStreamDefaultWriter;
-
         try {
           const generator = router.routeStream({
             task: 'chat',
@@ -42,7 +40,7 @@ export async function POST(req: Request) {
           });
 
           for await (const event of generator) {
-            writeSSEEvent(writer, event);
+            writeSSEEvent(controller, event);
 
             if (event.type === 'done' || event.type === 'error') {
               controller.close();
@@ -51,7 +49,7 @@ export async function POST(req: Request) {
           }
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-          writeSSEEvent(writer, {
+          writeSSEEvent(controller, {
             type: 'error',
             data: { error: errorMessage, code: 'INTERNAL_ERROR' },
           });
