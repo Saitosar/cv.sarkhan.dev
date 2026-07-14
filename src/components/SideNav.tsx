@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { X, Menu, LayoutDashboard, FileText, Briefcase, BarChart3 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -43,14 +42,24 @@ const navItems: NavItem[] = [
 ];
 
 export function SideNav() {
-  const pathname = usePathname();
+  const [pathname, setPathname] = React.useState('/');
   // Parse search params manually to avoid useSearchParams() Suspense boundary delay
   const [tab, setTab] = React.useState<string | null>(null);
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
+      setPathname(window.location.pathname);
       setTab(new URLSearchParams(window.location.search).get('tab'));
     }
-  }, [pathname]);
+  }, []);
+  // Also update on popstate (back/forward navigation)
+  React.useEffect(() => {
+    const handlePopState = () => {
+      setPathname(window.location.pathname);
+      setTab(new URLSearchParams(window.location.search).get('tab'));
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
   const [isOpen, setIsOpen] = React.useState(false);
 
   // Close SideNav on route change (mobile)
@@ -95,7 +104,7 @@ export function SideNav() {
       {/* SideNav */}
       <nav
         className={cn(
-          'fixed left-0 top-0 z-50 h-screen w-72 flex-col gap-4 border-r border-[rgba(255,255,255,0.08)] bg-[#1c1b1b] py-8 shadow-2xl backdrop-blur-xl transition-transform duration-300 ease-in-out',
+          'fixed left-0 top-0 z-50 h-screen w-72 flex-col gap-4 border-r border-[rgba(255,255,255,0.08)] bg-[#1c1b1b] py-8 shadow-2xl transition-transform duration-200 ease-in-out',
           // Desktop: always visible
           'md:flex',
           // Mobile: slide in/out
