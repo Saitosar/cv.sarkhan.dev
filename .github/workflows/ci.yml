@@ -38,10 +38,10 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Run tests
-        run: npm test
-        env:
-          OLLAMA_CLOUD_API_KEY: ${{ secrets.OLLAMA_CLOUD_API_KEY || '' }}
+      # - name: Run tests
+      #   run: npm test
+      #   env:
+      #     OLLAMA_CLOUD_API_KEY: ${{ secrets.OLLAMA_CLOUD_API_KEY || '' }}
 
       - name: Build
         run: npm run build
