@@ -9,15 +9,15 @@ module.exports = {
       'icon-pen': '#7dd3fc',
       'icon-folder': '#c4b5fd',
       'icon-linkedin': '#38bdf8',
-      neonViolet: "#8B5CF6",
-      neonCyan: "#06B6D4",
+      neonViolet: "#6001d1",
+      neonCyan: "#4F46E5",
     },
       fontFamily: {
         display: ["'Space Grotesk'", "ui-sans-serif", "system-ui"],
         body: ["Inter", "ui-sans-serif", "system-ui"],
       },
       boxShadow: {
-        neon: "0 0 20px rgba(139,92,246,.35), 0 0 30px rgba(6,182,212,.25)",
+        neon: "0 0 20px rgba(96,1,209,.35), 0 0 30px rgba(79,70,229,.25)",
       },
     },
   },

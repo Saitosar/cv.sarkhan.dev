@@ -16,7 +16,7 @@ export default function SubscriptionBadge() {
         'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold',
         'transition-all duration-200 hover:scale-105',
         isPro
-          ? 'bg-[#6001d1]/30 text-[#d2bbff] border border-[#8B5CF6]/50 shadow-[0_0_12px_rgba(96,1,209,0.25)]'
+          ? 'bg-[#6001d1]/30 text-[#d2bbff] border border-[#6001d1]/50 shadow-[0_0_12px_rgba(96,1,209,0.25)]'
           : 'bg-white/10 text-[#c4c7c7] border border-white/10 hover:bg-white/15'
       )}
       title={isPro ? 'Pro plan active' : 'Upgrade to Pro'}

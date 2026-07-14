@@ -72,7 +72,7 @@ export function SideNav() {
         aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
         aria-expanded={isOpen}
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed top-4 left-4 z-[60] flex md:hidden items-center justify-center w-10 h-10 rounded-xl bg-[#1c1b1b] border border-[rgba(255,255,255,0.08)] text-[#e5e2e1] hover:bg-[#353434] transition-all duration-200 shadow-lg"
+        className={cn("fixed top-4 left-4 z-[60] flex md:hidden items-center justify-center w-10 h-10 rounded-xl bg-[#1c1b1b] border border-[rgba(255,255,255,0.08)] text-[#e5e2e1] hover:bg-[#353434] transition-all duration-200 shadow-lg", isOpen && 'opacity-0 pointer-events-none')}
       >
         {<Menu size={20} />}
       </button>

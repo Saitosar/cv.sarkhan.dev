@@ -38,12 +38,12 @@ export default function MobileTabBar({ activeTab, onTabChange }: MobileTabBarPro
                   'px-4 py-2 rounded-xl transition-all duration-200',
                   'min-w-[64px] min-h-[56px] active:scale-95 active:opacity-80',
                   isActive
-                    ? 'text-[#8B5CF6] drop-shadow-[0_0_8px_rgba(139,92,246,0.6)]'
+                    ? 'text-[#6001d1] drop-shadow-[0_0_8px_rgba(96,1,209,0.6)]'
                     : 'text-[#c4c7c7] active:bg-white/5'
                 )}
               >
                 <Icon size={24} strokeWidth={isActive ? 2 : 1.5} className={cn(isActive && 'animate-bounce-in')} />
-                <span className={cn("text-xs font-medium transition-colors", isActive ? "text-[#8B5CF6]" : "text-[#c4c7c7]")}>{tab.label}</span>
+                <span className={cn("text-xs font-medium transition-colors", isActive ? "text-[#6001d1]" : "text-[#c4c7c7]")}>{tab.label}</span>
               </button>
             );
           })}

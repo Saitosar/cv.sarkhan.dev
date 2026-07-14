@@ -27,14 +27,14 @@
   --border: rgba(255, 255, 255, 0.1); 
   --input: rgba(255, 255, 255, 0.15); 
   --ring: #8e8e8e; 
-  --chart-1: #8a4ecf; 
+  --chart-1: #6001d1; 
   --chart-2: #29b6f6; 
   --chart-3: #e1b12c; 
   --chart-4: #d81b60; 
   --chart-5: #f4511e; 
   --sidebar: #141313; 
   --sidebar-foreground: #fafafa; 
-  --sidebar-primary: #8a4ecf; 
+  --sidebar-primary: #6001d1; 
   --sidebar-primary-foreground: #fafafa; 
   --sidebar-accent: #252525; 
   --sidebar-accent-foreground: #fafafa; 
@@ -237,10 +237,10 @@ h1, h2, h3, h4, h5, h6,
 /* неоновое свечение снаружи */
 .glow {
   box-shadow:
-    0 0 0 1px rgba(139,92,246,.35) inset,
+    0 0 0 1px rgba(96,1,209,.35) inset,
     0 8px 30px rgba(0,0,0,.45),
-    0 0 36px rgba(139,92,246,.25),
-    0 0 60px rgba(6,182,212,.20);
+    0 0 36px rgba(96,1,209,.25),
+    0 0 60px rgba(79,70,229,.20);
 }
 
 /* градиентная кайма (бордер) */
@@ -252,7 +252,7 @@ h1, h2, h3, h4, h5, h6,
   inset: -1px; 
   border-radius: 17px; /* border-radius + 1px */
   padding: 1px;
-  background: linear-gradient(135deg, #06B6D4AA, #8B5CF6AA);
+  background: linear-gradient(135deg, #4F46E5AA, #6001d1AA);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor; 
   mask-composite: exclude;
@@ -274,7 +274,7 @@ h1, h2, h3, h4, h5, h6,
   /* Мы добавляем градиент поверх цвета фона */
   background-image: radial-gradient(
     circle at 50% 0%,
-    rgba(139, 92, 246, 0.15),
+    rgba(96, 1, 209, 0.15),
     transparent 60%
   );
 
@@ -286,7 +286,7 @@ h1, h2, h3, h4, h5, h6,
   /* --- Усиление свечения при наведении --- */
   background-image: radial-gradient(
     circle at 50% 0%,
-    rgba(139, 92, 246, 0.25),
+    rgba(96, 1, 209, 0.25),
     transparent 70%
   );
 
@@ -306,7 +306,7 @@ h1, h2, h3, h4, h5, h6,
   background-color: rgba(255, 255, 255, 0.05);
   background-image: radial-gradient(
     circle at 50% 100%, /* Свечение снизу */
-    rgba(139, 92, 246, 0.15), /* Violet */
+    rgba(96, 1, 209, 0.15), /* Violet */
     transparent 70%
   );
   border: 1px solid rgba(146, 204, 255, 0.552);
@@ -330,8 +330,8 @@ h1, h2, h3, h4, h5, h6,
   transform: scale(1.03); /* Легкое увеличение */
 
   /* Эффект неонового свечения, зажигающегося внутри */
-  box-shadow: 0 0 25px rgba(139, 92, 246, 0.5), /* Внешнее свечение */
-              inset 0 0 15px rgba(139, 92, 246, 0.3); /* Внутреннее свечение */
+  box-shadow: 0 0 25px rgba(96, 1, 209, 0.5), /* Внешнее свечение */
+              inset 0 0 15px rgba(96, 1, 209, 0.3); /* Внутреннее свечение */
 }
 
 /* Новые классы для свечения иконок */
@@ -368,7 +368,7 @@ h1, h2, h3, h4, h5, h6,
   background-color: rgba(255, 255, 255, 0.05);
   background-image: radial-gradient(
     circle at 50% 100%,
-    rgba(139, 92, 246, 0.15),
+    rgba(96, 1, 209, 0.15),
     transparent 70%
   );
   border: 1px solid rgba(146, 204, 255, 0.552);
@@ -386,8 +386,8 @@ h1, h2, h3, h4, h5, h6,
   background-color: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.4);
   transform: scale(1.03);
-  box-shadow: 0 0 25px rgba(139, 92, 246, 0.5),
-              inset 0 0 15px rgba(139, 92, 246, 0.3);
+  box-shadow: 0 0 25px rgba(96, 1, 209, 0.5),
+              inset 0 0 15px rgba(96, 1, 209, 0.3);
 }
 
 button,
@@ -543,14 +543,14 @@ html {
   --border: rgba(255, 255, 255, 0.1); 
   --input: rgba(255, 255, 255, 0.15); 
   --ring: #8e8e8e; 
-  --chart-1: #8a4ecf; 
+  --chart-1: #6001d1; 
   --chart-2: #29b6f6; 
   --chart-3: #e1b12c; 
   --chart-4: #d81b60; 
   --chart-5: #f4511e; 
   --sidebar: #343434; 
   --sidebar-foreground: #fafafa; 
-  --sidebar-primary: #8a4ecf; 
+  --sidebar-primary: #6001d1; 
   --sidebar-primary-foreground: #fafafa; 
   --sidebar-accent: #454545; 
   --sidebar-accent-foreground: #fafafa; 

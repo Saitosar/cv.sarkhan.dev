@@ -22,7 +22,7 @@ export const modernPalettes: ColorScheme[] = [
 ];
 
 export const creativePalettes: ColorScheme[] = [
-  { name: 'Neon Violet', primary: '#8B5CF6', secondary: '' },
+  { name: 'Neon Violet', primary: '#6001d1', secondary: '' },
   { name: 'Hot Pink', primary: '#EC4899', secondary: '' },
   { name: 'Lime Green', primary: '#84CC16', secondary: '' },
   { name: 'Electric Orange', primary: '#F97316', secondary: '' },

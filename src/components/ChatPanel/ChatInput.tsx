@@ -125,9 +125,9 @@ export default function ChatInput({
           disabled={disabled}
           aria-label="Attach file"
           className={cn(
-            'text-[#d2bbff] p-2 rounded-lg transition-colors shrink-0',
+            'text-[#c4c7c7] p-2 rounded-lg transition-colors shrink-0',
             !disabled
-              ? 'hover:bg-[#6001d1]/20 active:bg-[#6001d1]/30'
+              ? 'hover:text-[#d2bbff] hover:bg-[#6001d1]/20 active:bg-[#6001d1]/30'
               : 'opacity-40 cursor-not-allowed'
           )}
         >
@@ -164,9 +164,9 @@ export default function ChatInput({
             disabled={!canSend}
             aria-label="Send message"
             className={cn(
-              'text-[#d2bbff] p-2 rounded-lg transition-colors',
+              'text-[#c4c7c7] p-2 rounded-lg transition-colors',
               canSend
-                ? 'hover:bg-[#6001d1]/20 active:bg-[#6001d1]/30'
+                ? 'hover:text-[#d2bbff] hover:bg-[#6001d1]/20 active:bg-[#6001d1]/30'
                 : 'opacity-40 cursor-not-allowed'
             )}
           >

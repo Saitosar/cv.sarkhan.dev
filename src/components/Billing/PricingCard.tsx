@@ -33,7 +33,7 @@ const PricingCard = React.memo(function PricingCard({
         'glass-card transition-all duration-300',
         'border',
         isPro
-          ? 'border-[#8B5CF6]/40 shadow-[0_0_40px_rgba(139,92,246,0.2)]'
+          ? 'border-[#6001d1]/40 shadow-[0_0_40px_rgba(96,1,209,0.2)]'
           : 'border-white/10'
       )}
     >

@@ -20,12 +20,12 @@ export default function ChatHeader({
             'bg-[rgba(96,1,209,0.1)] border-[rgba(210,187,255,0.3)]'
           )}
         >
-          <Bot size={16} className="text-[#d2bbff]" />
+          <Bot size={16} className="text-[#6001d1]" />
         </div>
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-lg text-[#e5e2e1]">{agentName}</h2>
-            <span className="text-[10px] px-1.5 py-0.5 rounded-full border text-[#d2bbff] border-[rgba(210,187,255,0.3)] bg-[rgba(96,1,209,0.1)]">
+            <span className="text-[10px] px-1.5 py-0.5 rounded-full border text-[#6001d1] border-[rgba(210,187,255,0.3)] bg-[rgba(96,1,209,0.1)]">
               Aether
             </span>
           </div>
