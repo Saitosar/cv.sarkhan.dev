@@ -35,7 +35,7 @@ export default function MobileTabBar({ activeTab, onTabChange }: MobileTabBarPro
                 aria-label={`${tab.label} tab`}
                 className={cn(
                   'flex flex-col items-center justify-center gap-1',
-                  'px-4 py-2 rounded-xl transition-all duration-200',
+                  'px-4 py-2 rounded-xl',
                   'min-w-[64px] min-h-[56px] active:scale-95 active:opacity-80',
                   isActive
                     ? 'text-[#6001d1] drop-shadow-[0_0_8px_rgba(96,1,209,0.6)]'

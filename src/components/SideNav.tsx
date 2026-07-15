@@ -104,7 +104,7 @@ export function SideNav() {
       {/* SideNav */}
       <nav
         className={cn(
-          'fixed left-0 top-0 z-50 h-screen w-72 flex-col gap-4 border-r border-[rgba(255,255,255,0.08)] bg-[#1c1b1b] py-8 shadow-2xl',
+          'fixed left-0 top-0 z-50 h-screen w-72 flex-col gap-4 border-r border-[rgba(255,255,255,0.08)] bg-[#1c1b1b] py-8 shadow-2xl will-change-transform',
           // Desktop: always visible
           'md:flex',
           // Mobile: slide in/out — use hidden for instant hide, flex for show
@@ -147,7 +147,7 @@ export function SideNav() {
                 href={item.href}
                 onClick={() => setIsOpen(false)}
                 className={cn(
-                  'mx-2 flex items-center gap-3 rounded-lg px-4 py-3 transition-all',
+                  'mx-2 flex items-center gap-3 rounded-lg px-4 py-3',
                   active
                     ? 'bg-[#6001d1] text-white'
                     : 'text-[#c4c7c7] hover:bg-[#353434] hover:text-[#e5e2e1]'

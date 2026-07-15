@@ -1,8 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { Suspense } from 'react';
-import { usePathname } from 'next/navigation';
 import BackgroundFX from '@/components/BackgroundFX';
 import { MobileNav } from '@/components/MobileNav';
 import { SideNav } from '@/components/SideNav';
@@ -12,8 +10,12 @@ export default function ClientLayoutWrapper({
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
-  const isTelegram = pathname.startsWith('/telegram');
+  const [isTelegram, setIsTelegram] = React.useState(false);
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsTelegram(window.location.pathname.startsWith('/telegram'));
+    }
+  }, []);
 
   if (isTelegram) {
     return <>{children}</>;
@@ -22,9 +24,7 @@ export default function ClientLayoutWrapper({
   return (
     <>
       <BackgroundFX />
-      <Suspense fallback={null}>
-        <SideNav />
-      </Suspense>
+      <SideNav />
       <main className="ml-0 md:ml-72">
         {children}
       </main>

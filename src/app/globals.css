@@ -399,6 +399,16 @@ a,
 
 /* Touch-optimized interaction styles */
 @media (hover: none) and (pointer: coarse) {
+  /* Disable backdrop-filter on mobile — huge GPU perf killer */
+  .glass-panel,
+  .glass,
+  .glass-card,
+  .card-button,
+  .signin-button {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
   /* Remove hover effects on touch devices */
   .card-3d:hover {
     transform: translateY(0);

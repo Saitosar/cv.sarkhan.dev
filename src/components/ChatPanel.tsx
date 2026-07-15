@@ -89,7 +89,7 @@ export default function ChatPanel({ className }: ChatPanelProps) {
       </div>
       <div
         ref={inputRef}
-        className="sticky bottom-0 z-50 shrink-0 p-4 border-t border-[rgba(255,255,255,0.08)] bg-[#141313]/80 backdrop-blur-md"
+        className="sticky bottom-0 z-50 shrink-0 p-4 border-t border-[rgba(255,255,255,0.08)] bg-[#141313]/80"
       >
         <div className="flex flex-wrap gap-2 mb-3">
           <SuggestionChips

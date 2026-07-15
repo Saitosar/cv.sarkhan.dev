@@ -23,7 +23,7 @@ export default function PricingToggle({
 
   return (
     <div
-      className="inline-flex items-center rounded-full border border-white/10 bg-[#141313]/70 p-1 backdrop-blur-sm"
+      className="inline-flex items-center rounded-full border border-white/10 bg-[#141313]/70 p-1"
       role="group"
       aria-label="Billing cycle"
     >

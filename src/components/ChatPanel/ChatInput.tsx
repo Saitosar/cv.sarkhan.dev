@@ -89,7 +89,7 @@ export default function ChatInput({
             className={cn(
               'inline-flex items-center gap-1.5 pl-3 pr-1.5 py-1',
               'rounded-full bg-[#6001d1]/20 border border-[#d2bbff]/30',
-              'text-xs text-[#e5e2e1] backdrop-blur-sm'
+              'text-xs text-[#e5e2e1]'
             )}
           >
             <span className="max-w-[200px] truncate">{attachment.name}</span>
