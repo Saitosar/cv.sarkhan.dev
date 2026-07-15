@@ -4,7 +4,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import { Home, Briefcase, Sparkles } from 'lucide-react';
 
-export function MobileNav() {
+export const MobileNav = React.memo(function MobileNav() {
   const [pathname, setPathname] = React.useState('/');
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
