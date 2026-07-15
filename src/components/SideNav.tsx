@@ -92,23 +92,25 @@ export function SideNav() {
         {<Menu size={20} />}
       </button>
 
-      {/* Overlay backdrop — visible on mobile when SideNav is open */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/50 md:hidden"
-          onClick={() => setIsOpen(false)}
-          aria-hidden="true"
-        />
-      )}
+      {/* Overlay backdrop — always in DOM, toggled via opacity/pointer-events to avoid layout reflow */}
+      <div
+        className={cn(
+          'fixed inset-0 z-40 bg-black/50 md:hidden transition-opacity duration-200',
+          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        )}
+        onClick={() => setIsOpen(false)}
+        aria-hidden="true"
+      />
 
-      {/* SideNav */}
+      {/* SideNav — always in DOM, toggled via translate/opacity/visibility to avoid layout reflow */}
       <nav
         className={cn(
-          'fixed left-0 top-0 z-50 h-screen w-72 flex-col gap-4 border-r border-[rgba(255,255,255,0.08)] bg-[#1c1b1b] py-8 shadow-2xl will-change-transform',
+          'fixed left-0 top-0 z-50 h-screen w-72 flex-col gap-4 border-r border-[rgba(255,255,255,0.08)] bg-[#1c1b1b] py-8 shadow-2xl',
           // Desktop: always visible
           'md:flex',
-          // Mobile: slide in/out — use hidden for instant hide, flex for show
-          isOpen ? 'flex translate-x-0' : 'hidden -translate-x-full md:flex md:translate-x-0'
+          // Mobile: slide in/out — use translate + visibility to avoid layout reflow
+          'flex transition-transform duration-200',
+          isOpen ? 'translate-x-0 visible' : '-translate-x-full invisible md:visible md:translate-x-0'
         )}
         aria-label="Main navigation"
       >
