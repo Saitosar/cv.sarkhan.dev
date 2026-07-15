@@ -1,11 +1,16 @@
 'use client';
 
+import * as React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { Home, Briefcase, Sparkles } from 'lucide-react';
 
 export function MobileNav() {
-  const pathname = usePathname();
+  const [pathname, setPathname] = React.useState('/');
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setPathname(window.location.pathname);
+    }
+  }, []);
 
   // Workspace has its own MobileTabBar inside SplitScreen; avoid double bottom bars.
   if (pathname.startsWith('/workspace')) {
