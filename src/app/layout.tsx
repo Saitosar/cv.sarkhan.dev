@@ -73,15 +73,8 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="512x512" href="/manifest-icon-512.maskable.png" />
       </head>
       {/* Применяем переменные шрифтов к телу документа */}
-      <body className={`${inter.variable} ${geist.variable} ${interTight.variable} font-sans pb-20 md:pb-0`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-          storageKey="cv-theme"
-        >
+      <body className={`${inter.variable} ${geist.variable} ${interTight.variable} font-sans pb-20 md:pb-0 dark`}>
           <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
-        </ThemeProvider>
       </body>
     </html>
   );
