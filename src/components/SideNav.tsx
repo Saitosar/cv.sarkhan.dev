@@ -87,7 +87,7 @@ export function SideNav() {
         aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
         aria-expanded={isOpen}
         onClick={() => setIsOpen(!isOpen)}
-        className={cn("fixed top-4 left-4 z-[60] flex md:hidden items-center justify-center w-10 h-10 rounded-xl bg-[#1c1b1b] border border-[rgba(255,255,255,0.08)] text-[#e5e2e1] hover:bg-[#353434] transition-all duration-200 shadow-lg touch-manipulation", isOpen && 'opacity-0 pointer-events-none')}
+        className={cn("fixed top-4 left-4 z-[60] flex md:hidden items-center justify-center w-10 h-10 rounded-xl bg-[#1c1b1b] border border-[rgba(255,255,255,0.08)] text-[#e5e2e1] hover:bg-[#353434] shadow-lg touch-manipulation", isOpen && 'opacity-0 pointer-events-none')}
       >
         {<Menu size={20} />}
       </button>
@@ -95,7 +95,7 @@ export function SideNav() {
       {/* Overlay backdrop — visible on mobile when SideNav is open */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-40 bg-black/50 md:hidden"
           onClick={() => setIsOpen(false)}
           aria-hidden="true"
         />
@@ -133,7 +133,7 @@ export function SideNav() {
           type="button"
           aria-label="Close navigation"
           onClick={() => setIsOpen(false)}
-          className="absolute top-4 right-4 flex md:hidden items-center justify-center w-8 h-8 rounded-lg text-[#c4c7c7] hover:text-[#e5e2e1] hover:bg-[#353434] transition-all touch-manipulation"
+          className="absolute top-4 right-4 flex md:hidden items-center justify-center w-8 h-8 rounded-lg text-[#c4c7c7] hover:text-[#e5e2e1] hover:bg-[#353434] touch-manipulation"
         >
           <X size={18} />
         </button>
