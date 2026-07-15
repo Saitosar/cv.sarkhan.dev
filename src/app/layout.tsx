@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, Geist } from 'next/font/google';
 import './globals.css';
 import ClientLayoutWrapper from '@/components/ClientLayoutWrapper';
+import { SideNavShell } from '@/components/SideNavShell';
 import { ThemeProvider } from '@/components/ThemeProvider';
 
 // Body font - Inter for excellent readability
@@ -74,6 +75,7 @@ export default function RootLayout({
       </head>
       {/* Применяем переменные шрифтов к телу документа */}
       <body className={`${inter.variable} ${geist.variable} ${interTight.variable} font-sans pb-20 md:pb-0 dark`}>
+          <SideNavShell />
           <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
       </body>
     </html>

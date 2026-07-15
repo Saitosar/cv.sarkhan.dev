@@ -3,7 +3,6 @@
 import * as React from 'react';
 import BackgroundFX from '@/components/BackgroundFX';
 import { MobileNav } from '@/components/MobileNav';
-import { SideNav } from '@/components/SideNav';
 
 export default function ClientLayoutWrapper({
   children,
@@ -24,7 +23,6 @@ export default function ClientLayoutWrapper({
   return (
     <>
       <BackgroundFX />
-      <SideNav />
       <main className="ml-0 md:ml-72">
         {children}
       </main>

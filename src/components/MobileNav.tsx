@@ -58,4 +58,4 @@ export const MobileNav = React.memo(function MobileNav() {
       </div>
     </nav>
   );
-}
+});
