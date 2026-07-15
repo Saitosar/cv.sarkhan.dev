@@ -67,22 +67,6 @@ export function SideNav() {
     setIsOpen(false);
   }, [pathname]);
 
-  // Prevent body scroll when SideNav is open on mobile
-  // Use requestAnimationFrame to delay overflow reset — avoids layout thrashing
-  // on heavy pages (dashboard) when SideNav closes
-  React.useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      requestAnimationFrame(() => {
-        document.body.style.overflow = '';
-      });
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isOpen]);
-
   return (
     <>
       {/* Hamburger button — visible on mobile only */}
