@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { Inter, Geist } from 'next/font/google';
 import './globals.css';
 import ClientLayoutWrapper from '@/components/ClientLayoutWrapper';
-import { SideNavShell } from '@/components/SideNavShell';
 import { ThemeProvider } from '@/components/ThemeProvider';
 
 // Body font - Inter for excellent readability
@@ -74,7 +73,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="512x512" href="/manifest-icon-512.maskable.png" />
       </head>
       {/* Применяем переменные шрифтов к телу документа */}
-      <body className={`${inter.variable} ${geist.variable} ${interTight.variable} font-sans pb-20 md:pb-0 dark`}>
+      <body className={`${inter.variable} ${geist.variable} ${interTight.variable} font-sans dark`}>
           <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
       </body>
     </html>

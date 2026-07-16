@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import BackgroundFX from '@/components/BackgroundFX';
-import { MobileNav } from '@/components/MobileNav';
+import BottomTabBar from '@/components/BottomTabBar';
 
 export default function ClientLayoutWrapper({
   children,
@@ -26,6 +26,7 @@ export default function ClientLayoutWrapper({
       <main className="ml-0 md:ml-72">
         {children}
       </main>
+      <BottomTabBar />
     </>
   );
 }
