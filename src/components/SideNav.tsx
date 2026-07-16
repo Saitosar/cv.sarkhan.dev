@@ -75,7 +75,8 @@ export function SideNav() {
         aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
         aria-expanded={isOpen}
         onClick={() => setIsOpen(!isOpen)}
-        className={cn("fixed top-4 left-4 z-[60] flex md:hidden items-center justify-center w-10 h-10 rounded-xl bg-[#1c1b1b] border border-[rgba(255,255,255,0.08)] text-[#e5e2e1] hover:bg-[#353434] shadow-lg touch-manipulation", isOpen && 'opacity-0 pointer-events-none')}
+        className={cn("fixed top-4 left-4 z-[60] flex md:hidden items-center justify-center w-10 h-10 rounded-xl bg-[#1c1b1b] border border-[rgba(255,255,255,0.08)] text-[#e5e2e1] hover:bg-[#353434] shadow-lg", isOpen && 'opacity-0 pointer-events-none')}
+        style={{ touchAction: 'manipulation' }}
       >
         {<Menu size={20} />}
       </button>
@@ -83,17 +84,19 @@ export function SideNav() {
       {/* Overlay backdrop — always in DOM, toggled via opacity/pointer-events to avoid layout reflow */}
       <div
         className={cn(
-          'fixed inset-0 z-40 bg-black/50 md:hidden transition-opacity duration-200 touch-manipulation',
+          'fixed inset-0 z-40 bg-black/50 md:hidden transition-opacity duration-200',
           isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         )}
+        style={{ touchAction: 'manipulation' }}
         onClick={() => setIsOpen(false)}
         aria-hidden="true"
       />
 
       {/* SideNav — always in DOM, toggled via translate/opacity/visibility to avoid layout reflow */}
       <nav
+        style={{ touchAction: 'manipulation' }}
         className={cn(
-          'fixed left-0 top-0 z-50 h-screen w-72 flex-col gap-4 border-r border-[rgba(255,255,255,0.08)] bg-[#1c1b1b] py-8 shadow-2xl touch-manipulation',
+          'fixed left-0 top-0 z-50 h-screen w-72 flex-col gap-4 border-r border-[rgba(255,255,255,0.08)] bg-[#1c1b1b] py-8 shadow-2xl',
           // Desktop: always visible
           'md:flex',
           // Mobile: slide in/out — use translate + visibility to avoid layout reflow
