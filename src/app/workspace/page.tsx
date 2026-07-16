@@ -1,25 +1,38 @@
 'use client';
 
 import * as React from 'react';
+import { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import SplitScreen from '@/components/SplitScreen';
 import ChatPanel from '@/components/ChatPanel';
 import CanvasPanel from '@/components/CanvasPanel';
-import JobSearchPanel from '@/components/JobSearch/JobSearchPanel';
 import { cn } from '@/lib/utils';
-import { Briefcase, FileText } from 'lucide-react';
-import dynamic from 'next/dynamic';
+import { Briefcase, FileText, Lock } from 'lucide-react';
 
-const ProFeatureGateComponent = dynamic(
-  () => import('@/components/Billing/ProFeatureGate'),
-  { ssr: false, loading: () => (
-    <div className="w-full h-full glass-panel rounded-2xl flex items-center justify-center">
-      <span className="text-sm text-[#c4c7c7]">Loading…</span>
+function JobsPlaceholder() {
+  return (
+    <div className="flex h-full items-center justify-center p-6">
+      <div className="text-center">
+        <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#2b2a2a]/80 flex items-center justify-center">
+          <Lock size={32} className="text-[#c4c7c7]" />
+        </div>
+        <h3 className="text-lg font-semibold text-[#e5e2e1] mb-2">В разработке</h3>
+        <p className="text-sm text-[#c4c7c7] max-w-[240px] mx-auto">
+          Поиск и отслеживание вакансий скоро появятся. Следите за обновлениями!
+        </p>
+      </div>
     </div>
-  ) }
-);
+  );
+}
 
-export default function WorkspacePage() {
-  const [showJobs, setShowJobs] = React.useState(false);
+function WorkspaceContent() {
+  const searchParams = useSearchParams();
+  const tab = searchParams.get('tab');
+  const [showJobs, setShowJobs] = React.useState(tab === 'jobs');
+
+  React.useEffect(() => {
+    setShowJobs(tab === 'jobs');
+  }, [tab]);
 
   return (
     <div className="h-[calc(100dvh-48px)] md:h-[calc(100dvh-64px)] flex flex-col">
@@ -29,9 +42,7 @@ export default function WorkspacePage() {
           right={
             <div className="relative w-full h-full">
               {showJobs ? (
-                <ProFeatureGateComponent featureName="AI Job Search">
-                  <JobSearchPanel />
-                </ProFeatureGateComponent>
+                <JobsPlaceholder />
               ) : (
                 <CanvasPanel />
               )}
@@ -44,6 +55,18 @@ export default function WorkspacePage() {
         />
       </div>
     </div>
+  );
+}
+
+export default function WorkspacePage() {
+  return (
+    <Suspense fallback={
+      <div className="h-[calc(100dvh-48px)] md:h-[calc(100dvh-64px)] flex items-center justify-center">
+        <span className="text-sm text-[#c4c7c7]">Loading workspace...</span>
+      </div>
+    }>
+      <WorkspaceContent />
+    </Suspense>
   );
 }
 

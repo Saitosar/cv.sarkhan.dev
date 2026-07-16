@@ -22,10 +22,10 @@ export default function AgentMessage({
   const config = CHAT_MODES[source];
 
   return (
-    <div className="flex gap-4 max-w-[90%]">
+    <div className="flex gap-3 max-w-[95%] md:max-w-[90%]">
       <div
         className={cn(
-          'w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center',
+          'w-7 h-7 md:w-8 md:h-8 rounded-full flex-shrink-0 flex items-center justify-center',
           'shadow-[0_0_15px_rgba(0,0,0,0.3)]'
         )}
         style={{
@@ -35,7 +35,7 @@ export default function AgentMessage({
       >
         <Bot size={16} className="text-white" />
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1.5">
         <div className="flex items-center gap-2">
           <span className="text-[10px] ml-1" style={{ color: config.color }}>
             {config.agentName}
@@ -57,7 +57,7 @@ export default function AgentMessage({
           className={cn(
             'bg-[#2b2a2a]/80 rounded-2xl rounded-tl-none',
             'chat-glow',
-            'p-4 text-[15px] text-[#e5e2e1]'
+            'p-3 md:p-4 text-[14px] md:text-[15px] text-[#e5e2e1]'
           )}
           style={{
             borderLeft: `2px solid ${config.color}`,
@@ -105,7 +105,6 @@ export default function AgentMessage({
           <SuggestionChips
             messageId={message.id}
             chips={[
-              { id: 'apply', label: 'Apply', action: 'apply', variant: 'primary' },
               { id: 'details', label: 'Details', action: 'details', variant: 'secondary' },
             ]}
             onAction={(_, action) => handleAction(action)}

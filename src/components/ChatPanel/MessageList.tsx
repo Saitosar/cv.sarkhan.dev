@@ -52,7 +52,7 @@ export default function MessageList({ messages, bottomOffset = 0, className }: M
       ref={listRef}
       style={{ scrollPaddingBottom }}
       className={cn(
-        "flex-1 p-6 overflow-y-auto flex flex-col gap-6",
+        "flex-1 p-4 md:p-6 overflow-y-auto flex flex-col gap-4",
         className
       )}
       aria-live="polite"

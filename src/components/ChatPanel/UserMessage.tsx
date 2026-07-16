@@ -6,7 +6,7 @@ import type { UserMessageProps } from '@/types/chat';
 export default function UserMessage({ message }: UserMessageProps) {
   return (
     <div className="flex justify-end">
-      <div className="bg-[#6001d1]/20 rounded-2xl rounded-tr-none p-4 text-[15px] text-[#e5e2e1] max-w-[85%]">
+      <div className="bg-[#6001d1]/20 rounded-2xl rounded-tr-none p-3 md:p-4 text-[14px] md:text-[15px] text-[#e5e2e1] max-w-[95%] md:max-w-[85%]">
         {message.content}
       </div>
     </div>
