@@ -83,7 +83,7 @@ export function SideNav() {
       {/* Overlay backdrop — always in DOM, toggled via opacity/pointer-events to avoid layout reflow */}
       <div
         className={cn(
-          'fixed inset-0 z-40 bg-black/50 md:hidden transition-opacity duration-200',
+          'fixed inset-0 z-40 bg-black/50 md:hidden transition-opacity duration-200 touch-manipulation',
           isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         )}
         onClick={() => setIsOpen(false)}
@@ -93,7 +93,7 @@ export function SideNav() {
       {/* SideNav — always in DOM, toggled via translate/opacity/visibility to avoid layout reflow */}
       <nav
         className={cn(
-          'fixed left-0 top-0 z-50 h-screen w-72 flex-col gap-4 border-r border-[rgba(255,255,255,0.08)] bg-[#1c1b1b] py-8 shadow-2xl',
+          'fixed left-0 top-0 z-50 h-screen w-72 flex-col gap-4 border-r border-[rgba(255,255,255,0.08)] bg-[#1c1b1b] py-8 shadow-2xl touch-manipulation',
           // Desktop: always visible
           'md:flex',
           // Mobile: slide in/out — use translate + visibility to avoid layout reflow
