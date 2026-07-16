@@ -2,9 +2,7 @@
 
 import * as React from 'react';
 import { cn } from '@/lib/utils';
-import type { SplitScreenProps } from '@/types/split-screen';
-import MobileTabBar from '@/components/MobileTabBar';
-import type { MobileTab } from '@/types/split-screen';
+import type { SplitScreenProps, MobileTab } from '@/types/split-screen';
 
 const MOBILE_BREAKPOINT = 768;
 
@@ -133,7 +131,6 @@ export default function SplitScreen({
             </div>
           )}
         </div>
-        <MobileTabBar activeTab={activeTab} onTabChange={setActiveTab} />
       </div>
     );
   }
