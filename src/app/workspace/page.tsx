@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { Suspense } from 'react';
 import SplitScreen from '@/components/SplitScreen';
 import ChatPanel from '@/components/ChatPanel';
 import CanvasPanel from '@/components/CanvasPanel';
