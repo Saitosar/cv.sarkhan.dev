@@ -1,8 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
 import SplitScreen from '@/components/SplitScreen';
 import ChatPanel from '@/components/ChatPanel';
 import CanvasPanel from '@/components/CanvasPanel';
@@ -26,34 +24,33 @@ function JobsPlaceholder() {
 }
 
 function WorkspaceContent() {
-  const searchParams = useSearchParams();
-  const tab = searchParams.get('tab');
-  const [showJobs, setShowJobs] = React.useState(tab === 'jobs');
-
+  const [showJobs, setShowJobs] = React.useState(false);
   React.useEffect(() => {
-    setShowJobs(tab === 'jobs');
-  }, [tab]);
+    if (typeof window !== 'undefined') {
+      setShowJobs(new URLSearchParams(window.location.search).get('tab') === 'jobs');
+    }
+  }, []);
 
   return (
     <div className="h-[calc(100dvh-48px)] md:h-[calc(100dvh-64px)] flex flex-col">
-      <div className="flex-1 p-4 pl-4 md:pl-6 pr-4 md:pr-0 pt-2 md:pt-3">
-        <SplitScreen
-          left={<ChatPanel />}
-          right={
-            <div className="relative w-full h-full">
-              {showJobs ? (
-                <JobsPlaceholder />
-              ) : (
+      {showJobs ? (
+        <JobsPlaceholder />
+      ) : (
+        <div className="flex-1 p-4 pl-4 md:pl-6 pr-4 md:pr-0 pt-2 md:pt-3">
+          <SplitScreen
+            left={<ChatPanel />}
+            right={
+              <div className="relative w-full h-full">
                 <CanvasPanel />
-              )}
-              <JobsToggle
-                showJobs={showJobs}
-                onToggle={() => setShowJobs((v) => !v)}
-              />
-            </div>
-          }
-        />
-      </div>
+                <JobsToggle
+                  showJobs={showJobs}
+                  onToggle={() => setShowJobs((v) => !v)}
+                />
+              </div>
+            }
+          />
+        </div>
+      )}
     </div>
   );
 }
