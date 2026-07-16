@@ -73,7 +73,7 @@ export default function ChatPanel({ className }: ChatPanelProps) {
         isOnline={true}
       />
       <div className="flex-1 overflow-hidden flex flex-col min-h-0">
-        <div className="px-6 pt-4 pb-2 shrink-0">
+        <div className="px-3 pt-4 pb-2 shrink-0">
           <SessionBadge focus={resume.targetJob?.title} />
         </div>
         <MessageList
@@ -82,7 +82,7 @@ export default function ChatPanel({ className }: ChatPanelProps) {
           className="pb-[160px] md:pb-6"
         />
         {showTyping && (
-          <div className="px-6 py-2 shrink-0">
+          <div className="px-3 py-2 shrink-0">
             <TypingIndicator visible={true} />
           </div>
         )}

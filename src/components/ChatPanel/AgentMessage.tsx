@@ -10,19 +10,17 @@ import SuggestionChips from './SuggestionChips';
 
 export default function AgentMessage({
   message,
-  onApply,
   onDetails,
 }: AgentMessageProps) {
   const handleAction = (action: string) => {
-    if (action === 'apply') onApply?.(message.id);
-    else if (action === 'details') onDetails?.(message.id);
+    if (action === 'details') onDetails?.(message.id);
   };
 
   const source = message.source ?? 'aether';
   const config = CHAT_MODES[source];
 
   return (
-    <div className="flex gap-3 max-w-[95%] md:max-w-[90%]">
+    <div className="flex gap-3 max-w-[95%]">
       <div
         className={cn(
           'w-7 h-7 md:w-8 md:h-8 rounded-full flex-shrink-0 flex items-center justify-center',
@@ -57,7 +55,7 @@ export default function AgentMessage({
           className={cn(
             'bg-[#2b2a2a]/80 rounded-2xl rounded-tl-none',
             'chat-glow',
-            'p-3 md:p-4 text-[14px] md:text-[15px] text-[#e5e2e1]'
+            'p-2 md:p-3 text-[14px] md:text-[15px] text-[#e5e2e1]'
           )}
           style={{
             borderLeft: `2px solid ${config.color}`,

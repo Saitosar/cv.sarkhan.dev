@@ -63,7 +63,6 @@ export interface SessionBadgeProps {
 
 export interface AgentMessageProps {
   message: ChatMessage;
-  onApply?: (messageId: string) => void;
   onDetails?: (messageId: string) => void;
 }
 

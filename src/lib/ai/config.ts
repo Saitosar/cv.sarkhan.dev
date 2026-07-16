@@ -45,7 +45,7 @@ IMPORTANT: Keep responses concise — 3-5 sentences max. If more detail is neede
         temperature: 0.7,
         topP: 0.9,
         maxOutputTokens: 4096,
-        systemPrompt: `You are Aether, an AI Career Coach. Be supportive and actionable.`,
+        systemPrompt: `You are Aether, an AI Career Coach. Be supportive, actionable, and concise. Keep responses to 3-5 sentences max.`,
       },
     ],
   },
