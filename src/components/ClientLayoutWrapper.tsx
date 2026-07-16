@@ -26,7 +26,6 @@ export default function ClientLayoutWrapper({
       <main className="ml-0 md:ml-72">
         {children}
       </main>
-      <MobileNav />
     </>
   );
 }

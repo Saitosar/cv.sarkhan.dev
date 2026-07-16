@@ -75,7 +75,6 @@ export default function RootLayout({
       </head>
       {/* Применяем переменные шрифтов к телу документа */}
       <body className={`${inter.variable} ${geist.variable} ${interTight.variable} font-sans pb-20 md:pb-0 dark`}>
-          <SideNavShell />
           <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
       </body>
     </html>
