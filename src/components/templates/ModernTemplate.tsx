@@ -1,6 +1,6 @@
 // src/components/templates/ModernTemplate.tsx
 import type { ColorScheme } from "@/lib/palettes";
-import { type ResumeData, formatExperienceDate } from "@/lib/placeholder-data";
+import { type ResumeData, formatExperienceDate } from "@/lib/resume-utils";
 
 export function ModernTemplate({ resume, accentColor }: { resume: ResumeData, accentColor: ColorScheme }) {
   const hasContent = (arr: unknown[] | undefined) => arr && arr.length > 0;

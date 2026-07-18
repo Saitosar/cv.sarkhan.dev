@@ -40,12 +40,12 @@ export default function SuggestionPanel({
     >
       <div className="flex items-center justify-between p-4 border-b border-white/8">
         <div className="flex items-center gap-2">
-          <Lightbulb size={18} className="text-[#d2bbff]" />
-          <span className="text-sm font-semibold text-[#e5e2e1]">
+          <Lightbulb size={18} className="text-[rgba(210,187,255,0.3)]" />
+          <span className="text-sm font-semibold text-[rgba(210,187,255,0.3)]">
             AI Suggestions
           </span>
           {visible.length > 0 && (
-            <span className="ml-2 px-2 py-0.5 rounded-full bg-[#6001d1]/30 text-[#d2bbff] text-xs">
+            <span className="ml-2 px-2 py-0.5 rounded-full bg-[#6001d1]/30 text-[rgba(210,187,255,0.3)] text-xs">
               {visible.length}
             </span>
           )}

@@ -1,6 +1,6 @@
 // src/components/templates/ClassicTemplate.tsx
 import type { ColorScheme } from "@/lib/palettes";
-import { type ResumeData, formatExperienceDate } from "@/lib/placeholder-data";
+import { type ResumeData, formatExperienceDate } from "@/lib/resume-utils";
 
 export function ClassicTemplate({ resume, accentColor }: { resume: ResumeData, accentColor: ColorScheme }) {
   const hasContent = (arr: unknown[] | undefined) => arr && arr.length > 0;

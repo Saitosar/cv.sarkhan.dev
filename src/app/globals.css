@@ -20,13 +20,13 @@
   --secondary: #252525; 
   --secondary-foreground: #fafafa; 
   --muted: #1c1b1b; 
-  --muted-foreground: #8e8e8e; 
+  --muted-foreground: #c4c7c7; 
   --accent: #6001d1; 
   --accent-foreground: #fafafa; 
   --destructive: #ef5350; 
   --border: rgba(255, 255, 255, 0.1); 
   --input: rgba(255, 255, 255, 0.15); 
-  --ring: #8e8e8e; 
+  --ring: #c4c7c7; 
   --chart-1: #6001d1; 
   --chart-2: #29b6f6; 
   --chart-3: #e1b12c; 
@@ -39,7 +39,7 @@
   --sidebar-accent: #252525; 
   --sidebar-accent-foreground: #fafafa; 
   --sidebar-border: rgba(255, 255, 255, 0.1); 
-  --sidebar-ring: #8e8e8e; 
+  --sidebar-ring: #c4c7c7; 
 }
 
 html, body { min-height: 100dvh; touch-action: manipulation; }
@@ -345,18 +345,18 @@ h1, h2, h3, h4, h5, h6,
 }
 .glow-soon {
   color: #fbbf24;
-  filter: drop-shadow(0 0 2px #fde047);
+  filter: drop-shadow(0 0 2px #d2bbff);
   animation: pulse-glow 2s ease-in-out infinite;
 }
 
 @keyframes pulse-glow {
   0%, 100% {
     opacity: 1;
-    filter: drop-shadow(0 0 2px #fde047);
+    filter: drop-shadow(0 0 2px #d2bbff);
   }
   50% {
     opacity: 0.7;
-    filter: drop-shadow(0 0 6px #fde047);
+    filter: drop-shadow(0 0 6px #d2bbff);
   }
 }
 
@@ -557,7 +557,7 @@ html {
   --destructive: #e57373; 
   --border: rgba(255, 255, 255, 0.1); 
   --input: rgba(255, 255, 255, 0.15); 
-  --ring: #8e8e8e; 
+  --ring: #c4c7c7; 
   --chart-1: #6001d1; 
   --chart-2: #29b6f6; 
   --chart-3: #e1b12c; 
@@ -570,7 +570,7 @@ html {
   --sidebar-accent: #454545; 
   --sidebar-accent-foreground: #fafafa; 
   --sidebar-border: rgba(255, 255, 255, 0.1); 
-  --sidebar-ring: #8e8e8e; 
+  --sidebar-ring: #c4c7c7; 
 }
 
 @layer base {

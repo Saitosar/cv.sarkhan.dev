@@ -3,6 +3,9 @@ import { z } from 'zod';
 import { AIRouter } from '@/lib/ai/router';
 import { parseLinkedInProfile, enrichResumeWithLinkedIn, type LinkedInContext } from '@/lib/linkedin-parser';
 
+import { getLogger } from '@/lib/monitoring/logger';
+
+const log = getLogger();
 const router = new AIRouter();
 
 const updateRequestSchema = z.object({
@@ -28,9 +31,9 @@ export async function POST(req: Request) {
       try {
         linkedInContext = await parseLinkedInProfile(linkedinProfileText);
         enrichedResume = enrichResumeWithLinkedIn(oldResume, linkedInContext);
-        console.log('LinkedIn context parsed successfully:', Object.keys(linkedInContext));
+        log.info({ linkedInKeys: Object.keys(linkedInContext) }, 'LinkedIn context parsed successfully');
       } catch (error) {
-        console.error('Failed to parse LinkedIn profile:', error);
+        log.error({ error }, 'Failed to parse LinkedIn profile');
       }
     }
 
@@ -73,7 +76,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(responseWithMeta);
   } catch (error) {
-    console.error('Error in /api/update:', error);
+    log.error({ error }, 'Error in /api/update');
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(

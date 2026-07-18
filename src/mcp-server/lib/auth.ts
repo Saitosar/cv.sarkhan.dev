@@ -1,5 +1,8 @@
 import * as bcrypt from 'bcrypt';
 import { TokenValidationResult, RateLimitResult } from '../types';
+import { getLogger } from '@/lib/monitoring/logger';
+
+const log = getLogger();
 
 // Mock DB for implementation. In real world, this would be a PostgreSQL client.
 const MOCK_DB = {
@@ -100,5 +103,5 @@ export async function analyzeResumeFit(userId: string, jobDescription: string): 
 }
 
 export async function sendTelegramNotification(userId: string, event: string, payload: any) {
-  console.log(`[Telegram Notification] User ${userId}, Event ${event}, Payload: ${JSON.stringify(payload)}`);
+  log.info({ userId, event, payload }, '[Telegram Notification]');
 }

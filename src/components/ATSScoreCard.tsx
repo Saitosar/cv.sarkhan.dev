@@ -91,7 +91,7 @@ export function ATSScoreCard({ resumeData, targetJobDescription }: ATSScoreCardP
             <div className="flex items-center gap-2">
               <div className="w-32 h-2 bg-white/10 rounded-full overflow-hidden">
                 <div
-                  className="h-full transition-all duration-500"
+                  className="h-full transition-transform duration-500"
                   style={{
                     width: `${value}%`,
                     backgroundColor: getScoreColor(value).path,

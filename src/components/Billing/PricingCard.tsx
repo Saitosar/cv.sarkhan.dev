@@ -30,7 +30,7 @@ const PricingCard = React.memo(function PricingCard({
     <div
       className={cn(
         'relative flex flex-col rounded-2xl p-6 md:p-8',
-        'glass-card transition-all duration-300',
+        'glass-card transition-opacity transition-shadow duration-300',
         'border',
         isPro
           ? 'border-[#6001d1]/40 shadow-[0_0_40px_rgba(96,1,209,0.2)]'
@@ -55,8 +55,8 @@ const PricingCard = React.memo(function PricingCard({
           <span className="text-4xl font-bold text-white">${price}</span>
           <span className="text-sm text-[#c4c7c7]">{periodLabel}</span>
         </div>
-        <p className="mt-1 text-xs text-[#8e8e8e]">{subLabel}</p>
-        <p className="mt-2 text-sm text-[#8e8e8e]">
+        <p className="mt-1 text-xs text-[#c4c7c7]">{subLabel}</p>
+        <p className="mt-2 text-sm text-[#c4c7c7]">
           {isPro ? 'Unlock AI superpowers for your job search' : 'Perfect for getting started'}
         </p>
       </div>
@@ -101,9 +101,9 @@ const PricingCard = React.memo(function PricingCard({
         onClick={onSubscribe}
         disabled={isCurrent}
         className={cn(
-          'w-full py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-200',
+          'w-full py-3 px-4 rounded-xl font-semibold text-sm transition-opacity transition-shadow duration-200',
           isCurrent
-            ? 'bg-white/10 text-[#8e8e8e] cursor-default border border-white/10'
+            ? 'bg-white/10 text-[#c4c7c7] cursor-default border border-white/10'
             : isPro
             ? 'bg-[#6001d1] text-white hover:bg-[#7a1ce8] shadow-[0_0_20px_rgba(96,1,209,0.4)] hover:shadow-[0_0_30px_rgba(96,1,209,0.6)]'
             : 'bg-white/5 text-[#e5e2e1] border border-white/20 hover:bg-white/10'

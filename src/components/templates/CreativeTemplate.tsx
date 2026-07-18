@@ -1,7 +1,7 @@
 // src/components/templates/CreativeTemplate.tsx
 import type { ColorScheme } from "@/lib/palettes";
 type Theme = 'dark' | 'light';
-import { type ResumeData, formatExperienceDate } from "@/lib/placeholder-data";
+import { type ResumeData, formatExperienceDate } from "@/lib/resume-utils";
 
 export function CreativeTemplate({ resume, accentColor, theme }: { resume: ResumeData, accentColor: ColorScheme, theme: Theme }) {
   const hasContent = (arr: unknown[] | undefined) => arr && arr.length > 0;

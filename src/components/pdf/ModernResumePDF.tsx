@@ -1,7 +1,7 @@
 // src/components/pdf/ModernResumePDF.tsx
 import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
 import type { ResumeFormData } from '@/lib/validators';
-import { formatExperienceDate, type Experience } from '@/lib/placeholder-data';
+import { formatExperienceDate, type Experience } from '@/lib/resume-utils';
 import type { ColorScheme } from '@/lib/palettes';
 
 Font.register({

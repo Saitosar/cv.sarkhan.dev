@@ -1,7 +1,7 @@
 // src/components/pdf/CreativeResumePDF.tsx
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import type { ResumeFormData } from '@/lib/validators';
-import { formatExperienceDate, type Experience } from '@/lib/placeholder-data';
+import { formatExperienceDate, type Experience } from '@/lib/resume-utils';
 import type { ColorScheme } from '@/lib/palettes';
 type Theme = 'dark' | 'light';
 

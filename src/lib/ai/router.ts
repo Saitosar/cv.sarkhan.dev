@@ -6,6 +6,9 @@ import { getGemini } from '@/lib/gemini';
 import { withRetry } from './retry';
 import { classifyError, AIRouterError } from './errors';
 import type { ChatMode } from '@/types/chat';
+import { getLogger } from '@/lib/monitoring/logger';
+
+const log = getLogger();
 
 export type { TaskType } from './config';
 
@@ -262,9 +265,9 @@ export class AIRouter {
           },
         };
       } catch (error) {
-        lastError = error instanceof Error ? error : new Error(String(error));
-        console.warn(`[AIRouter] Model "${modelConfig.model}" failed:`, lastError.message);
-      }
+   lastError = error instanceof Error ? error : new Error(String(error));
+   log.warn({ model: modelConfig.model, error: lastError.message }, '[AIRouter] Model failed');
+ }
     }
 
     throw new Error(
@@ -322,7 +325,7 @@ class RouterLogger {
       this.entries.shift();
     }
     if (process.env.NODE_ENV === 'development') {
-      console.debug('[AIRouter]', logEntry);
+      log.debug({ router: logEntry }, '[AIRouter]');
     }
   }
 

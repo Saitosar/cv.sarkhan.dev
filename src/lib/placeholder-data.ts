@@ -1,4 +1,7 @@
 // src/lib/placeholder-data.ts
+//
+// Generic sample resume data used for preview / demo states only.
+// No real personal information — replace at runtime with the user's own data.
 
 import type {
   ResumeData,
@@ -9,82 +12,71 @@ import type {
 } from '@/types/resume';
 
 export type { ResumeData, Experience, Project, Education, Language };
-export function formatExperienceDate(job: Experience): string {
-  if (!job.startDate?.month || !job.startDate?.year) return '';
-  
-  const start = `${job.startDate.month} ${job.startDate.year}`;
-  
-  if (job.endDate?.isCurrent) {
-    return `${start} - Present`;
-  }
-  
-  if (job.endDate?.month && job.endDate?.year) {
-    return `${start} - ${job.endDate.month} ${job.endDate.year}`;
-  }
-  
-  return start;
-}
+export { formatExperienceDate } from './resume-utils';
 
 export const placeholderResume: ResumeData = {
-  fullName: "John Doe",
-  jobTitle: "Senior Frontend Developer",
-  summary: "A highly skilled and motivated frontend developer with over 8 years of experience in creating responsive and user-friendly web applications.",
+  fullName: 'Sample Candidate',
+  jobTitle: 'Senior Frontend Engineer',
+  summary:
+    'Results-driven frontend engineer with 7+ years of experience building scalable web applications, design systems, and AI-powered user interfaces.',
   contact: {
-    email: "john.doe@email.com",
-    phone: "+1 (555) 123-4567",
-    linkedin: "linkedin.com/in/johndoe",
+    email: 'candidate@example.com',
+    phone: '+1 (555) 000-0000',
+    linkedin: 'linkedin.com/in/samplecandidate',
   },
   experience: [
     {
-      id: "exp-1",
-      company: "Tech Solutions Inc.",
-      position: "Senior Frontend Developer",
-      startDate: { month: 'Jan', year: '2020' },
+      id: 'exp-1',
+      company: 'Example Tech Inc.',
+      position: 'Senior Frontend Engineer',
+      startDate: { month: 'Jan', year: '2021' },
       endDate: { isCurrent: true },
-      description: "Led the development of a new e-commerce platform, resulting in a 30% increase in sales. Optimized application performance, reducing page load time by 50%.",
+      description:
+        'Led the development of a high-traffic SaaS platform, improving core web vitals by 35% and establishing a reusable component library adopted by 8 product teams.',
     },
     {
-      id: "exp-2",
-      company: "Web Innovators LLC",
-      position: "Frontend Developer",
-      startDate: { month: 'Jun', year: '2017' },
-      endDate: { month: 'Dec', year: '2019' },
-      description: "Developed and maintained user interfaces for various client websites using React and Vue.js. Collaborated with designers to create pixel-perfect, responsive designs.",
+      id: 'exp-2',
+      company: 'Another Startup LLC',
+      position: 'Frontend Developer',
+      startDate: { month: 'Jun', year: '2018' },
+      endDate: { month: 'Dec', year: '2020' },
+      description:
+        'Built responsive customer-facing features with React and TypeScript, collaborated with product designers to implement accessible UI patterns.',
     },
   ],
   projects: [
     {
-      id: "proj-1",
-      name: "Personal Portfolio Website",
-      description: "Developed a personal portfolio to showcase my projects, using a modern tech stack and focusing on performance and SEO.",
-      technologies: "Next.js, Tailwind CSS, Vercel",
+      id: 'proj-1',
+      name: 'Open Source Component Library',
+      description:
+        'Published a TypeScript-first UI kit focused on accessibility and theming, used by 1,000+ weekly downloads.',
+      technologies: 'React, TypeScript, Tailwind CSS, Storybook',
     },
   ],
   education: [
     {
-      institution: "State University",
-      degree: "B.S. in Computer Science",
-      years: "2013 - 2017",
+      institution: 'University of Example',
+      degree: 'B.S. in Computer Science',
+      years: '2014 - 2018',
     },
   ],
   skills: [
-    { value: "React" },
-    { value: "TypeScript" },
-    { value: "Next.js" },
-    { value: "Tailwind CSS" },
-    { value: "GraphQL" },
+    { value: 'React' },
+    { value: 'TypeScript' },
+    { value: 'Next.js' },
+    { value: 'Tailwind CSS' },
+    { value: 'Node.js' },
   ],
   languages: [
     { language: 'English', proficiency: 'Fluent' },
-    { language: 'Russian', proficiency: 'Native' },
   ],
   achievements: [
-    { value: "Winner of the 2021 'Innovation in UI/UX' award." },
+    { value: 'Speaker at Example Frontend Conference 2023' },
   ],
   trainings: [
-    { value: 'Agile & Scrum Fundamentals Workshop (2022)' },
+    { value: 'Accessibility and Inclusive Design (2022)' },
   ],
   certifications: [
-    { value: 'Certified Scrum Master (CSM)' },
+    { value: 'AWS Certified Cloud Practitioner' },
   ],
 };

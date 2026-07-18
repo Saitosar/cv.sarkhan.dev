@@ -21,7 +21,7 @@ export default function SubscriptionBadge() {
       )}
       title={isPro ? 'Pro plan active' : 'Upgrade to Pro'}
     >
-      <span className={cn('w-2 h-2 rounded-full', isPro ? 'bg-[#d2bbff]' : 'bg-[#8e8e8e]')} />
+      <span className={cn('w-2 h-2 rounded-full', isPro ? 'bg-[rgba(210,187,255,0.3)]' : 'bg-[#c4c7c7]')} />
       {isPro ? 'Pro' : 'Free'}
     </Link>
   );
