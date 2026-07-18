@@ -30,7 +30,7 @@ export interface SplitScreenState {
   orientation: SplitOrientation;
 }
 
-export type MobileTab = 'chat' | 'resume' | 'score' | 'jobs';
+export type MobileTab = 'chat' | 'resume' | 'score';
 
 export interface MobileTabBarProps {
   activeTab: MobileTab;

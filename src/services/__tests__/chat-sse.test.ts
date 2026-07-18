@@ -29,7 +29,7 @@ describe('ChatSSEService', () => {
     } as unknown as ReadableStreamDefaultReader<Uint8Array>;
   }
 
-  it('adds user message, streams assistant response, and sets hasActions on done', async () => {
+  it('adds user message, streams assistant response, and finalizes on done', async () => {
     const reader = createMockReader([
       'data: {"type":"token","content":"Hello "}\n\n',
       'data: {"type":"token","content":"Aether"}\n\n',
@@ -54,7 +54,6 @@ describe('ChatSSEService', () => {
     expect(messages[0].content).toBe('hi');
     expect(messages[1].role).toBe('assistant');
     expect(messages[1].content).toBe('Hello Aether');
-    expect(messages[1].hasActions).toBe(true);
     expect(state.isStreaming).toBe(false);
     expect(onDone).toHaveBeenCalled();
   });

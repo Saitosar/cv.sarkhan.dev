@@ -21,8 +21,6 @@ export interface ChatMessage {
   timestamp: number;
   section?: SectionType;
   metadata?: Record<string, unknown>;
-  /** Whether this message has suggestion chips visible */
-  hasActions?: boolean;
   /** Whether this message is currently being streamed */
   isStreaming?: boolean;
   /** Which chat mode produced this message */

@@ -6,16 +6,10 @@ import { cn } from '@/lib/utils';
 import { Bot } from 'lucide-react';
 import type { AgentMessageProps } from '@/types/chat';
 import { CHAT_MODES } from '@/types/hr-coach';
-import SuggestionChips from './SuggestionChips';
 
 export default function AgentMessage({
   message,
-  onDetails,
 }: AgentMessageProps) {
-  const handleAction = (action: string) => {
-    if (action === 'details') onDetails?.(message.id);
-  };
-
   const source = message.source ?? 'aether';
   const config = CHAT_MODES[source];
 
@@ -99,15 +93,6 @@ export default function AgentMessage({
             </ReactMarkdown>
           </div>
         </div>
-        {message.hasActions && (
-          <SuggestionChips
-            messageId={message.id}
-            chips={[
-              { id: 'details', label: 'Details', action: 'details', variant: 'secondary' },
-            ]}
-            onAction={(_, action) => handleAction(action)}
-          />
-        )}
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { cn } from '@/lib/utils';
-import type { SplitScreenProps, MobileTab } from '@/types/split-screen';
+import type { SplitScreenProps } from '@/types/split-screen';
 
 const MOBILE_BREAKPOINT = 768;
 
@@ -19,7 +19,6 @@ export default function SplitScreen({
   const [leftRatio, setLeftRatio] = React.useState(defaultLeftRatio);
   const [isDragging, setIsDragging] = React.useState(false);
   const [isMobile, setIsMobile] = React.useState(false);
-  const [activeTab, setActiveTab] = React.useState<MobileTab>('chat');
   const containerRef = React.useRef<HTMLDivElement>(null);
   const currentOrientation = orientation ?? (isMobile ? 'vertical' : 'horizontal');
 
@@ -114,22 +113,7 @@ export default function SplitScreen({
     return (
       <div className={cn('flex flex-col h-full', className)}>
         <div className="flex-1 overflow-hidden animate-tab-fade pb-[calc(72px+env(safe-area-inset-bottom))]">
-          {activeTab === 'chat' && left}
-          {activeTab === 'resume' && right}
-          {activeTab === 'jobs' && (
-            <div className="flex h-full items-center justify-center p-6">
-              <div className="text-center text-[#c4c7c7]">
-                Job Search panel placeholder
-              </div>
-            </div>
-          )}
-          {activeTab === 'score' && (
-            <div className="flex h-full items-center justify-center p-6">
-              <div className="text-center text-[#c4c7c7]">
-                ATS Score breakdown placeholder
-              </div>
-            </div>
-          )}
+          {left}
         </div>
       </div>
     );
@@ -163,7 +147,7 @@ export default function SplitScreen({
           onMouseDown={startDrag}
           onTouchStart={startDrag}
           onKeyDown={splitterKeyDown}
-          >
+        >
           <div
             className={cn(
               'absolute left-0 top-1/2 w-full h-[4px] -translate-y-1/2 rounded-full',
@@ -174,7 +158,7 @@ export default function SplitScreen({
           <span className="material-symbols-outlined absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[#e5e2e1]/40 group-hover:text-[#e5e2e1]/70 text-lg pointer-events-none transition-colors duration-200">
             drag_indicator
           </span>
-          </div>
+        </div>
         <div className="flex-1 overflow-hidden">{right}</div>
       </div>
     );

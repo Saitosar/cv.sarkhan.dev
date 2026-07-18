@@ -100,11 +100,9 @@ export class ChatSSEService {
                     useChatStore.getState().updateLastMessage(
                       lastMessage.content
                     );
-                    // Mark message as having actions (suggestion chips)
                     const messages = [...storeNow.session.messages];
                     messages[messages.length - 1] = {
                       ...lastMessage,
-                      hasActions: true,
                       source: mode ?? store.session.mode,
                     };
                     useChatStore.setState({

@@ -18,11 +18,10 @@ export function readChatHistory(): MCPResourceContent[] {
     {
       id: 'msg-1',
       role: 'assistant',
-      content: 'Hi! I can help you improve your resume, analyze ATS score, or search for jobs. What would you like to do?',
+      content: 'Hi! I can help you improve your resume or analyze ATS score. What would you like to do?',
       timestamp: Date.now() - 1000 * 60 * 5,
       section: 'general' as SectionType,
       source: 'aether',
-      hasActions: true,
     },
     {
       id: 'msg-2',

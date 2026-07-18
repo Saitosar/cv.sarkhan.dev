@@ -3,7 +3,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { Home, FileText, Briefcase, User } from 'lucide-react';
+import { Home, FileText, User } from 'lucide-react';
 
 type TabItem = {
   label: string;
@@ -26,18 +26,14 @@ const tabs: TabItem[] = [
     isActive: (pathname, search) => pathname.startsWith('/workspace') && !search.includes('tab='),
   },
   {
-    label: 'Вакансии',
-    href: '/workspace?tab=jobs',
-    icon: Briefcase,
-    isActive: (pathname, search) => pathname.startsWith('/workspace') && search.includes('tab=jobs'),
-  },
-  {
     label: 'Профиль',
     href: '/pricing',
     icon: User,
     isActive: (pathname) => pathname === '/pricing',
   },
 ];
+
+// Вакансии (Jobs) таб удалён — см. задачу 1/3.
 
 export default function BottomTabBar() {
   const [pathname, setPathname] = React.useState('/');

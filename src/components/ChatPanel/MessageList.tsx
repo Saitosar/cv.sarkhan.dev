@@ -28,24 +28,6 @@ export default function MessageList({ messages, bottomOffset = 0, className }: M
 
   const safeBottom = bottomOffset > 0 ? bottomOffset + 8 : 128;
   const scrollPaddingBottom = `${safeBottom}px`;
-  const scrollPaddingBottomSafe = `calc(${safeBottom}px + env(safe-area-inset-bottom, 0px))`;
-
-  if (messages.length === 0) {
-    return (
-      <div
-        ref={listRef}
-        style={{ scrollPaddingBottom: scrollPaddingBottomSafe, paddingBottom: scrollPaddingBottomSafe }}
-        className={cn(
-          "flex-1 p-6 overflow-y-auto flex flex-col items-center justify-center text-center",
-          className
-        )}
-      >
-        <p className="text-sm text-[#c4c7c7]">
-          Send a LinkedIn link, resume, or describe your experience — Aether will read it and build your resume.
-        </p>
-      </div>
-    );
-  }
 
   return (
     <div
